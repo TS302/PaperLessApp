@@ -1,0 +1,686 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		C7FECCB12E79B0CA00191928 /* KMPObservableViewModelCore in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB02E79B0CA00191928 /* KMPObservableViewModelCore */; settings = {ATTRIBUTES = (Required, ); }; };
+		C7FECCB32E79B0CA00191928 /* KMPObservableViewModelSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB22E79B0CA00191928 /* KMPObservableViewModelSwiftUI */; };
+		C7FECCB62E79B13B00191928 /* KMPNativeCoroutinesAsync in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB52E79B13B00191928 /* KMPNativeCoroutinesAsync */; };
+		C7FECCB82E79B13B00191928 /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB72E79B13B00191928 /* KMPNativeCoroutinesCombine */; };
+		C7FECCBA2E79B13B00191928 /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB92E79B13B00191928 /* KMPNativeCoroutinesCore */; };
+		C7FECCBC2E79B13B00191928 /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCBB2E79B13B00191928 /* KMPNativeCoroutinesRxSwift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C7F11DA42D9723D700673AB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C7F11D8B2D9723D500673AB9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C7F11D922D9723D500673AB9;
+			remoteInfo = PaperLess;
+		};
+		C7F11DAE2D9723D700673AB9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C7F11D8B2D9723D500673AB9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C7F11D922D9723D500673AB9;
+			remoteInfo = PaperLess;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C755F4D22DF483C8001FF3F8 /* PaperLess.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PaperLess.xctestplan; sourceTree = "<group>"; };
+		C7F11D932D9723D500673AB9 /* PaperLess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperLess.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7F11DA32D9723D700673AB9 /* PaperLessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperLessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7F11DAD2D9723D700673AB9 /* PaperLessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperLessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C7B8ED1E2DFE49FA00A5CD2D /* Exceptions for "PaperLess" folder in "PaperLess" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Application/PaperLessTests/PaperLessTests.swift,
+				Application/PaperLessUITests/PaperLessUITests.swift,
+				Application/PaperLessUITests/PaperLessUITestsLaunchTests.swift,
+			);
+			target = C7F11D922D9723D500673AB9 /* PaperLess */;
+		};
+		C7B8ED1F2DFE49FA00A5CD2D /* Exceptions for "PaperLess" folder in "PaperLessTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Application/PaperLessTests/PaperLessTests.swift,
+			);
+			target = C7F11DA22D9723D700673AB9 /* PaperLessTests */;
+		};
+		C7B8ED202DFE49FA00A5CD2D /* Exceptions for "PaperLess" folder in "PaperLessUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Application/PaperLessUITests/PaperLessUITests.swift,
+				Application/PaperLessUITests/PaperLessUITestsLaunchTests.swift,
+			);
+			target = C7F11DAC2D9723D700673AB9 /* PaperLessUITests */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C7F11D952D9723D500673AB9 /* PaperLess */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C7B8ED1E2DFE49FA00A5CD2D /* Exceptions for "PaperLess" folder in "PaperLess" target */,
+				C7B8ED1F2DFE49FA00A5CD2D /* Exceptions for "PaperLess" folder in "PaperLessTests" target */,
+				C7B8ED202DFE49FA00A5CD2D /* Exceptions for "PaperLess" folder in "PaperLessUITests" target */,
+			);
+			path = PaperLess;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C7F11D902D9723D500673AB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7FECCB12E79B0CA00191928 /* KMPObservableViewModelCore in Frameworks */,
+				C7FECCBA2E79B13B00191928 /* KMPNativeCoroutinesCore in Frameworks */,
+				C7FECCB82E79B13B00191928 /* KMPNativeCoroutinesCombine in Frameworks */,
+				C7FECCBC2E79B13B00191928 /* KMPNativeCoroutinesRxSwift in Frameworks */,
+				C7FECCB32E79B0CA00191928 /* KMPObservableViewModelSwiftUI in Frameworks */,
+				C7FECCB62E79B13B00191928 /* KMPNativeCoroutinesAsync in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7F11DA02D9723D700673AB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7F11DAA2D9723D700673AB9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C7F11D8A2D9723D500673AB9 = {
+			isa = PBXGroup;
+			children = (
+				C7F11D952D9723D500673AB9 /* PaperLess */,
+				C755F4D22DF483C8001FF3F8 /* PaperLess.xctestplan */,
+				C7FED17A2E7A084600191928 /* Frameworks */,
+				C7F11D942D9723D500673AB9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C7F11D942D9723D500673AB9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C7F11D932D9723D500673AB9 /* PaperLess.app */,
+				C7F11DA32D9723D700673AB9 /* PaperLessTests.xctest */,
+				C7F11DAD2D9723D700673AB9 /* PaperLessUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		C7FED17A2E7A084600191928 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C7F11D922D9723D500673AB9 /* PaperLess */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7F11DB72D9723D700673AB9 /* Build configuration list for PBXNativeTarget "PaperLess" */;
+			buildPhases = (
+				C7FED09A2E79D3EF00191928 /* ShellScript */,
+				C7F11D8F2D9723D500673AB9 /* Sources */,
+				C7F11D902D9723D500673AB9 /* Frameworks */,
+				C7F11D912D9723D500673AB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C7F11D952D9723D500673AB9 /* PaperLess */,
+			);
+			name = PaperLess;
+			packageProductDependencies = (
+				C7FECCB02E79B0CA00191928 /* KMPObservableViewModelCore */,
+				C7FECCB22E79B0CA00191928 /* KMPObservableViewModelSwiftUI */,
+				C7FECCB52E79B13B00191928 /* KMPNativeCoroutinesAsync */,
+				C7FECCB72E79B13B00191928 /* KMPNativeCoroutinesCombine */,
+				C7FECCB92E79B13B00191928 /* KMPNativeCoroutinesCore */,
+				C7FECCBB2E79B13B00191928 /* KMPNativeCoroutinesRxSwift */,
+			);
+			productName = PaperLess;
+			productReference = C7F11D932D9723D500673AB9 /* PaperLess.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C7F11DA22D9723D700673AB9 /* PaperLessTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7F11DBA2D9723D700673AB9 /* Build configuration list for PBXNativeTarget "PaperLessTests" */;
+			buildPhases = (
+				C7F11D9F2D9723D700673AB9 /* Sources */,
+				C7F11DA02D9723D700673AB9 /* Frameworks */,
+				C7F11DA12D9723D700673AB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C7F11DA52D9723D700673AB9 /* PBXTargetDependency */,
+			);
+			name = PaperLessTests;
+			packageProductDependencies = (
+			);
+			productName = PaperLessTests;
+			productReference = C7F11DA32D9723D700673AB9 /* PaperLessTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C7F11DAC2D9723D700673AB9 /* PaperLessUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7F11DBD2D9723D700673AB9 /* Build configuration list for PBXNativeTarget "PaperLessUITests" */;
+			buildPhases = (
+				C7F11DA92D9723D700673AB9 /* Sources */,
+				C7F11DAA2D9723D700673AB9 /* Frameworks */,
+				C7F11DAB2D9723D700673AB9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C7F11DAF2D9723D700673AB9 /* PBXTargetDependency */,
+			);
+			name = PaperLessUITests;
+			packageProductDependencies = (
+			);
+			productName = PaperLessUITests;
+			productReference = C7F11DAD2D9723D700673AB9 /* PaperLessUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C7F11D8B2D9723D500673AB9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1620;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					C7F11D922D9723D500673AB9 = {
+						CreatedOnToolsVersion = 16.2;
+					};
+					C7F11DA22D9723D700673AB9 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = C7F11D922D9723D500673AB9;
+					};
+					C7F11DAC2D9723D700673AB9 = {
+						CreatedOnToolsVersion = 16.2;
+						TestTargetID = C7F11D922D9723D500673AB9;
+					};
+				};
+			};
+			buildConfigurationList = C7F11D8E2D9723D500673AB9 /* Build configuration list for PBXProject "PaperLess" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C7F11D8A2D9723D500673AB9;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */,
+				C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C7F11D942D9723D500673AB9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C7F11D922D9723D500673AB9 /* PaperLess */,
+				C7F11DA22D9723D700673AB9 /* PaperLessTests */,
+				C7F11DAC2D9723D700673AB9 /* PaperLessUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C7F11D912D9723D500673AB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7F11DA12D9723D700673AB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7F11DAB2D9723D700673AB9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		C7FED09A2E79D3EF00191928 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd \"/Users/tomsalih/AndroidStudioProjects/PaperLess\"\n\n./gradlew :shared:embedAndSignAppleFrameworkForXcode \\\n  -PXCODE_CONFIGURATION=\"${CONFIGURATION}\" \\\n  -PXCODE_SDK_NAME=\"${SDK_NAME}\" \\\n  -PXCODE_CODE_SIGNING_ALLOWED=\"${CODE_SIGNING_ALLOWED}\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C7F11D8F2D9723D500673AB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7F11D9F2D9723D700673AB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7F11DA92D9723D700673AB9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C7F11DA52D9723D700673AB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C7F11D922D9723D500673AB9 /* PaperLess */;
+			targetProxy = C7F11DA42D9723D700673AB9 /* PBXContainerItemProxy */;
+		};
+		C7F11DAF2D9723D700673AB9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C7F11D922D9723D500673AB9 /* PaperLess */;
+			targetProxy = C7F11DAE2D9723D700673AB9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		C7F11DB52D9723D700673AB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = J9PNCTV3N5;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C7F11DB62D9723D700673AB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = J9PNCTV3N5;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C7F11DB82D9723D700673AB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J9PNCTV3N5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ts.PaperLess;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C7F11DB92D9723D700673AB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = J9PNCTV3N5;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.ts.PaperLess;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C7F11DBB2D9723D700673AB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tom.PaperLessTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PaperLess.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PaperLess";
+			};
+			name = Debug;
+		};
+		C7F11DBC2D9723D700673AB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tom.PaperLessTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/PaperLess.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/PaperLess";
+			};
+			name = Release;
+		};
+		C7F11DBE2D9723D700673AB9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tom.PaperLessUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PaperLess;
+			};
+			name = Debug;
+		};
+		C7F11DBF2D9723D700673AB9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tom.PaperLessUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = PaperLess;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C7F11D8E2D9723D500673AB9 /* Build configuration list for PBXProject "PaperLess" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7F11DB52D9723D700673AB9 /* Debug */,
+				C7F11DB62D9723D700673AB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7F11DB72D9723D700673AB9 /* Build configuration list for PBXNativeTarget "PaperLess" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7F11DB82D9723D700673AB9 /* Debug */,
+				C7F11DB92D9723D700673AB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7F11DBA2D9723D700673AB9 /* Build configuration list for PBXNativeTarget "PaperLessTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7F11DBB2D9723D700673AB9 /* Debug */,
+				C7F11DBC2D9723D700673AB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7F11DBD2D9723D700673AB9 /* Build configuration list for PBXNativeTarget "PaperLessUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7F11DBE2D9723D700673AB9 /* Debug */,
+				C7F11DBF2D9723D700673AB9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rickclephas/KMP-ObservableViewModel.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/rickclephas/KMP-NativeCoroutines.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C7FECCB02E79B0CA00191928 /* KMPObservableViewModelCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
+			productName = KMPObservableViewModelCore;
+		};
+		C7FECCB22E79B0CA00191928 /* KMPObservableViewModelSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
+			productName = KMPObservableViewModelSwiftUI;
+		};
+		C7FECCB52E79B13B00191928 /* KMPNativeCoroutinesAsync */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesAsync;
+		};
+		C7FECCB72E79B13B00191928 /* KMPNativeCoroutinesCombine */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesCombine;
+		};
+		C7FECCB92E79B13B00191928 /* KMPNativeCoroutinesCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesCore;
+		};
+		C7FECCBB2E79B13B00191928 /* KMPNativeCoroutinesRxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			productName = KMPNativeCoroutinesRxSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = C7F11D8B2D9723D500673AB9 /* Project object */;
+}

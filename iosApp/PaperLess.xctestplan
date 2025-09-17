@@ -1,0 +1,37 @@
+{
+  "configurations" : [
+    {
+      "id" : "A3752795-EA1C-41A7-A2EC-FB6903C8E56B",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:PaperLess.xcodeproj",
+      "identifier" : "C7F11D922D9723D500673AB9",
+      "name" : "PaperLess"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:PaperLess.xcodeproj",
+        "identifier" : "C7F11DA22D9723D700673AB9",
+        "name" : "PaperLessTests"
+      }
+    },
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:PaperLess.xcodeproj",
+        "identifier" : "C7F11DAC2D9723D700673AB9",
+        "name" : "PaperLessUITests"
+      }
+    }
+  ],
+  "version" : 1
+}
