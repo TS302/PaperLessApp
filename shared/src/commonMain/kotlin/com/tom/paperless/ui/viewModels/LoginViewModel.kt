@@ -18,8 +18,6 @@ class LoginViewModel(
 
     private val _uiStateInternal = MutableStateFlow(LoginUiState())
 
-    // WICHTIG: Diese Annotation erzeugt in Swift die Properties `uiStateFlow` (AsyncSeq/Combine)
-    // und `uiStatePublisher` (Combine).
     @NativeCoroutinesState
     val uiState: StateFlow<LoginUiState> = _uiStateInternal
 
@@ -52,7 +50,6 @@ class LoginViewModel(
         _uiStateInternal.update { LoginUiState() }
     }
 
-    /** WICHTIG: Erfolg **und** Misserfolg explizit in den State schreiben. */
     fun checkIfAlreadyLoggedIn() {
         val user = getLoggedInUserUseCase()
         _uiStateInternal.update { prev ->
