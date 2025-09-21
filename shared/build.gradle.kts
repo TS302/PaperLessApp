@@ -4,9 +4,8 @@ import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
-    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
-    id("com.rickclephas.kmp.nativecoroutines") version "1.0.0-ALPHA-47"
-    id("org.jetbrains.kotlin.plugin.serialization") version libs.versions.kotlin.get()
+    alias(libs.plugins.kotlinSerialization)
+    id("com.rickclephas.kmp.nativecoroutines") version libs.versions.kmp.nativecoroutines.get()
 }
 
 
@@ -38,6 +37,13 @@ kotlin {
             // KMP OVM & NativeCoroutines
             api(libs.kmp.observableviewmodel.core)
             implementation(libs.kmp.nativecoroutines.core)
+            implementation(libs.koin.core)
+
+
+            // falls benötigt:
+            implementation(libs.kotlinx.serialization.json)
+            implementation(libs.kotlinx.coroutines.core)
+
 
         }
         commonTest.dependencies {

@@ -7,12 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		C7FECCB12E79B0CA00191928 /* KMPObservableViewModelCore in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB02E79B0CA00191928 /* KMPObservableViewModelCore */; settings = {ATTRIBUTES = (Required, ); }; };
-		C7FECCB32E79B0CA00191928 /* KMPObservableViewModelSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB22E79B0CA00191928 /* KMPObservableViewModelSwiftUI */; };
-		C7FECCB62E79B13B00191928 /* KMPNativeCoroutinesAsync in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB52E79B13B00191928 /* KMPNativeCoroutinesAsync */; };
-		C7FECCB82E79B13B00191928 /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB72E79B13B00191928 /* KMPNativeCoroutinesCombine */; };
-		C7FECCBA2E79B13B00191928 /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCB92E79B13B00191928 /* KMPNativeCoroutinesCore */; };
-		C7FECCBC2E79B13B00191928 /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C7FECCBB2E79B13B00191928 /* KMPNativeCoroutinesRxSwift */; };
+		C796CDFA2E7C2707000C9F81 /* shared.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = C796CDF92E7C2707000C9F81 /* shared.xcframework */; };
+		C796CDFB2E7C2707000C9F81 /* shared.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = C796CDF92E7C2707000C9F81 /* shared.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		C796CEE52E7C3BE6000C9F81 /* KMPObservableViewModelCore in Frameworks */ = {isa = PBXBuildFile; productRef = C796CEE42E7C3BE6000C9F81 /* KMPObservableViewModelCore */; };
+		C796CEE72E7C3BE6000C9F81 /* KMPObservableViewModelSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = C796CEE62E7C3BE6000C9F81 /* KMPObservableViewModelSwiftUI */; };
+		C796CEEA2E7C3C11000C9F81 /* KMPNativeCoroutinesAsync in Frameworks */ = {isa = PBXBuildFile; productRef = C796CEE92E7C3C11000C9F81 /* KMPNativeCoroutinesAsync */; };
+		C796CEEC2E7C3C11000C9F81 /* KMPNativeCoroutinesCombine in Frameworks */ = {isa = PBXBuildFile; productRef = C796CEEB2E7C3C11000C9F81 /* KMPNativeCoroutinesCombine */; };
+		C796CEEE2E7C3C11000C9F81 /* KMPNativeCoroutinesCore in Frameworks */ = {isa = PBXBuildFile; productRef = C796CEED2E7C3C11000C9F81 /* KMPNativeCoroutinesCore */; };
+		C796CEF02E7C3C11000C9F81 /* KMPNativeCoroutinesRxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C796CEEF2E7C3C11000C9F81 /* KMPNativeCoroutinesRxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,8 +34,23 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		C796CDFC2E7C2707000C9F81 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C796CDFB2E7C2707000C9F81 /* shared.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		C755F4D22DF483C8001FF3F8 /* PaperLess.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = PaperLess.xctestplan; sourceTree = "<group>"; };
+		C796CDF92E7C2707000C9F81 /* shared.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = shared.xcframework; path = ../shared/build/XCFrameworks/debug/shared.xcframework; sourceTree = "<group>"; };
 		C7F11D932D9723D500673AB9 /* PaperLess.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PaperLess.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F11DA32D9723D700673AB9 /* PaperLessTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperLessTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7F11DAD2D9723D700673AB9 /* PaperLessUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PaperLessUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -84,12 +101,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C7FECCB12E79B0CA00191928 /* KMPObservableViewModelCore in Frameworks */,
-				C7FECCBA2E79B13B00191928 /* KMPNativeCoroutinesCore in Frameworks */,
-				C7FECCB82E79B13B00191928 /* KMPNativeCoroutinesCombine in Frameworks */,
-				C7FECCBC2E79B13B00191928 /* KMPNativeCoroutinesRxSwift in Frameworks */,
-				C7FECCB32E79B0CA00191928 /* KMPObservableViewModelSwiftUI in Frameworks */,
-				C7FECCB62E79B13B00191928 /* KMPNativeCoroutinesAsync in Frameworks */,
+				C796CEEA2E7C3C11000C9F81 /* KMPNativeCoroutinesAsync in Frameworks */,
+				C796CEEC2E7C3C11000C9F81 /* KMPNativeCoroutinesCombine in Frameworks */,
+				C796CEEE2E7C3C11000C9F81 /* KMPNativeCoroutinesCore in Frameworks */,
+				C796CEF02E7C3C11000C9F81 /* KMPNativeCoroutinesRxSwift in Frameworks */,
+				C796CEE72E7C3BE6000C9F81 /* KMPObservableViewModelSwiftUI in Frameworks */,
+				C796CEE52E7C3BE6000C9F81 /* KMPObservableViewModelCore in Frameworks */,
+				C796CDFA2E7C2707000C9F81 /* shared.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +151,7 @@
 		C7FED17A2E7A084600191928 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C796CDF92E7C2707000C9F81 /* shared.xcframework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -148,6 +167,7 @@
 				C7F11D8F2D9723D500673AB9 /* Sources */,
 				C7F11D902D9723D500673AB9 /* Frameworks */,
 				C7F11D912D9723D500673AB9 /* Resources */,
+				C796CDFC2E7C2707000C9F81 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -158,12 +178,12 @@
 			);
 			name = PaperLess;
 			packageProductDependencies = (
-				C7FECCB02E79B0CA00191928 /* KMPObservableViewModelCore */,
-				C7FECCB22E79B0CA00191928 /* KMPObservableViewModelSwiftUI */,
-				C7FECCB52E79B13B00191928 /* KMPNativeCoroutinesAsync */,
-				C7FECCB72E79B13B00191928 /* KMPNativeCoroutinesCombine */,
-				C7FECCB92E79B13B00191928 /* KMPNativeCoroutinesCore */,
-				C7FECCBB2E79B13B00191928 /* KMPNativeCoroutinesRxSwift */,
+				C796CEE42E7C3BE6000C9F81 /* KMPObservableViewModelCore */,
+				C796CEE62E7C3BE6000C9F81 /* KMPObservableViewModelSwiftUI */,
+				C796CEE92E7C3C11000C9F81 /* KMPNativeCoroutinesAsync */,
+				C796CEEB2E7C3C11000C9F81 /* KMPNativeCoroutinesCombine */,
+				C796CEED2E7C3C11000C9F81 /* KMPNativeCoroutinesCore */,
+				C796CEEF2E7C3C11000C9F81 /* KMPNativeCoroutinesRxSwift */,
 			);
 			productName = PaperLess;
 			productReference = C7F11D932D9723D500673AB9 /* PaperLess.app */;
@@ -242,8 +262,8 @@
 			mainGroup = C7F11D8A2D9723D500673AB9;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */,
-				C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
+				C796CEE32E7C3BE6000C9F81 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */,
+				C796CEE82E7C3C11000C9F81 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C7F11D942D9723D500673AB9 /* Products */;
@@ -631,53 +651,53 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */ = {
+		C796CEE32E7C3BE6000C9F81 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rickclephas/KMP-ObservableViewModel.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = exactVersion;
+				version = "1.0.0-BETA-13";
 			};
 		};
-		C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
+		C796CEE82E7C3C11000C9F81 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/rickclephas/KMP-NativeCoroutines.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = exactVersion;
+				version = "1.0.0-ALPHA-46";
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		C7FECCB02E79B0CA00191928 /* KMPObservableViewModelCore */ = {
+		C796CEE42E7C3BE6000C9F81 /* KMPObservableViewModelCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
+			package = C796CEE32E7C3BE6000C9F81 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
 			productName = KMPObservableViewModelCore;
 		};
-		C7FECCB22E79B0CA00191928 /* KMPObservableViewModelSwiftUI */ = {
+		C796CEE62E7C3BE6000C9F81 /* KMPObservableViewModelSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C7FECCAF2E79B0CA00191928 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
+			package = C796CEE32E7C3BE6000C9F81 /* XCRemoteSwiftPackageReference "KMP-ObservableViewModel" */;
 			productName = KMPObservableViewModelSwiftUI;
 		};
-		C7FECCB52E79B13B00191928 /* KMPNativeCoroutinesAsync */ = {
+		C796CEE92E7C3C11000C9F81 /* KMPNativeCoroutinesAsync */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			package = C796CEE82E7C3C11000C9F81 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesAsync;
 		};
-		C7FECCB72E79B13B00191928 /* KMPNativeCoroutinesCombine */ = {
+		C796CEEB2E7C3C11000C9F81 /* KMPNativeCoroutinesCombine */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			package = C796CEE82E7C3C11000C9F81 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesCombine;
 		};
-		C7FECCB92E79B13B00191928 /* KMPNativeCoroutinesCore */ = {
+		C796CEED2E7C3C11000C9F81 /* KMPNativeCoroutinesCore */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			package = C796CEE82E7C3C11000C9F81 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesCore;
 		};
-		C7FECCBB2E79B13B00191928 /* KMPNativeCoroutinesRxSwift */ = {
+		C796CEEF2E7C3C11000C9F81 /* KMPNativeCoroutinesRxSwift */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = C7FECCB42E79B13B00191928 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
+			package = C796CEE82E7C3C11000C9F81 /* XCRemoteSwiftPackageReference "KMP-NativeCoroutines" */;
 			productName = KMPNativeCoroutinesRxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */

@@ -11,14 +11,12 @@ import KMPObservableViewModelSwiftUI
 
 
 struct MainTabView: View {
-    @StateObject private var nfcTagViewModel = CompanyViewModel()
     @ObservedViewModel var loginViewModel: LoginViewModel
     
     
     var body: some View {
         TabView {
             CompanyView()
-                .environmentObject(nfcTagViewModel)
                 .tabItem {
                     Image(systemName: "house.lodge.fill")
                     Text("Firma")
@@ -30,7 +28,7 @@ struct MainTabView: View {
                     Text("Personal")
                 }
             
-            SettingsView()
+            SettingsView(loginViewModel: loginViewModel)
             .tabItem {
                 Image(systemName: "gear")
                 Text("Einstellungen")

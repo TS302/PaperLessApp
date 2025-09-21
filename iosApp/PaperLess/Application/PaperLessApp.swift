@@ -6,9 +6,15 @@
 //
 
 import SwiftUI
+import Shared
 
 @main
 struct PaperLessApp: App {
+
+    init() {
+        KoinStarter.shared.start()
+        print("✅ KoinStarter.start() called")
+    }
     
     var body: some Scene {
         
