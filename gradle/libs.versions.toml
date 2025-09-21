@@ -1,4 +1,5 @@
 [versions]
+kotlin = "2.2.10"
 agp = "8.11.2"
 android-compileSdk = "36"
 android-minSdk = "24"
@@ -11,7 +12,7 @@ androidx-lifecycle = "2.9.3"
 androidx-testExt = "1.3.0"
 composeMultiplatform = "1.8.2"
 junit = "4.13.2"
-kotlin = "2.2.20"
+
 
 kmp-ovm = "1.0.0-BETA-13"
 kmp-nativecoroutines = "1.0.0-ALPHA-46"
@@ -53,12 +54,11 @@ kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 # Kotlin Serialization
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
 
-# KMP-ObservableViewModel
+# Rick Clephas KMP libs
 kmp-observableviewmodel-core = { module = "com.rickclephas.kmp:kmp-observableviewmodel-core", version.ref = "kmp-ovm" }
 kmp-observableviewmodel-compose = { module = "com.rickclephas.kmp:kmp-observableviewmodel-compose", version.ref = "kmp-ovm" }
-
-# KMP-NativeCoroutines
 kmp-nativecoroutines-core = { module = "com.rickclephas.kmp:kmp-nativecoroutines-core", version.ref = "kmp-nativecoroutines" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -66,3 +66,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlinSerialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

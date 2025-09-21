@@ -6,34 +6,61 @@
 //
 
 import SwiftUI
+import Shared
+import KMPObservableViewModelSwiftUI
+import KMPNativeCoroutinesAsync
 
 struct SettingsView: View {
-//    
-//    @Binding var user: User
-//    @Binding var isLoggedIn: Bool
+    
+    let loginViewModel: LoginViewModel
+
+    @ObservedViewModel var settingsViewModel: SettingsViewModel
+
+    @State private var settingsUiState = SettingsUiState(
+        logoutSuccess: false,
+        errorMessage: nil
+    )
+    @State private var uiStateTask: Task<Void, Never>? = nil
+
+    init(loginViewModel: LoginViewModel) {
+        self.loginViewModel = loginViewModel
+        let vm = KoinStarter.shared.settingsViewModel()
+        self._settingsViewModel = ObservedViewModel(wrappedValue: vm)
+    }
 
     var body: some View {
         NavigationView {
-            VStack {
-                Text("Einstellungen")
+            List {
+                Section(header: Text("Konto")) {
+                    Button(role: .destructive) {
+                        settingsViewModel.logout()
+                        loginViewModel.logout()
+                    } label: {
+                        HStack {
+                            Image(systemName: "rectangle.portrait.and.arrow.forward")
+                            Text("Abmelden")
+                        }
+                    }
+                }
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color.secondary)
-            .navigationBarTitle("Einstellungen")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        
-                    }) {
-                        Image(systemName: "power.circle.fill")
-                            .foregroundStyle(Color.primary)
+            .navigationTitle("Einstellungen")
+        }
+        .onAppear {
+            if uiStateTask == nil {
+                uiStateTask = Task {
+                    do {
+                        for try await newState in asyncSequence(for: settingsViewModel.uiStateFlow) {
+                            self.settingsUiState = newState
+                        }
+                    } catch {
+                        print("SettingsView uiState stream error:", error)
                     }
                 }
             }
         }
+        .onDisappear {
+            uiStateTask?.cancel()
+            uiStateTask = nil
+        }
     }
-}
-
-#Preview {
-    SettingsView()
 }

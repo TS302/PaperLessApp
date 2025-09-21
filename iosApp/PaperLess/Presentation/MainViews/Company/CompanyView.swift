@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CompanyView: View {
-    @EnvironmentObject var companyViewModel: CompanyViewModel
+    @StateObject private var companyViewModel = CompanyViewModel()
     
     var body: some View {
         NavigationStack {
