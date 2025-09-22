@@ -16,7 +16,7 @@ struct MainTabView: View {
     
     var body: some View {
         TabView {
-            CompanyView()
+            HomeView()
                 .tabItem {
                     Image(systemName: "house.lodge.fill")
                     Text("Firma")

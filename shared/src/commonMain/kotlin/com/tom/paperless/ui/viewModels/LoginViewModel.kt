@@ -16,27 +16,27 @@ class LoginViewModel(
     private val logoutUserUseCase: LogoutUserUseCase
 ) : ViewModel() {
 
-    private val _uiStateInternal = MutableStateFlow(LoginUiState())
+    private val _uiState = MutableStateFlow(LoginUiState())
 
     @NativeCoroutinesState
-    val uiState: StateFlow<LoginUiState> = _uiStateInternal
+    val uiState: StateFlow<LoginUiState> = _uiState
 
     fun onEmailChanged(newEmail: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(email = newEmail.trim(), errorMessage = null, success = false)
         }
     }
 
     fun onPasswordChanged(newPassword: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(password = newPassword, errorMessage = null, success = false)
         }
     }
 
     fun login() {
-        val curr = _uiStateInternal.value
+        val curr = _uiState.value
         val result = loginUserUseCase(email = curr.email, password = curr.password)
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             result.fold(
                 onSuccess = { prev.copy(success = true, errorMessage = null, password = "") },
                 onFailure = { error ->
@@ -47,17 +47,17 @@ class LoginViewModel(
 
     fun logout() {
         logoutUserUseCase()
-        _uiStateInternal.update { LoginUiState() }
+        _uiState.update { LoginUiState() }
     }
 
     fun checkIfAlreadyLoggedIn() {
         val user = getLoggedInUserUseCase()
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(success = (user != null), errorMessage = null)
         }
     }
 
     fun reset() {
-        _uiStateInternal.update { LoginUiState() }
+        _uiState.update { LoginUiState() }
     }
 }

@@ -12,7 +12,7 @@ object UserRepository {
             email = "tom@test.de",
             password = "1111",
             role = Role.ADMIN,
-            isLoggedIn = false
+            isLoggedIn = true
         ),
         User(
             firstname = "Max",

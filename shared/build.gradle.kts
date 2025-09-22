@@ -32,6 +32,7 @@ kotlin {
             languageSettings.optIn("kotlinx.cinterop.ExperimentalForeignApi")
             languageSettings.optIn("kotlin.experimental.ExperimentalObjCName")
             languageSettings.optIn("kotlin.uuid.ExperimentalUuidApi")
+            languageSettings.optIn("kotlin.experimental.ExperimentalObjCRefinement")
         }
         commonMain.dependencies {
 

@@ -1,5 +1,6 @@
 package com.tom.paperless.di
 
+import com.tom.paperless.ui.viewModels.CompanyViewModel
 import com.tom.paperless.ui.viewModels.LoginViewModel
 import com.tom.paperless.ui.viewModels.RegistrationViewModel
 import com.tom.paperless.ui.viewModels.SettingsViewModel
@@ -7,12 +8,20 @@ import org.koin.core.Koin
 import org.koin.core.context.startKoin
 
 object KoinStarter {
+
     private var koinReference: Koin? = null
 
     fun start() {
         if (koinReference == null) {
             koinReference = startKoin { modules(appModule) }.koin
         }
+    }
+
+
+    fun companyViewModel(): CompanyViewModel {
+        val koin = koinReference ?: error("Koin not started. Call KoinStarter.start() first.")
+        return try { koin.get(clazz = CompanyViewModel::class) }
+        catch (t: Throwable) { error("Koin get(CompanyViewModel) failed: ${t.message}") }
     }
 
     fun registrationViewModel(): RegistrationViewModel =
@@ -26,4 +35,8 @@ object KoinStarter {
     fun settingsViewModel(): SettingsViewModel =
         requireNotNull(koinReference) { "KoinStarter.start() zuerst aufrufen." }
             .get(clazz = SettingsViewModel::class)
+
+//    fun companyViewModel(): CompanyViewModel =
+//        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
+//            .get(clazz = CompanyViewModel::class)
 }

@@ -17,11 +17,6 @@ sealed class RegisterUserOutcome {
 class RegisterUserUseCase(
     private val repository: UserRepository = UserRepository
 ) {
-
-    /**
-     * Validiert Eingaben, legt User an, mapped Fehler auf domänenspezifische Typen.
-     * Intern nutzen wir runCatching + Exceptions, nach außen nur RegisterUserOutcome.
-     */
     operator fun invoke(
         firstname: String,
         lastname: String,
@@ -59,7 +54,6 @@ class RegisterUserUseCase(
             newUser
         }
 
-        // --- Mapping auf domänenspezifisches Ergebnis-Objekt ---
         return result.fold(
             onSuccess = { user -> RegisterUserOutcome.Success(user) },
             onFailure = { throwable ->

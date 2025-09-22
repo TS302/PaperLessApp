@@ -17,45 +17,44 @@ class RegistrationViewModel(
     private val loginUserUseCase: LoginUserUseCase
 ) : ViewModel() {
 
-    private val _uiStateInternal = MutableStateFlow(RegistrationUiState())
+    private val _uiState = MutableStateFlow(RegistrationUiState())
 
     @NativeCoroutinesState
-    val uiState: StateFlow<RegistrationUiState> = _uiStateInternal
+    val uiState: StateFlow<RegistrationUiState> = _uiState
 
     fun onFirstnameChanged(newFirstname: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(firstname = newFirstname.trim(), errorMessage = null, success = false)
         }
     }
 
     fun onLastnameChanged(newLastname: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(lastname = newLastname.trim(), errorMessage = null, success = false)
         }
     }
 
     fun onEmailChanged(newEmail: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(email = newEmail.trim(), errorMessage = null, success = false)
         }
     }
 
     fun onPasswordChanged(newPassword: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(password = newPassword, errorMessage = null, success = false)
         }
     }
 
     fun onConfirmPasswordChanged(newConfirmPassword: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(confirmPassword = newConfirmPassword, errorMessage = null, success = false)
         }
     }
 
     fun register() {
-        val current = _uiStateInternal.value
+        val current = _uiState.value
 
-        // 1) Client-Validierung: Passwörter müssen übereinstimmen
         if (current.password.isBlank() ||
             current.confirmPassword.isBlank() ||
             current.password != current.confirmPassword
@@ -64,10 +63,8 @@ class RegistrationViewModel(
             return
         }
 
-        // 2) E-Mail normalisieren
         val normalizedEmail = current.email.trim().lowercase()
 
-        // 3) Registrieren (liefert RegisterUserOutcome)
         when (val outcome = registerUserUseCase(
             firstname = current.firstname,
             lastname = current.lastname,
@@ -96,11 +93,11 @@ class RegistrationViewModel(
                         )
                     }
                 )
-                _uiStateInternal.value = newState
+                _uiState.value = newState
             }
 
             is RegisterUserOutcome.Failure -> {
-                _uiStateInternal.update { prev ->
+                _uiState.update { prev ->
                     prev.copy(
                         success = false,
                         errorMessage = outcome.error.toHumanMessage()
@@ -111,16 +108,15 @@ class RegistrationViewModel(
     }
 
     fun reset() {
-        _uiStateInternal.update { RegistrationUiState() }
+        _uiState.update { RegistrationUiState() }
     }
 
-    /** Für SwiftUI-Alert: Fehlermeldung nach dem Anzeigen zurücksetzen. */
     fun clearError() {
-        _uiStateInternal.update { prev -> prev.copy(errorMessage = null) }
+        _uiState.update { prev -> prev.copy(errorMessage = null) }
     }
 
     private fun setError(message: String) {
-        _uiStateInternal.update { prev ->
+        _uiState.update { prev ->
             prev.copy(success = false, errorMessage = message)
         }
     }

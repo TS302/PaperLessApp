@@ -10,37 +10,24 @@ import kotlin.uuid.Uuid
 
 object NfcTaggableRepositoryImpl: NfcTaggableRepository {
 
-    private var sampleData = mutableListOf(
+    private var sampleData = mutableListOf<NfcTaggable>(
         Employee(
-            id = Uuid.parse("00000000-0000-0000-0000-0000000000E1"),
-            name = "Anna Müller",
-            email = "anna.mueller@example.com",
-            phoneNumber = "+49 151 0000001"
+            id = Uuid.random(), name = "Anna Müller",
+            email = "anna.mueller@example.com", phoneNumber = "+49 151 0000001"
         ),
         Employee(
-            id = Uuid.parse("00000000-0000-0000-0000-0000000000E2"),
-            name = "Ben Schmidt",
-            email = "ben.schmidt@example.com",
-            phoneNumber = "+49 151 0000002"
+            id = Uuid.random(), name = "Ben Schmidt",
+            email = "ben.schmidt@example.com", phoneNumber = "+49 151 0000002"
         ),
-        // Vehicle
         Vehicle(
-            id = Uuid.parse("00000000-0000-0000-0000-0000000000V1"),
-            name = "Sprinter 316",
-            plate = "TÜ-AB 1234"
+            id = Uuid.random(), name = "Sprinter 316", plate = "TÜ-AB 1234"
         ),
-        // Tool
         Tool(
-            id = Uuid.parse("00000000-0000-0000-0000-0000000000T1"),
-            name = "Hilti TE 50",
-            serialNumber = "H-TE50-7788"
+            id = Uuid.random(), name = "Hilti TE 50", serialNumber = "H-TE50-7788"
         ),
-        // Key
         KeyRing(
-            id = Uuid.parse("00000000-0000-0000-0000-0000000000K1"),
-            name = "Hauptschlüssel Zentrale"
+            id = Uuid.random(), name = "Hauptschlüssel Zentrale"
         )
-
     )
 
     override suspend fun getAll(): List<NfcTaggable> {

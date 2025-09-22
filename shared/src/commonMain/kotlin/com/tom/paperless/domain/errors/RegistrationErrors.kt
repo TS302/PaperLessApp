@@ -8,10 +8,7 @@ sealed interface RegistrationError {
     data class Unknown(val message: String?) : RegistrationError
 }
 
-/**
- * Interne Exception, die einen RegistrationError kapselt.
- * Wird nur intern im UseCase geworfen und anschließend in ein domänenspezifisches Ergebnis gemappt.
- */
+
 class RegistrationException(
     val reason: RegistrationError
 ) : IllegalArgumentException(
