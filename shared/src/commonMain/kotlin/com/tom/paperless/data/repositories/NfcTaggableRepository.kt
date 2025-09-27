@@ -1,13 +1,15 @@
 package com.tom.paperless.data.repositories
 
+import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.tom.paperless.domain.models.NfcTaggable
-import com.tom.paperless.domain.models.TargetType
+import com.tom.paperless.domain.models.enums.TargetType
 import kotlin.native.HiddenFromObjC
 import kotlin.uuid.Uuid
 
 
 interface NfcTaggableRepository {
-    @HiddenFromObjC
+
+    @NativeCoroutines
     suspend fun getAll(): List<NfcTaggable>
 
     @HiddenFromObjC

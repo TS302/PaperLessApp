@@ -6,6 +6,7 @@ import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.GetAllNfcTaggablesUseCase
 import com.tom.paperless.domain.useCases.GetLoggedInUserUseCase
 import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
+import com.tom.paperless.domain.useCases.GetNfcTaggablesFilteredUseCase
 import com.tom.paperless.domain.useCases.LoginUserUseCase
 import com.tom.paperless.domain.useCases.LogoutUserUseCase
 import com.tom.paperless.domain.useCases.RegisterUserUseCase
@@ -21,16 +22,17 @@ val appModule = module {
     // Repositories
     single<NfcTaggableRepository> { NfcTaggableRepositoryImpl }
 
+    // UseCases
     single { RegisterUserUseCase() }
     single { LoginUserUseCase() }
     single { LogoutUserUseCase() }
     single { GetLoggedInUserUseCase() }
 
-    // UseCases
     single { GetAllNfcTaggablesUseCase(repository = get()) }
     single { GetNfcTaggableByIdUseCase(repository = get()) }
     single { AddNfcTaggableUseCase(repository = get()) }
     single { UpdateNfcTaggableUseCase(repository = get()) }
+    single { GetNfcTaggablesFilteredUseCase(repository = get()) }
 
 
     //Viewmodels
@@ -59,7 +61,8 @@ val appModule = module {
             getAllTags = get<GetAllNfcTaggablesUseCase>(),
             getTagById = get<GetNfcTaggableByIdUseCase>(),
             addTag = get<AddNfcTaggableUseCase>(),
-            updateTag = get<UpdateNfcTaggableUseCase>()
+            updateTag = get<UpdateNfcTaggableUseCase>(),
+            getNfcTaggablesFilteredUseCase = get<GetNfcTaggablesFilteredUseCase>()
         )
     }
 }

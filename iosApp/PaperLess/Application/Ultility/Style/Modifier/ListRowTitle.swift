@@ -10,8 +10,9 @@ import SwiftUI
 struct ListRowTitle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(.caption)
-            .fontWeight(.semibold)
+            .font(.system(size: 16))        
+            .fontWeight(.medium)
             .foregroundStyle(Color.primary)
+            .padding(.bottom, 2)
     }
 }

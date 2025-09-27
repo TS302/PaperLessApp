@@ -17,13 +17,6 @@ object KoinStarter {
         }
     }
 
-
-    fun companyViewModel(): CompanyViewModel {
-        val koin = koinReference ?: error("Koin not started. Call KoinStarter.start() first.")
-        return try { koin.get(clazz = CompanyViewModel::class) }
-        catch (t: Throwable) { error("Koin get(CompanyViewModel) failed: ${t.message}") }
-    }
-
     fun registrationViewModel(): RegistrationViewModel =
         requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
             .get(clazz = RegistrationViewModel::class)
@@ -36,7 +29,7 @@ object KoinStarter {
         requireNotNull(koinReference) { "KoinStarter.start() zuerst aufrufen." }
             .get(clazz = SettingsViewModel::class)
 
-//    fun companyViewModel(): CompanyViewModel =
-//        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
-//            .get(clazz = CompanyViewModel::class)
+    fun companyViewModel(): CompanyViewModel =
+        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
+            .get(clazz = CompanyViewModel::class)
 }

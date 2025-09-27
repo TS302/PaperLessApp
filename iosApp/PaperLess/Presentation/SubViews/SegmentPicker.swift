@@ -33,3 +33,7 @@ struct SegmentPicker: View {
     }
 }
 
+#Preview {
+    SegmentPicker(selectedSegment: .constant(1), segmentCount: 2, label1: "Test1", label2: "Test2", label3: "Test3")
+}
+
