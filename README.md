@@ -56,4 +56,8 @@ Viele Unternehmen verwalten Betriebsmittel noch mit Excel oder Papierlisten.
 - Sichere Cloud-Speicherung  
 - Plattformübergreifend nutzbar  
 
+## 📱 App Mockup  
 
+<p align="left">
+  <img src="https://github.com/TS302/PaperLessApp/blob/develop/SECO_APP_MOCKUP_01.jpg?raw=true" alt="SECO App Mockup" width="600"/>
+</p>
