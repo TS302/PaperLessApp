@@ -1,39 +1,59 @@
-This is a Kotlin Multiplatform project targeting Android, iOS.
+# 🔖 SECO – NFC-basiertes Asset-Management  
 
-* [/composeApp](./composeApp/src) is for code that will be shared across your Compose Multiplatform applications.
-  It contains several subfolders:
-  - [commonMain](./composeApp/src/commonMain/kotlin) is for code that’s common for all targets.
-  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
-    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
-    the [iosMain](./composeApp/src/iosMain/kotlin) folder would be the right place for such calls.
-    Similarly, if you want to edit the Desktop (JVM) specific part, the [jvmMain](./composeApp/src/jvmMain/kotlin)
-    folder is the appropriate location.
-
-* [/iosApp](./iosApp/iosApp) contains iOS applications. Even if you’re sharing your UI with Compose Multiplatform,
-  you need this entry point for your iOS app. This is also where you should add SwiftUI code for your project.
-
-* [/shared](./shared/src) is for the code that will be shared between all targets in the project.
-  The most important subfolder is [commonMain](./shared/src/commonMain/kotlin). If preferred, you
-  can add code to the platform-specific folders here too.
-
-### Build and Run Android Application
-
-To build and run the development version of the Android app, use the run configuration from the run widget
-in your IDE’s toolbar or build it directly from the terminal:
-- on macOS/Linux
-  ```shell
-  ./gradlew :composeApp:assembleDebug
-  ```
-- on Windows
-  ```shell
-  .\gradlew.bat :composeApp:assembleDebug
-  ```
-
-### Build and Run iOS Application
-
-To build and run the development version of the iOS app, use the run configuration from the run widget
-in your IDE’s toolbar or open the [/iosApp](./iosApp) directory in Xcode and run it from there.
+[![Kotlin Multiplatform](https://img.shields.io/badge/Kotlin_Multiplatform-1.0.0-blue?logo=kotlin&logoColor=white)](https://kotlinlang.org/docs/multiplatform.html)
+[![Android](https://img.shields.io/badge/Android-Compose-brightgreen?logo=android&logoColor=white)](https://developer.android.com/jetpack/compose)
+[![iOS](https://img.shields.io/badge/iOS-SwiftUI-orange?logo=apple&logoColor=white)](https://developer.apple.com/xcode/swiftui/)
+[![Firebase](https://img.shields.io/badge/Backend-Firebase-yellow?logo=firebase&logoColor=white)](https://firebase.google.com/)
+[![License](https://img.shields.io/badge/License-MIT-lightgrey.svg)](LICENSE)
 
 ---
 
-Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…
+## 📱 Projektbeschreibung  
+
+**SECO** ist eine moderne **NFC-gestützte Asset-Management-App**, entwickelt mit **Kotlin Multiplatform (KMP)**.  
+Ziel ist es, physische Unternehmenswerte – wie **Fahrzeuge, Werkzeuge, Schlüssel oder Mitarbeitende** – einfach zu **erfassen, verwalten und zuzuordnen**.  
+
+Durch den Einsatz von **NFC-Tags** können Assets per Scan identifiziert, digital erfasst und in einer gemeinsamen Cloud-Datenbank synchronisiert werden.  
+Dadurch behalten Unternehmen stets den Überblick über ihre Betriebsmittel – **plattformübergreifend**, **in Echtzeit** und **intuitiv bedienbar**.
+
+---
+
+## ✨ Hauptfunktionen  
+
+- 🔍 **NFC-Scan** zur Identifikation und Registrierung von Assets  
+- 🧾 **Asset-Management** (Fahrzeuge, Werkzeuge, Schlüssel, Mitarbeitende)  
+- 🔄 **Synchronisation mit Firebase Firestore**  
+- 🔐 **Benutzerverwaltung & Login via Firebase Auth**  
+- 🖥️ **Cross-Plattform UI** mit Jetpack Compose & SwiftUI  
+- ⚙️ **Offline-Funktionalität** mit lokalem Cache  
+- 📊 **Dashboard-Ansicht** zur schnellen Übersicht  
+
+---
+
+## 🛠️ Tech Stack  
+
+| Kategorie | Technologie |
+|------------|--------------|
+| **Programmiersprache** | Kotlin (Multiplatform) |
+| **UI** | Jetpack Compose (Android), SwiftUI (iOS) |
+| **DI** | Koin |
+| **Netzwerk** | Ktor |
+| **Asynchronität** | Kotlin Coroutines |
+| **Backend** | Firebase Firestore & Authentication |
+| **Architektur** | MVVM + Use Cases + Repository |
+| **Build-System** | Gradle Kotlin DSL |
+| **Versionskontrolle** | Git / GitHub |
+
+---
+
+## 🧠 Ziel & Motivation  
+
+Viele Unternehmen verwalten Betriebsmittel noch mit Excel oder Papierlisten.  
+**SECO** bietet eine moderne Lösung zur **digitalen Nachverfolgung** von Assets:  
+
+- Weniger Verwaltungsaufwand  
+- Sofortiger Überblick  
+- Sichere Cloud-Speicherung  
+- Plattformübergreifend nutzbar  
+
+
