@@ -8,7 +8,9 @@
 import SwiftUI
 import Shared
 
-extension TagStatus {
+extension TagStatus: @retroactive Identifiable {
+    public var id: String { caseName }
+    var label: String { displayName }
     var color: Color {
         switch self {
         case .available:
@@ -20,5 +22,7 @@ extension TagStatus {
         default:
             return .black
         }
+    }
+    static var all: [TagStatus] { [.available, .inuse, .passive]
     }
 }
