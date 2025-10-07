@@ -44,7 +44,7 @@ struct HomeView: View {
         )
     }
 
-    // optional: triggert nur Recompute, kein echtes Reload nötig
+    
     private func reloadList() {
         companyVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
         companyVM.setSearchQueryForIos(queryText: searchBinding.wrappedValue)
@@ -60,7 +60,7 @@ struct HomeView: View {
                 Section {
                     ForEach(uiState.items, id: \.id.description) { item in
                         NavigationLink {
-                            ItemDetailView(item: item) // kein lokales Patchen mehr
+                            ItemDetailView(item: item)
                         } label: {
                             ItemRow(item: item)
                         }
@@ -87,10 +87,10 @@ struct HomeView: View {
                     )
                 }
             }
-            .refreshable { reloadList() } // darf bleiben
+            .refreshable { reloadList() }
         }
-        .frame(maxWidth: .infinity)
-        .background(Color.secondary)
+//        .frame(maxWidth: .infinity)
+//        .background(Color.secondary)
         .task {
             uiStateTask?.cancel()
             uiStateTask = Task {

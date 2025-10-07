@@ -19,71 +19,6 @@ object NfcTaggableRepositoryImpl: NfcTaggableRepository {
     override fun observeAll(): StateFlow<List<NfcTaggable>> = _items
 
     private fun initialSample(): List<NfcTaggable> = listOf(
-        Employee(
-            id = Uuid.random(),
-            name = "Clara Becker",
-            email = "clara.becker@example.com",
-            phoneNumber = "+49 151 0000003",
-            tagStatus = TagStatus.inUse,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "David Wagner",
-            email = "david.wagner@example.com",
-            phoneNumber = "+49 151 0000004",
-            tagStatus = TagStatus.available,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Elena Schulz",
-            email = "elena.schulz@example.com",
-            phoneNumber = "+49 151 0000005",
-            tagStatus = TagStatus.passive,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Felix Hoffmann",
-            email = "felix.hoffmann@example.com",
-            phoneNumber = "+49 151 0000006",
-            tagStatus = TagStatus.available,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Greta Klein",
-            email = "greta.klein@example.com",
-            phoneNumber = "+49 151 0000007",
-            tagStatus = TagStatus.inUse,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Hannah Vogel",
-            email = "hannah.vogel@example.com",
-            phoneNumber = "+49 151 0000008",
-            tagStatus = TagStatus.available,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Jonas Krause",
-            email = "jonas.krause@example.com",
-            phoneNumber = "+49 151 0000009",
-            tagStatus = TagStatus.passive,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Laura Neumann",
-            email = "laura.neumann@example.com",
-            phoneNumber = "+49 151 0000010",
-            tagStatus = TagStatus.inUse,
-            targetType = TargetType.Employee
-        ),
-
         // Vehicles
         Vehicle(
             id = Uuid.random(),
@@ -165,7 +100,7 @@ object NfcTaggableRepositoryImpl: NfcTaggableRepository {
             targetType = TargetType.Tool
         ),
 
-        // KeyRings → TargetType.Key
+        // KeyRings
         KeyRing(
             id = Uuid.random(),
             name = "Nebeneingang Lagerhalle",

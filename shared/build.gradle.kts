@@ -36,6 +36,8 @@ kotlin {
         }
         commonMain.dependencies {
 
+            implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+
             // KMP OVM & NativeCoroutines
             api(libs.kmp.observableviewmodel.core)
             implementation(libs.kmp.nativecoroutines.core)
