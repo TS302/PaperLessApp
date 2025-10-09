@@ -48,15 +48,6 @@ struct FilterPicker: View {
                     .foregroundColor(filter == .keys ? .primary : .primary.opacity(0.4))
             }
             .accessibilityLabel("Schlüssel")
-
-            Button {
-                filter = .employees
-            } label: {
-                Image(systemName: "person.2.fill")
-                    .font(.system(size: 16))
-                    .foregroundColor(filter == .employees ? .primary : .primary.opacity(0.4))
-            }
-            .accessibilityLabel("Mitarbeiter")
             
             Button {
                 filter = .all
@@ -69,8 +60,8 @@ struct FilterPicker: View {
             .accessibilityLabel("Filter löschen")
 
         }
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, minHeight: 30, alignment: .trailing)
+        .padding(.bottom, 8)
     }
 }
 

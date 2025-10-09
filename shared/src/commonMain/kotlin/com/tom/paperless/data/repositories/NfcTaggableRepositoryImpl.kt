@@ -8,76 +8,17 @@ import com.tom.paperless.domain.models.enums.TargetType
 import com.tom.paperless.domain.models.Tool
 import com.tom.paperless.domain.models.Vehicle
 import com.tom.paperless.domain.models.enums.TagStatus
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlin.uuid.Uuid
 
 object NfcTaggableRepositoryImpl: NfcTaggableRepository {
 
-    private var sampleData = mutableListOf<NfcTaggable>(
-        Employee(
-            id = Uuid.random(),
-            name = "Clara Becker",
-            email = "clara.becker@example.com",
-            phoneNumber = "+49 151 0000003",
-            tagStatus = TagStatus.inUse,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "David Wagner",
-            email = "david.wagner@example.com",
-            phoneNumber = "+49 151 0000004",
-            tagStatus = TagStatus.available,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Elena Schulz",
-            email = "elena.schulz@example.com",
-            phoneNumber = "+49 151 0000005",
-            tagStatus = TagStatus.passive,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Felix Hoffmann",
-            email = "felix.hoffmann@example.com",
-            phoneNumber = "+49 151 0000006",
-            tagStatus = TagStatus.available,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Greta Klein",
-            email = "greta.klein@example.com",
-            phoneNumber = "+49 151 0000007",
-            tagStatus = TagStatus.inUse,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Hannah Vogel",
-            email = "hannah.vogel@example.com",
-            phoneNumber = "+49 151 0000008",
-            tagStatus = TagStatus.available,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Jonas Krause",
-            email = "jonas.krause@example.com",
-            phoneNumber = "+49 151 0000009",
-            tagStatus = TagStatus.passive,
-            targetType = TargetType.Employee
-        ),
-        Employee(
-            id = Uuid.random(),
-            name = "Laura Neumann",
-            email = "laura.neumann@example.com",
-            phoneNumber = "+49 151 0000010",
-            tagStatus = TagStatus.inUse,
-            targetType = TargetType.Employee
-        ),
+    private val _items = MutableStateFlow<List<NfcTaggable>>(initialSample())
+    override fun observeAll(): StateFlow<List<NfcTaggable>> = _items
 
+    private fun initialSample(): List<NfcTaggable> = listOf(
         // Vehicles
         Vehicle(
             id = Uuid.random(),
@@ -159,7 +100,7 @@ object NfcTaggableRepositoryImpl: NfcTaggableRepository {
             targetType = TargetType.Tool
         ),
 
-        // KeyRings → TargetType.Key
+        // KeyRings
         KeyRing(
             id = Uuid.random(),
             name = "Nebeneingang Lagerhalle",
@@ -222,32 +163,42 @@ object NfcTaggableRepositoryImpl: NfcTaggableRepository {
         )
     )
 
-    @NativeCoroutines
-    override suspend fun getAll(): List<NfcTaggable> {
-        return sampleData
+    override suspend fun getAll(): List<NfcTaggable>  = _items.value
+
+    override suspend fun getById(id: Uuid): NfcTaggable? {
+        return _items.value.firstOrNull { it.id == id }
     }
 
-    override suspend fun getById(type: TargetType, id: Uuid): NfcTaggable? {
-        return sampleData.firstOrNull { it.targetType == type && it.id == id }
+    override suspend fun add(itemToAdd: NfcTaggable): NfcTaggable {
+        require(itemToAdd.name.isNotBlank()) { "Name darf nicht leer sein." }
+        _items.update { current -> current + itemToAdd }
+        return itemToAdd
     }
 
-    override suspend fun add(item: NfcTaggable): NfcTaggable {
-        require(item.name.isNotBlank()) { "Name darf nicht leer sein." }
-        require(sampleData.none { it.id == item.id && it.targetType == item.targetType }) {
-            "${item.targetType} mit ID ${item.id} existiert bereits."
+    override suspend fun update(itemToUpdate: NfcTaggable): NfcTaggable? {
+        var savedItem: NfcTaggable? = null
+        _items.update { current ->
+            val index = current.indexOfFirst { it.id == itemToUpdate.id && it.targetType == itemToUpdate.targetType }
+            if (index >= 0) {
+                val newList = current.toMutableList()
+                newList[index] = itemToUpdate
+                savedItem = itemToUpdate
+                newList
+            } else {
+                current
+            }
         }
-        sampleData.add(item)
-        return item
+        return savedItem
     }
 
-    override suspend fun update(item: NfcTaggable): Boolean {
-        val index = sampleData.indexOfFirst { it.id == item.id && it.targetType == item.targetType }
-        return if (index >= 0) {
-            sampleData[index] = item
-            true
-        } else {
-            false
+    override suspend fun delete(id: Uuid): Boolean {
+        var removed = false
+        _items.update { list ->
+            val newList = list.filterNot { it.id == id }
+            removed = newList.size != list.size
+            newList
         }
+        return removed
     }
 
 }

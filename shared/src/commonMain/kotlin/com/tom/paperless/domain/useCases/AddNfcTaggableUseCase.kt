@@ -8,6 +8,8 @@ class AddNfcTaggableUseCase(
     private val repository: NfcTaggableRepository
 ) {
     @NativeCoroutines
-    suspend operator fun invoke(item: NfcTaggable): NfcTaggable =
-        repository.add(item)
+    suspend operator fun invoke(itemToAdd: NfcTaggable): NfcTaggable {
+        require(itemToAdd.name.isNotBlank()) { "Name darf nicht leer sein." }
+        return repository.add(itemToAdd)
+    }
 }

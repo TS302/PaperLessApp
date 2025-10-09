@@ -1,101 +1,115 @@
 package com.tom.paperless.ui.viewModels
 
-
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
-import com.tom.paperless.data.repositories.NfcTaggableRepositoryImpl.getById
 import com.tom.paperless.domain.models.NfcTaggable
 import com.tom.paperless.domain.models.enums.TargetType
 import com.tom.paperless.domain.models.uiStates.NfcTaggablesUiState
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.GetAllNfcTaggablesUseCase
-import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
-import com.tom.paperless.domain.useCases.GetNfcTaggablesFilteredUseCase
-import com.tom.paperless.domain.useCases.UpdateNfcTaggableUseCase
+import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
+import com.tom.paperless.domain.useCases.FilterNfcTaggablesUseCase
+import com.tom.paperless.domain.useCases.GetAllNfcTaggablesFlowUseCase
+import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlin.uuid.Uuid
 
 class CompanyViewModel(
-    private val getAllTags: GetAllNfcTaggablesUseCase,
-    private val getTagById: GetNfcTaggableByIdUseCase,
-    private val addTag: AddNfcTaggableUseCase,
-    private val updateTag: UpdateNfcTaggableUseCase,
-    private val getNfcTaggablesFilteredUseCase: GetNfcTaggablesFilteredUseCase
+    private val getAllNfcTaggablesFlowUseCase: GetAllNfcTaggablesFlowUseCase,
+    private val addNfcTaggableUseCase: AddNfcTaggableUseCase,
+    private val saveNfcTaggableUseCase: SaveNfcTaggableUseCase,
+    private val deleteNfcTaggableUseCase: DeleteNfcTaggableUseCase,
+    private val filterNfcTaggablesUseCase: FilterNfcTaggablesUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NfcTaggablesUiState())
+
+    private val _uiState = MutableStateFlow(NfcTaggablesUiState.empty())
 
     @NativeCoroutinesState
     val uiState: StateFlow<NfcTaggablesUiState> = _uiState
 
 init {
     viewModelScope.launch {
-        val items = getAllTags()
-        _uiState.value = _uiState.value.copy(items = items)
-        println("CompanyVM loaded ${items.size} items")
+        getAllNfcTaggablesFlowUseCase().collectLatest { allItems ->
+            val current = _uiState.value
+            val visible = filterNfcTaggablesUseCase(
+                allItems = allItems,
+                typeFilter = current.activeTypeFilter,
+                searchQueryText = current.searchQueryText
+            )
+            _uiState.value = current.copy(items = visible, isLoading = false)
+        }
     }
 }
 
-
-    fun loadAllNfcTaggables() {
-        viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            runCatching { getAllTags() }
-                .onSuccess { items -> _uiState.value = _uiState.value.copy(items = items, isLoading = false) }
-                .onFailure { e -> _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = e.message) }
-        }
+    // ---------- Filter & Suche ----------
+    fun setTypeFilter(newTypeFilter: TargetType?) {
+        val current = _uiState.value
+        _uiState.value = current.copy(activeTypeFilter = newTypeFilter)
+        recomputeVisibleItems()
     }
 
-    fun applyTypeFilter(newTypeFilter: TargetType?) {
-        _uiState.value = _uiState.value.copy(activeTypeFilter = newTypeFilter)
-        reloadDisplayedItems()
+    fun setSearchQuery(newSearchQueryText: String) {
+        val current = _uiState.value
+        _uiState.value = current.copy(searchQueryText = newSearchQueryText)
+        recomputeVisibleItems()
     }
 
-    fun updateSearchQuery(newSearchQueryText: String) {
-        _uiState.value = _uiState.value.copy(searchQueryText = newSearchQueryText)
-        reloadDisplayedItems()
-    }
-
-    fun addNfcTaggable(item: NfcTaggable) {
-        viewModelScope.launch {
-            runCatching { addTag(item) }
-                .onSuccess { loadAllNfcTaggables() }
-                .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
-        }
-    }
-
-    fun updateNfcTaggable(item: NfcTaggable) {
-        viewModelScope.launch {
-            runCatching { updateTag(item) }
-                .onSuccess { loadAllNfcTaggables() }
-                .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
-        }
-    }
-
-    fun setTypeFilterForIos(typeFilter: TargetType?) {
-        println("iOS setTypeFilterForIos -> $typeFilter")
-        applyTypeFilter(typeFilter)
-    }
-
-    fun setSearchQueryForIos(queryText: String) {
-        println("iOS setSearchQueryForIos -> '$queryText'")
-        updateSearchQuery(queryText)
-    }
-
-    private fun reloadDisplayedItems() = viewModelScope.launch {
+    private fun recomputeVisibleItems() = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(isLoading = true)
+        val snapshotAll: List<NfcTaggable> = getAllNfcTaggablesFlowUseCase().value
         val state = _uiState.value
-        val filtered = getNfcTaggablesFilteredUseCase(
+        val visible = filterNfcTaggablesUseCase(
+            allItems = snapshotAll,
             typeFilter = state.activeTypeFilter,
             searchQueryText = state.searchQueryText
         )
-        _uiState.value = state.copy(items = filtered)
-        println("reloadDisplayedItems -> ${filtered.size} items")
+        _uiState.value = state.copy(items = visible, isLoading = false)
     }
 
-    @NativeCoroutines
-    suspend fun getNfcTaggableById(type: TargetType, id: Uuid): NfcTaggable? =
-        getById(type, id)
+
+    // ---------- CRUD ----------
+    fun addItem(itemToAdd: NfcTaggable) {
+        viewModelScope.launch {
+            try {
+                val savedItem: NfcTaggable = addNfcTaggableUseCase(itemToAdd)
+                // keine weitere Aktion nötig – Repo-Flow emittiert automatisch neu
+                println("addItem OK: ${savedItem.id}")
+            } catch (e: Throwable) {
+                _uiState.value = _uiState.value.copy(errorMessage = e.message)
+            }
+        }
+    }
+
+    fun updateItem(itemToSave: NfcTaggable) {
+        viewModelScope.launch {
+            try {
+                val savedItem: NfcTaggable = saveNfcTaggableUseCase(itemToSave)
+                println("updateItem OK: ${savedItem.id}")
+            } catch (e: Throwable) {
+                _uiState.value = _uiState.value.copy(errorMessage = e.message)
+            }
+        }
+    }
+
+    fun deleteItem(id: Uuid) {
+        viewModelScope.launch {
+            try {
+                val wasDeleted: Boolean = deleteNfcTaggableUseCase(id)
+                if (!wasDeleted) {
+                    _uiState.value = _uiState.value.copy(errorMessage = "Löschen fehlgeschlagen.")
+                }
+                // Bei Erfolg emittiert der Repo-Flow automatisch neu
+            } catch (e: Throwable) {
+                _uiState.value = _uiState.value.copy(errorMessage = e.message)
+            }
+        }
+    }
+
+    // ---------- iOS Helfer-Methoden ----------
+    fun setTypeFilterForIos(typeFilter: TargetType?) = setTypeFilter(typeFilter)
+    fun setSearchQueryForIos(queryText: String) = setSearchQuery(queryText)
+
 }

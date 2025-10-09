@@ -11,4 +11,8 @@ data class NfcTaggablesUiState(
     val selectedItem: NfcTaggable? = null,
     val activeTypeFilter: TargetType? = null,
     val searchQueryText: String = ""
-)
+) {
+    companion object {
+        fun empty() = NfcTaggablesUiState()
+    }
+}

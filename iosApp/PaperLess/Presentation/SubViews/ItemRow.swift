@@ -14,12 +14,17 @@ struct ItemRow: View {
     var body: some View {
         HStack {
             HStack {
-                item.targetType.icon
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 15, height: 15)
-                    .foregroundStyle(Color.primary)
-                    .padding(.trailing, 4)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 8)
+                        .frame(width: 40, height: 40)
+                        .foregroundColor(.primary.opacity(0.2))
+                        
+                    item.targetType.icon
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 15, height: 15)
+                        .foregroundStyle(Color.primary)
+                }
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)
@@ -28,16 +33,13 @@ struct ItemRow: View {
                     HStack {
                         Image(systemName: "ellipsis.rectangle.fill")
                             .foregroundStyle(item.tagStatus.color)
+                        
                         Text(item.tagStatus.displayName)
                             .modifier(ListRowSubtitle())
                     }
                 }
+                .padding(.leading, 2)
             }
-            
-            Spacer()
-            Text(item.targetType.name)
-                .font(.caption)
-                .foregroundStyle(.secondary)
         }
         .padding(.vertical, 4)
     }

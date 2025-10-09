@@ -11,8 +11,10 @@ struct ListRowTitle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.system(size: 16))        
-            .fontWeight(.medium)
+            .fontWeight(.semibold)
             .foregroundStyle(Color.primary)
             .padding(.bottom, 2)
+            .lineLimit(1)
+            .truncationMode(.tail)
     }
 }
