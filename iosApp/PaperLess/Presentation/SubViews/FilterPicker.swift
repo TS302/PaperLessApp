@@ -60,8 +60,8 @@ struct FilterPicker: View {
             .accessibilityLabel("Filter löschen")
 
         }
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .padding(.vertical, 8)
+        .frame(maxWidth: .infinity, minHeight: 30, alignment: .trailing)
+        .padding(.bottom, 8)
     }
 }
 

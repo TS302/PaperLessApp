@@ -89,8 +89,6 @@ struct HomeView: View {
             }
             .refreshable { reloadList() }
         }
-//        .frame(maxWidth: .infinity)
-//        .background(Color.secondary)
         .task {
             uiStateTask?.cancel()
             uiStateTask = Task {

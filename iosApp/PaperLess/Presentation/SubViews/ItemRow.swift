@@ -26,7 +26,6 @@ struct ItemRow: View {
                         .foregroundStyle(Color.primary)
                 }
                 
-                
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)
                         .modifier(ListRowTitle())
@@ -34,6 +33,7 @@ struct ItemRow: View {
                     HStack {
                         Image(systemName: "ellipsis.rectangle.fill")
                             .foregroundStyle(item.tagStatus.color)
+                        
                         Text(item.tagStatus.displayName)
                             .modifier(ListRowSubtitle())
                     }

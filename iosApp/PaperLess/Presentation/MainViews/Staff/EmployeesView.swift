@@ -31,31 +31,17 @@ struct EmployeesView: View {
             List {
                 Section {
                     ForEach(uiState.items, id: \.id.description) { employee in
-                        VStack(alignment: .leading) {
-                            Text(employee.name).font(.headline)
-                            Text(employee.email).font(.subheadline).foregroundStyle(.secondary)
+                        NavigationLink {
+                            EmployeeDetailView()
+                        } label: {
+                            EmployeeRow(employee: employee)
                         }
                     }
                 } header: {
-                    HStack {
-                        Text("Mitarbeiter")
-                            .opacity(0.4)
-                            .font(.callout)
-                            .fontWeight(.black)
-                            .foregroundStyle(Color.primary)
-                        Spacer()
-                        Button {
-                            
-                        } label: {
-                            Image(systemName: "slider.horizontal.2.square")
-                                .padding(.trailing, 10)
-                                .font(.system(size: 16))
-                                .foregroundColor(Color.primary)
-                                
-                        }
-                    }
+                    SectionHeader(text: "Mitarbeiter")
                 }
             }
+            .modifier(ListStyle(title: ""))
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
@@ -66,11 +52,7 @@ struct EmployeesView: View {
                     }
                 }
             }
-            .modifier(ListStyle(title: ""))
-            
         }
-        
-        .searchable(text: self.searchTextBinding, prompt: Text("Suchen"))
         .task {
             task?.cancel()
             task = Task {
@@ -84,9 +66,8 @@ struct EmployeesView: View {
             }
         }
         .onDisappear { task?.cancel() }
-        
+        .searchable(text: self.searchTextBinding, prompt: Text("Suchen"))
     }
-    
 }
 
 #Preview {
