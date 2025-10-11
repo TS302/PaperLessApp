@@ -1,42 +1,83 @@
 package com.tom.paperless.data.repositories
 
-import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.tom.paperless.domain.models.Assignment
 import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.NfcTaggable
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.datetime.Clock
 import kotlin.uuid.Uuid
-import com.tom.paperless.domain.models.NfcTaggable
 
-object AssignmentRepositoryImpl : AssignmentRepository {
-    private val _assignments = MutableStateFlow<List<Assignment>>(emptyList())
-    override fun observeAll() = _assignments
-    override fun observeForEmployee(employeeId: Uuid) =
-        _assignments.mapState { it.filter { a -> a.employeeId == employeeId && a.until == null } }
+class AssignmentRepositoryImpl(
+    private val employeeRepository: EmployeeRepository,
+    private val nfcTaggableRepository: NfcTaggableRepository,
+    private val repoScope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+) : AssignmentRepository {
 
-    override fun observeForAsset(taggableId: Uuid) =
-        _assignments.mapState { it.filter { a -> a.taggableId == taggableId && a.until == null } }
+    private val assignmentsState: MutableStateFlow<List<Assignment>> =
+        MutableStateFlow(emptyList())
+
+    override fun observeAll(): StateFlow<List<Assignment>> =
+        assignmentsState.asStateFlow()
+
+    override fun observeForEmployee(employeeId: Uuid): StateFlow<List<Assignment>> =
+        assignmentsState
+            .map { allAssignments: List<Assignment> ->
+                allAssignments.filter { assignment: Assignment ->
+                    assignment.employeeId == employeeId && assignment.until == null
+                }
+            }
+            .stateIn(repoScope, SharingStarted.Eagerly, emptyList())
+
+    override fun observeForAsset(taggableId: Uuid): StateFlow<List<Assignment>> =
+        assignmentsState
+            .map { allAssignments: List<Assignment> ->
+                allAssignments.filter { assignment: Assignment ->
+                    assignment.taggableId == taggableId && assignment.until == null
+                }
+            }
+            .stateIn(repoScope, SharingStarted.Eagerly, emptyList())
 
     override suspend fun assign(taggableId: Uuid, toEmployeeId: Uuid): Assignment {
-        // Optional: offene Zuweisung vorher schließen
-        _assignments.update { cur ->
-            val closed = cur.map {
-                if (it.taggableId == taggableId && it.until == null) it.copy(until = Clock.System.now()) else it
+        assignmentsState.update { current: List<Assignment> ->
+            val now = Clock.System.now()
+            current.map { assignment: Assignment ->
+                if (assignment.taggableId == taggableId && assignment.until == null) {
+                    assignment.copy(until = now)
+                } else {
+                    assignment
+                }
             }
-            closed + Assignment(Uuid.random(), toEmployeeId, taggableId)
         }
-        return _assignments.value.last()
+
+        val newAssignment = Assignment(
+            id = Uuid.random(),
+            employeeId = toEmployeeId,
+            taggableId = taggableId
+        )
+        assignmentsState.update { current -> current + newAssignment }
+        return newAssignment
     }
 
     override suspend fun unassign(taggableId: Uuid): Boolean {
         var changed = false
-        _assignments.update { cur ->
-            cur.map {
-                if (it.taggableId == taggableId && it.until == null) {
-                    changed = true; it.copy(until = Clock.System.now())
-                } else it
+        assignmentsState.update { current: List<Assignment> ->
+            val now = Clock.System.now()
+            current.map { assignment: Assignment ->
+                if (assignment.taggableId == taggableId && assignment.until == null) {
+                    changed = true
+                    assignment.copy(until = now)
+                } else {
+                    assignment
+                }
             }
         }
         return changed
@@ -44,17 +85,36 @@ object AssignmentRepositoryImpl : AssignmentRepository {
 
     override suspend fun closeAssignment(assignmentId: Uuid): Boolean {
         var changed = false
-        _assignments.update { cur ->
-            cur.map { if (it.id == assignmentId && it.until == null) { changed = true; it.copy(until = Clock.System.now()) } else it }
+        assignmentsState.update { current: List<Assignment> ->
+            val now = Clock.System.now()
+            current.map { assignment: Assignment ->
+                if (assignment.id == assignmentId && assignment.until == null) {
+                    changed = true
+                    assignment.copy(until = now)
+                } else {
+                    assignment
+                }
+            }
         }
         return changed
     }
 
-    // Helpers (wenn du willst): currentAssigneeOf / assetsOf
-    override suspend fun currentAssigneeOf(taggableId: Uuid): Employee? = null
-    override suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable> = emptyList()
-}
+    override suspend fun currentAssigneeOf(taggableId: Uuid): Employee? {
+        val openAssignment: Assignment = assignmentsState.value
+            .lastOrNull { a -> a.taggableId == taggableId && a.until == null }
+            ?: return null
 
-private fun <T, R> StateFlow<T>.mapState(transform: (T) -> R): StateFlow<R> =
-    MutableStateFlow(transform(value)).also { out ->
+        return employeeRepository.getById(openAssignment.employeeId)
     }
+
+    override suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable> {
+        val openAssignments: List<Assignment> = assignmentsState.value
+            .filter { a -> a.employeeId == employeeId && a.until == null }
+
+        if (openAssignments.isEmpty()) return emptyList()
+
+        val taggableIds: Set<Uuid> = openAssignments.map { it.taggableId }.toSet()
+        val allTaggables: List<NfcTaggable> = nfcTaggableRepository.getAll()
+        return allTaggables.filter { t -> t.id in taggableIds }
+    }
+}

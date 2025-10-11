@@ -1,6 +1,7 @@
 package com.tom.paperless.ui.viewModels
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.NfcTaggable
@@ -11,8 +12,8 @@ import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
 import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
 import com.tom.paperless.domain.mappers.withName
 import com.tom.paperless.domain.mappers.withStatus
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlin.uuid.Uuid
 
 class ItemDetailViewModel(
@@ -21,9 +22,9 @@ class ItemDetailViewModel(
     private val deleteTag: DeleteNfcTaggableUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(ItemDetailUiState())
+    private val _uiState = MutableStateFlow(viewModelScope, ItemDetailUiState())
     @NativeCoroutinesState
-    val uiState: StateFlow<ItemDetailUiState> = _uiState
+    val uiState: StateFlow<ItemDetailUiState> = _uiState.asStateFlow()
 
     fun hydrate(item: NfcTaggable) {
         _uiState.value = _uiState.value.copy(

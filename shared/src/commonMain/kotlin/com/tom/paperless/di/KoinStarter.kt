@@ -1,5 +1,6 @@
 package com.tom.paperless.di
 
+import com.tom.paperless.ui.viewModels.AssignAssetViewModel
 import com.tom.paperless.ui.viewModels.CompanyViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
 import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
@@ -9,6 +10,7 @@ import com.tom.paperless.ui.viewModels.RegistrationViewModel
 import com.tom.paperless.ui.viewModels.SettingsViewModel
 import org.koin.core.Koin
 import org.koin.core.context.startKoin
+import org.koin.core.parameter.parametersOf
 
 object KoinStarter {
 
@@ -20,31 +22,30 @@ object KoinStarter {
         }
     }
 
-    fun registrationViewModel(): RegistrationViewModel =
+    fun getKoin(): Koin =
         requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
-            .get(clazz = RegistrationViewModel::class)
+
+    fun registrationViewModel(): RegistrationViewModel =
+        getKoin().get(clazz = RegistrationViewModel::class)
 
     fun loginViewModel(): LoginViewModel =
-        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
-            .get(clazz = LoginViewModel::class)
+        getKoin().get(clazz = LoginViewModel::class)
 
     fun settingsViewModel(): SettingsViewModel =
-        requireNotNull(koinReference) { "KoinStarter.start() zuerst aufrufen." }
-            .get(clazz = SettingsViewModel::class)
+        getKoin().get(clazz = SettingsViewModel::class)
 
     fun companyViewModel(): CompanyViewModel =
-        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
-            .get(clazz = CompanyViewModel::class)
+        getKoin().get(clazz = CompanyViewModel::class)
 
     fun itemDetailViewModel(): ItemDetailViewModel =
-        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
-            .get(clazz = ItemDetailViewModel::class)
+        getKoin().get(clazz = ItemDetailViewModel::class)
 
     fun employeesViewModel(): EmployeesViewModel =
-        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
-            .get(clazz = EmployeesViewModel::class)
+        getKoin().get(clazz = EmployeesViewModel::class)
 
     fun employeesDetailViewModel(): EmployeeDetailViewModel =
-        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
-            .get (clazz = EmployeeDetailViewModel::class)
+        getKoin().get(clazz = EmployeeDetailViewModel::class)
+
+    fun assignAssetViewModel(itemIdString: String): AssignAssetViewModel =
+        getKoin().get(clazz = AssignAssetViewModel::class, parameters = { parametersOf(itemIdString) })
 }

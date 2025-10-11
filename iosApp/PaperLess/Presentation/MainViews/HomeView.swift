@@ -10,25 +10,24 @@ import Shared
 import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
+
+
 struct HomeView: View {
-    @ObservedViewModel var companyVM: CompanyViewModel
+    @StateViewModel var companyVM: CompanyViewModel
 
     @State private var addVehicle = false
     @State private var addTool = false
     @State private var addKey = false
-
-    @State private var uiState = NfcTaggablesUiState.empty()
-    @State private var uiStateTask: Task<Void, Never>? = nil
+    @State private var searchText: String = ""
 
     init() {
-        let vm = KoinStarter.shared.companyViewModel()
-        self._companyVM = ObservedViewModel(wrappedValue: vm)
+        _companyVM = StateViewModel(wrappedValue: KoinStarter.shared.companyViewModel())
     }
 
     private var filterBinding: Binding<FilterOption> {
         Binding(
             get: {
-                if let f = uiState.activeTypeFilter { return f.asFilterOption }
+                if let f = companyVM.uiState.activeTypeFilter { return f.asFilterOption }
                 return .all
             },
             set: { newValue in
@@ -39,15 +38,17 @@ struct HomeView: View {
 
     private var searchBinding: Binding<String> {
         Binding(
-            get: { uiState.searchQueryText },
-            set: { companyVM.setSearchQueryForIos(queryText: $0) }
+            get: { searchText },
+            set: { newValue in
+                searchText = newValue
+                companyVM.setSearchQueryForIos(queryText: newValue)
+            }
         )
     }
-
     
     private func reloadList() {
         companyVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
-        companyVM.setSearchQueryForIos(queryText: searchBinding.wrappedValue)
+        companyVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
     }
 
     private func delete(_ item: NfcTaggable) {
@@ -58,7 +59,7 @@ struct HomeView: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(uiState.items, id: \.id.description) { item in
+                    ForEach(companyVM.uiState.items, id: \.idString) { item in
                         NavigationLink {
                             ItemDetailView(item: item)
                         } label: {
@@ -89,20 +90,10 @@ struct HomeView: View {
             }
             .refreshable { reloadList() }
         }
-        .task {
-            uiStateTask?.cancel()
-            uiStateTask = Task {
-                do {
-                    for try await newState in asyncSequence(for: companyVM.uiStateFlow) {
-                        await MainActor.run { self.uiState = newState }
-                    }
-                } catch {
-                    print("uiState flow error:", error)
-                }
-            }
-        }
-        .onDisappear { uiStateTask?.cancel() }
-        .searchable(text: searchBinding, prompt: "Suchen")
+        .searchable(text: $searchText, prompt: "Suchen")
+        .onChange(of: searchText) { _, newValue in
+            companyVM.setSearchQueryForIos(queryText: newValue)
+          }
     }
 }
 
