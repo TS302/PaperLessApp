@@ -1,13 +1,14 @@
-package com.tom.paperless.domain.useCases
+package com.tom.paperless.domain.useCases.employeesUseCases
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.tom.paperless.data.repositories.EmployeeRepository
 import com.tom.paperless.domain.models.Employee
-import kotlinx.coroutines.flow.StateFlow
+import kotlin.uuid.Uuid
 
-class GetAllEmployeesFlowUseCase(
+class GetEmployeeByIdUseCase(
     private val repository: EmployeeRepository
 ) {
     @NativeCoroutines
-    operator fun invoke(): StateFlow<List<Employee>> = repository.observeAll()
+    suspend operator fun invoke(id: Uuid): Employee? =
+        repository.getById(id)
 }

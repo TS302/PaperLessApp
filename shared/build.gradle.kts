@@ -39,12 +39,12 @@ kotlin {
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
 
             // KMP OVM & NativeCoroutines
-            api(libs.kmp.observableviewmodel.core)
+            implementation(libs.kmp.observableviewmodel.core)
             implementation(libs.kmp.nativecoroutines.core)
+//            api(libs.kmp.observableviewmodel.core)
+//            implementation(libs.kmp.nativecoroutines.core)
             implementation(libs.koin.core)
 
-
-            // falls benötigt:
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
 

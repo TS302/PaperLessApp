@@ -73,7 +73,7 @@ struct ItemDetailView: View {
                     Text(error).foregroundStyle(.red)
                 }
                 if itemDetailVM.uiState.isSaving {
-                    ProgressView("Speichern …")
+                    ProgressView("Speichern…")
                 }
             }
             .navigationTitle("Details")

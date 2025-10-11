@@ -4,13 +4,13 @@ import com.tom.paperless.data.repositories.EmployeeRepository
 import com.tom.paperless.data.repositories.EmployeeRepositoryImpl
 import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.data.repositories.NfcTaggableRepositoryImpl
-import com.tom.paperless.domain.useCases.AddEmployeeUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.AddEmployeeUseCase
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.DeleteEmployeeUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.DeleteEmployeeUseCase
 import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.FilterEmployeesUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.FilterEmployeesUseCase
 import com.tom.paperless.domain.useCases.FilterNfcTaggablesUseCase
-import com.tom.paperless.domain.useCases.GetAllEmployeesFlowUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.GetAllEmployeesFlowUseCase
 import com.tom.paperless.domain.useCases.GetAllNfcTaggablesFlowUseCase
 import com.tom.paperless.domain.useCases.GetAllNfcTaggablesUseCase
 import com.tom.paperless.domain.useCases.GetLoggedInUserUseCase
@@ -19,9 +19,11 @@ import com.tom.paperless.domain.useCases.LoginUserUseCase
 import com.tom.paperless.domain.useCases.LogoutUserUseCase
 import com.tom.paperless.domain.useCases.RegisterUserUseCase
 import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.UpdateEmployeeUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
 import com.tom.paperless.domain.useCases.UpdateNfcTaggableUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.GetEmployeeByIdUseCase
 import com.tom.paperless.ui.viewModels.CompanyViewModel
+import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
 import com.tom.paperless.ui.viewModels.ItemDetailViewModel
 import com.tom.paperless.ui.viewModels.LoginViewModel
@@ -36,10 +38,13 @@ val appModule = module {
     single<EmployeeRepository> { EmployeeRepositoryImpl }
 
     // UseCases
+        //User
     single { RegisterUserUseCase() }
     single { LoginUserUseCase() }
     single { LogoutUserUseCase() }
     single { GetLoggedInUserUseCase() }
+
+        //NfcTaggables
     single { FilterNfcTaggablesUseCase() }
     single { GetAllNfcTaggablesFlowUseCase( repository = get()) }
     single { AddNfcTaggableUseCase(repository = get()) }
@@ -49,7 +54,9 @@ val appModule = module {
     single { GetNfcTaggableByIdUseCase(repository = get()) }
     single { UpdateNfcTaggableUseCase(repository = get()) }
 
+        //Employees
     single { GetAllEmployeesFlowUseCase(get()) }
+    single { GetEmployeeByIdUseCase(get()) }
     single { AddEmployeeUseCase(get()) }
     single { UpdateEmployeeUseCase(get()) }
     single { DeleteEmployeeUseCase(get()) }
@@ -100,6 +107,14 @@ val appModule = module {
             updateEmployee = get(),
             deleteEmployee = get(),
             filterEmployees = get()
+        )
+    }
+
+    factory {
+        EmployeeDetailViewModel(
+            getEmployeeById = get(),
+            updateEmployee = get(),
+            deleteEmployee = get()
         )
     }
 }

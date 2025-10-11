@@ -2,6 +2,7 @@ package com.tom.paperless.di
 
 import com.tom.paperless.ui.viewModels.CompanyViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
+import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
 import com.tom.paperless.ui.viewModels.ItemDetailViewModel
 import com.tom.paperless.ui.viewModels.LoginViewModel
 import com.tom.paperless.ui.viewModels.RegistrationViewModel
@@ -42,4 +43,8 @@ object KoinStarter {
     fun employeesViewModel(): EmployeesViewModel =
         requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
             .get(clazz = EmployeesViewModel::class)
+
+    fun employeesDetailViewModel(): EmployeeDetailViewModel =
+        requireNotNull(koinReference) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start() auf." }
+            .get (clazz = EmployeeDetailViewModel::class)
 }

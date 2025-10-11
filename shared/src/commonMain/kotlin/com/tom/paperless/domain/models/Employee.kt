@@ -10,5 +10,5 @@ data class Employee(
     val email: String,
     val phoneNumber: String,
     override val targetType: TargetType = TargetType.Employee,
-    override val tagStatus: TagStatus
+    override val tagStatus: TagStatus = TagStatus.available
 ) : NfcTaggable

@@ -1,17 +1,18 @@
 package com.tom.paperless.ui.viewModels
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.Employee
 import com.tom.paperless.domain.models.uiStates.EmployeesUiState
-import com.tom.paperless.domain.useCases.AddEmployeeUseCase
-import com.tom.paperless.domain.useCases.DeleteEmployeeUseCase
-import com.tom.paperless.domain.useCases.FilterEmployeesUseCase
-import com.tom.paperless.domain.useCases.GetAllEmployeesFlowUseCase
-import com.tom.paperless.domain.useCases.UpdateEmployeeUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.tom.paperless.domain.useCases.employeesUseCases.AddEmployeeUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.DeleteEmployeeUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.FilterEmployeesUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.GetAllEmployeesFlowUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlin.uuid.Uuid
 
@@ -23,49 +24,65 @@ class EmployeesViewModel(
     private val filterEmployees: FilterEmployeesUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(EmployeesUiState.empty())
+    private val _uiState = MutableStateFlow(viewModelScope, EmployeesUiState.empty())
     @NativeCoroutinesState
-    val uiState: StateFlow<EmployeesUiState> = _uiState
+    val uiState: StateFlow<EmployeesUiState> = _uiState.asStateFlow()
+
+    private var lastAllEmployees: List<Employee> = emptyList()
 
     init {
         viewModelScope.launch {
-            getAllEmployeesFlow().collectLatest { all ->
-                val current = _uiState.value
-                val visible = filterEmployees(all, current.searchQueryText)
-                _uiState.value = current.copy(items = visible, isLoading = false)
+            getAllEmployeesFlow().collectLatest { allEmployees ->
+                lastAllEmployees = allEmployees
+
+                val currentSearchText = _uiState.value.searchQueryText
+                val filteredEmployees =
+                    filterEmployees(allEmployees, currentSearchText)
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    items = filteredEmployees,
+                    errorMessage = null
+                )
             }
         }
     }
 
-    fun setSearchQuery(newValue: String) {
-        val current = _uiState.value
-        _uiState.value = current.copy(searchQueryText = newValue)
-        recomputeVisible()
+    fun setSearchQuery(newSearchText: String) {
+        _uiState.value = _uiState.value.copy(searchQueryText = newSearchText)
+        recomputeVisibleEmployees()
     }
 
-    private fun recomputeVisible() = viewModelScope.launch {
-        _uiState.value = _uiState.value.copy(isLoading = true)
-        val snapshot = getAllEmployeesFlow().value
-        val st = _uiState.value
-        _uiState.value = st.copy(items = filterEmployees(snapshot, st.searchQueryText), isLoading = false)
+    private fun recomputeVisibleEmployees() {
+        val stateBefore = _uiState.value
+        val filteredEmployees =
+            filterEmployees(lastAllEmployees, stateBefore.searchQueryText)
+
+        _uiState.value = stateBefore.copy(items = filteredEmployees)
     }
 
-    // CRUD
-    fun add(item: Employee) = viewModelScope.launch {
-        runCatching { addEmployee(item) }
-            .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
+    fun add(employee: Employee) = viewModelScope.launch {
+        runCatching { addEmployee(employee) }
+            .onFailure { error ->
+                _uiState.value = _uiState.value.copy(errorMessage = error.message)
+            }
     }
 
-    fun update(item: Employee) = viewModelScope.launch {
-        runCatching { updateEmployee(item) }
-            .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
+    fun update(employee: Employee) = viewModelScope.launch {
+        runCatching { updateEmployee(employee) }
+            .onFailure { error ->
+                _uiState.value = _uiState.value.copy(errorMessage = error.message)
+            }
     }
 
-    fun delete(id: Uuid) = viewModelScope.launch {
-        runCatching { deleteEmployee(id) }
-            .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
+    fun delete(employeeId: Uuid) = viewModelScope.launch {
+        runCatching { deleteEmployee(employeeId) }
+            .onFailure { error ->
+                _uiState.value = _uiState.value.copy(errorMessage = error.message)
+            }
     }
 
-    fun setSearchQueryForIos(queryText: String) = setSearchQuery(queryText)
+    /** iOS-Helper (gleiche Funktion, nur anderer Name für Swift-Aufrufe). */
+    fun setSearchQueryForIos(searchText: String) = setSearchQuery(searchText)
 
 }

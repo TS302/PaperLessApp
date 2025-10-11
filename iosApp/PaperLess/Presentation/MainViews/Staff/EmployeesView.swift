@@ -10,29 +10,28 @@ import Shared
 import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
+private extension Employee {
+    var idString: String { String(describing: id) }
+}
+
 struct EmployeesView: View {
-    @ObservedViewModel var employeesVM: EmployeesViewModel
-    @State private var uiState = EmployeesUiState.companion.empty()
-    
-    @State private var task: Task<Void, Never>? = nil
+    @StateViewModel var employeesVM: EmployeesViewModel
     
     init() {
-        _employeesVM = ObservedViewModel(wrappedValue: KoinStarter.shared.employeesViewModel())
-    }
-    
-    private var searchTextBinding: Binding<String> {
-        Binding(
-            get: { uiState.searchQueryText },
-            set: { employeesVM.setSearchQueryForIos(queryText: $0) }
+        _employeesVM = StateViewModel(
+            wrappedValue: KoinStarter.shared.employeesViewModel()
         )
     }
+    
+    @State private var searchText: String = ""
+    
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(uiState.items, id: \.id.description) { employee in
+                    ForEach(employeesVM.uiState.items, id: \.idString) { employee in
                         NavigationLink {
-                            EmployeeDetailView()
+                            EmployeeDetailView(employeeId: employee.idString)
                         } label: {
                             EmployeeRow(employee: employee)
                         }
@@ -41,7 +40,6 @@ struct EmployeesView: View {
                     SectionHeader(text: "Mitarbeiter")
                 }
             }
-            .modifier(ListStyle(title: ""))
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
@@ -52,24 +50,12 @@ struct EmployeesView: View {
                     }
                 }
             }
+            .modifier(ListStyle(title: ""))
+            
         }
-        .task {
-            task?.cancel()
-            task = Task {
-                do {
-                    for try await state in asyncSequence(for: employeesVM.uiStateFlow) {
-                        await MainActor.run { uiState = state }
-                    }
-                } catch {
-                    print("employees uiState flow error:", error)
-                }
-            }
+        .searchable(text: $searchText, prompt: Text("Suchen"))
+        .onChange(of: searchText) { _, newValue in
+            employeesVM.setSearchQueryForIos(searchText: newValue)
         }
-        .onDisappear { task?.cancel() }
-        .searchable(text: self.searchTextBinding, prompt: Text("Suchen"))
     }
-}
-
-#Preview {
-    EmployeesView()
 }
