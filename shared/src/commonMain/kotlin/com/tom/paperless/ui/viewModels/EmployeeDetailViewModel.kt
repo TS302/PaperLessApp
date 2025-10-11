@@ -5,6 +5,7 @@ import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.uiStates.EmployeeDetailUiState
+import com.tom.paperless.domain.useCases.assetsUseCases.GetAssetsOfEmployeeUseCase
 import com.tom.paperless.domain.useCases.employeesUseCases.DeleteEmployeeUseCase
 import com.tom.paperless.domain.useCases.employeesUseCases.GetEmployeeByIdUseCase
 import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
@@ -12,11 +13,16 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.uuid.Uuid
+import com.tom.paperless.domain.models.Vehicle
+import com.tom.paperless.domain.models.Tool
+import com.tom.paperless.domain.models.KeyRing
+import com.tom.paperless.domain.models.ui.AssignedItemUi
 
 class EmployeeDetailViewModel(
     private val getEmployeeById: GetEmployeeByIdUseCase,
     private val updateEmployee: UpdateEmployeeUseCase,
-    private val deleteEmployee: DeleteEmployeeUseCase
+    private val deleteEmployee: DeleteEmployeeUseCase,
+    private val getAssetsOfEmployee: GetAssetsOfEmployeeUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(viewModelScope, EmployeeDetailUiState())
@@ -45,6 +51,7 @@ class EmployeeDetailViewModel(
                                 hasChanges = false
                             )
                         }
+                        refreshAssignedItems()
                     }
                 }
                 .onFailure { throwable ->
@@ -170,6 +177,52 @@ class EmployeeDetailViewModel(
                 .onFailure { throwable ->
                     _uiState.update { it.copy(isSaving = false, errorMessage = throwable.message) }
                 }
+        }
+    }
+
+    fun refreshAssignedItems() {
+        val employee = _uiState.value.employee ?: return
+        viewModelScope.launch {
+            val assets = runCatching { getAssetsOfEmployee(employee.id) }.getOrElse { emptyList() }
+
+            val itemsUi = assets.map { nfcTag ->
+                when (nfcTag) {
+                    is Vehicle -> AssignedItemUi(
+                        id = nfcTag.id.toString(),
+                        displayName = nfcTag.name,
+                        type = "vehicle",
+                        subtype = null,
+                        code = nfcTag.plate,
+                        statusText = nfcTag.tagStatus.name
+                    )
+                    is Tool -> AssignedItemUi(
+                        id = nfcTag.id.toString(),
+                        displayName = nfcTag.name,
+                        type = "tool",
+                        subtype = null,
+                        code = nfcTag.serialNumber,
+                        statusText = nfcTag.tagStatus.name
+                    )
+                    is KeyRing -> AssignedItemUi(
+                        id = nfcTag.id.toString(),
+                        displayName = nfcTag.name,
+                        type = "key",
+                        subtype = null,
+                        code = null,
+                        statusText = nfcTag.tagStatus.name
+                    )
+                    else -> AssignedItemUi(
+                        id = nfcTag.id.toString(),
+                        displayName = nfcTag.name,
+                        type = nfcTag.targetType.name.lowercase(),
+                        subtype = null,
+                        code = null,
+                        statusText = nfcTag.tagStatus.name
+                    )
+                }
+            }
+
+            _uiState.update { it.copy(assignedItems = itemsUi) }
         }
     }
 }

@@ -144,7 +144,8 @@ val appModule = module {
         EmployeeDetailViewModel(
             getEmployeeById = get(),
             updateEmployee = get(),
-            deleteEmployee = get()
+            deleteEmployee = get(),
+            getAssetsOfEmployee = get()
         )
     }
 

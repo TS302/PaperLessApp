@@ -57,12 +57,47 @@ struct EmployeeDetailView: View {
                         }
                     }
                 }
-                Section("Items") {
-                    //Musterdaten - Items die dem Mitarbeiter zugewiesen sind
-                    Text("VW Crafter")
-                    Text("Kreissäge Master 2001")
-                    Text("Eingangsschlüssel Herr Müller")
-                    Text("Werkzeugkoffer 7200")
+                Section("Zugewiesene Items") {
+                    let items = employeeDetailVM.uiState.assignedItems
+                    if items.isEmpty {
+                        ContentUnavailableView(
+                            "Keine Items zugewiesen",
+                            systemImage: "shippingbox",
+                            description: Text("Diesem Mitarbeiter sind aktuell keine Assets zugewiesen.")
+                        )
+                    } else {
+                        ForEach(items, id: \.id) { item in
+                            HStack(spacing: 12) {
+                                Image(systemName: sfSymbol(for: item.type)) // <- hier angepasst
+                                    .imageScale(.large)
+                                    .frame(width: 28, height: 28)
+
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(item.displayName)
+                                        .font(.body.weight(.semibold))
+                                    HStack(spacing: 8) {
+                                        if let subtype = item.subtype, !subtype.isEmpty {
+                                            Text(subtype).font(.caption).foregroundStyle(.secondary)
+                                        }
+                                        if let code = item.code, !code.isEmpty {
+                                            Text(code).font(.caption).foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+
+                                Spacer()
+
+                                if let status = item.statusText, !status.isEmpty {
+                                    Text(status)
+                                        .font(.caption2)
+                                        .padding(.horizontal, 8)
+                                        .padding(.vertical, 4)
+                                        .background(.thinMaterial, in: Capsule())
+                                }
+                            }
+                            .contentShape(Rectangle())
+                        }
+                    }
                 }
             } else {
                 Text("Kein Datensatz gefunden.")
@@ -95,6 +130,15 @@ struct EmployeeDetailView: View {
                 }
             }
         }
+    }
+}
+
+private func sfSymbol(for type: String?) -> String {
+    switch (type ?? "").lowercased() {
+    case "vehicle": return "car.fill"
+    case "tool":    return "wrench.fill"
+    case "key":     return "key.fill"
+    default:        return "shippingbox.fill"
     }
 }
 
