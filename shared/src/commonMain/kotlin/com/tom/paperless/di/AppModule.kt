@@ -29,6 +29,7 @@ import com.tom.paperless.domain.useCases.employeesUseCases.FilterEmployeesUseCas
 import com.tom.paperless.domain.useCases.employeesUseCases.GetAllEmployeesFlowUseCase
 import com.tom.paperless.domain.useCases.employeesUseCases.GetEmployeeByIdUseCase
 import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
+import com.tom.paperless.ui.viewModels.AddEmployeeViewModel
 import com.tom.paperless.ui.viewModels.AssignAssetViewModel
 import com.tom.paperless.ui.viewModels.CompanyViewModel
 import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
@@ -158,4 +159,6 @@ val appModule = module {
             assignAssetsToEmployeeUseCase = get()
         )
     }
+
+    factory { AddEmployeeViewModel(get()) }
 }

@@ -1,5 +1,6 @@
 package com.tom.paperless.di
 
+import com.tom.paperless.ui.viewModels.AddEmployeeViewModel
 import com.tom.paperless.ui.viewModels.AssignAssetViewModel
 import com.tom.paperless.ui.viewModels.CompanyViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
@@ -48,4 +49,7 @@ object KoinStarter {
 
     fun assignAssetViewModel(itemIdString: String): AssignAssetViewModel =
         getKoin().get(clazz = AssignAssetViewModel::class, parameters = { parametersOf(itemIdString) })
+
+    fun addEmployeeViewModel(): AddEmployeeViewModel =
+        getKoin().get(clazz = AddEmployeeViewModel::class)
 }

@@ -24,6 +24,7 @@ struct EmployeesView: View {
     }
     
     @State private var searchText: String = ""
+    @State private var addEmployeeSheetIsPresent: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -43,7 +44,7 @@ struct EmployeesView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .topBarTrailing) {
                     Button {
-                        
+                        addEmployeeSheetIsPresent.toggle()
                     } label: {
                         Image(systemName: "person.crop.circle.badge.plus")
                             .foregroundStyle(Color.primary)
@@ -52,6 +53,9 @@ struct EmployeesView: View {
             }
             .modifier(ListStyle(title: ""))
             
+        }
+        .sheet(isPresented: $addEmployeeSheetIsPresent) {
+            AddEmployeeSheet()
         }
         .searchable(text: $searchText, prompt: Text("Suchen"))
         .onChange(of: searchText) { _, newValue in

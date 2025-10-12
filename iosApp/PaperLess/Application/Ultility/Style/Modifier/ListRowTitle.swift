@@ -13,7 +13,7 @@ struct ListRowTitle: ViewModifier {
             .font(.system(size: 16))        
             .fontWeight(.semibold)
             .foregroundStyle(Color.primary)
-            .padding(.bottom, 2)
+            .padding(.bottom, 1)
             .lineLimit(1)
             .truncationMode(.tail)
     }

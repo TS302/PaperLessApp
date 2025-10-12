@@ -17,7 +17,6 @@ struct ItemDetailView: View {
     @StateViewModel var itemDetailVM: ItemDetailViewModel
     @Environment(\.dismiss) private var dismiss
     
-    //    @State private var selectedStatusCaseName: String = TagStatus.available.caseName
     @State private var isEditing = false
     @State private var isAssignSheetPresented = false
     
@@ -26,10 +25,7 @@ struct ItemDetailView: View {
         self.onSaved = onSaved
         self._itemDetailVM = StateViewModel(wrappedValue: KoinStarter.shared.itemDetailViewModel())
     }
-    
-    
-    //MARK: Bindings
-    
+        
     private var nameBinding: Binding<String> {
         Binding(
             get: { itemDetailVM.uiState.item?.name ?? item.name },
@@ -37,7 +33,6 @@ struct ItemDetailView: View {
         )
     }
     
-    /// Direktes Binding des Pickers auf den VM-Status (Case-Name als String)
     private var statusCaseNameBinding: Binding<String> {
         Binding(
             get: { itemDetailVM.uiState.item?.tagStatus.caseName ?? item.tagStatus.caseName },
@@ -48,17 +43,6 @@ struct ItemDetailView: View {
             }
         )
     }
-    
-    //    private var selectedTagStatus: TagStatus {
-    //        TagStatus.all.first { $0.caseName == selectedStatusCaseName } ?? .available
-    //    }
-    //
-    //    private var nameBinding: Binding<String> {
-    //        Binding(
-    //            get: { itemDetailVM.uiState.item?.name ?? item.name },
-    //            set: { itemDetailVM.setNameInState(newName: $0) }
-    //        )
-    //    }
     
     var body: some View {
         NavigationStack {
