@@ -56,6 +56,7 @@ struct EmployeesView: View {
         }
         .sheet(isPresented: $addEmployeeSheetIsPresent) {
             AddEmployeeSheet()
+                .presentationDetents([.medium])
         }
         .searchable(text: $searchText, prompt: Text("Suchen"))
         .onChange(of: searchText) { _, newValue in

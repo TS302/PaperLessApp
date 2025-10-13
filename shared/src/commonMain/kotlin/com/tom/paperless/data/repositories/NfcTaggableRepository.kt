@@ -30,5 +30,11 @@ interface NfcTaggableRepository {
     suspend fun getByType(type: TargetType): List<NfcTaggable> =
         getAll().filter { it.targetType == type }
 
+    @NativeCoroutines
+    suspend fun getAllByType(type: TargetType): List<NfcTaggable>
+
+    fun observeByType(type: TargetType): StateFlow<List<NfcTaggable>>
+
+
 
 }

@@ -93,7 +93,19 @@ struct HomeView: View {
         .searchable(text: $searchText, prompt: "Suchen")
         .onChange(of: searchText) { _, newValue in
             companyVM.setSearchQueryForIos(queryText: newValue)
-          }
+        }
+        .sheet(isPresented: $addVehicle) {
+            AddVehicleSheet()
+//                .presentationDetents([.medium])
+        }
+        .sheet(isPresented: $addTool) {
+            AddToolSheet()
+//                .presentationDetents([.medium])
+        }
+        .sheet(isPresented: $addKey) {
+            AddKeySheet()
+//                .presentationDetents([.medium])
+        }
     }
 }
 

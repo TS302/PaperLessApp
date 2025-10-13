@@ -1,19 +1,25 @@
 package com.tom.paperless.data.repositories
 
-import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
-import com.tom.paperless.domain.models.Employee
 import com.tom.paperless.domain.models.KeyRing
 import com.tom.paperless.domain.models.NfcTaggable
-import com.tom.paperless.domain.models.enums.TargetType
 import com.tom.paperless.domain.models.Tool
 import com.tom.paperless.domain.models.Vehicle
 import com.tom.paperless.domain.models.enums.TagStatus
+import com.tom.paperless.domain.models.enums.TargetType
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlin.uuid.Uuid
 
-object NfcTaggableRepositoryImpl: NfcTaggableRepository {
+class NfcTaggableRepositoryImpl(
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+): NfcTaggableRepository {
 
     private val _items = MutableStateFlow<List<NfcTaggable>>(initialSample())
     override fun observeAll(): StateFlow<List<NfcTaggable>> = _items
@@ -200,5 +206,12 @@ object NfcTaggableRepositoryImpl: NfcTaggableRepository {
         }
         return removed
     }
+
+    override fun observeByType(type: TargetType): StateFlow<List<NfcTaggable>> =
+        _items.map { list -> list.filter { it.targetType == type } }
+            .stateIn(scope, SharingStarted.Eagerly, emptyList())
+
+    override suspend fun getAllByType(type: TargetType): List<NfcTaggable> =
+        _items.value.filter { it.targetType == type }
 
 }

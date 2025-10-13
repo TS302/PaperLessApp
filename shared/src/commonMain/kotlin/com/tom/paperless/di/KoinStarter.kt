@@ -1,6 +1,9 @@
 package com.tom.paperless.di
 
 import com.tom.paperless.ui.viewModels.AddEmployeeViewModel
+import com.tom.paperless.ui.viewModels.AddKeyViewModel
+import com.tom.paperless.ui.viewModels.AddToolViewModel
+import com.tom.paperless.ui.viewModels.AddVehicleViewModel
 import com.tom.paperless.ui.viewModels.AssignAssetViewModel
 import com.tom.paperless.ui.viewModels.CompanyViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
@@ -52,4 +55,14 @@ object KoinStarter {
 
     fun addEmployeeViewModel(): AddEmployeeViewModel =
         getKoin().get(clazz = AddEmployeeViewModel::class)
+
+    fun addVehicleViewModel(): AddVehicleViewModel =
+        getKoin().get(clazz = AddVehicleViewModel::class)
+
+    fun addToolViewModel(): AddToolViewModel =
+        getKoin().get(clazz = AddToolViewModel::class)
+
+    fun addKeyViewModel(): AddKeyViewModel =
+        getKoin().get(clazz = AddKeyViewModel::class)
+
 }
