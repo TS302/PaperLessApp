@@ -1,32 +1,33 @@
 //
-//  DetailItemStringRow.swift
+//  IconTextFieldRow.swift
 //  PaperLess
 //
-//  Created by Tom Salih on 12.10.25.
+//  Created by Tom Salih on 14.10.25.
 //
-
 import SwiftUI
 
-struct DetailItemStringRow: View {
-    var text: String = ""
-    var icon: String
-    
+struct IconTextFieldRow: View {
+    let systemImageName: String
+    let placeholder: String
+    @Binding var text: String
+
     var body: some View {
         HStack {
-            
             ZStack {
                 RoundedRectangle(cornerRadius: 6)
                     .frame(width: 40, height: 40)
                     .foregroundColor(.primary.opacity(0.2))
-                Image(systemName: icon)
+                Image(systemName: systemImageName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 18, height: 18)
                     .foregroundStyle(Color.primary)
             }
-            Text(text)
-                .modifier(ListRowTitle())
-            
+
+            TextField(placeholder, text: $text)
+                .textInputAutocapitalization(.words)
         }
     }
 }
+
+

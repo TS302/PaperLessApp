@@ -30,11 +30,16 @@ struct EmployeeDetailView: View {
             } else if employeeDetailVM.uiState.employee != nil {
                 Section("Mitarbeiter") {
                     if employeeDetailVM.uiState.isEditing {
-                        TextField("Name", text: Binding(
-                            get: { employeeDetailVM.uiState.draftName },
-                            set: { employeeDetailVM.onNameChange(newName: $0) }
-                        ))
-                        TextField("E-Mail", text: Binding(
+                        
+                        IconTextFieldRow(
+                            systemImageName: "person.fill",
+                            placeholder: "Name",
+                            text: Binding(
+                                get: { employeeDetailVM.uiState.draftName },
+                                set: { employeeDetailVM.onNameChange(newName: $0) }
+                            ))
+                        
+                        IconTextFieldRow(systemImageName: "envelope.fill", placeholder: "E-Mail", text: Binding(
                             get: { employeeDetailVM.uiState.draftEmail },
                             set: { employeeDetailVM.onEmailChange(newEmail: $0) }
                         ))
@@ -42,12 +47,14 @@ struct EmployeeDetailView: View {
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         
-                        TextField("Telefon", text: Binding(
+                        IconTextFieldRow(systemImageName: "phone.fill", placeholder: "Telefon", text: Binding(
                             get: { employeeDetailVM.uiState.draftPhone },
                             set: { employeeDetailVM.onPhoneChange(newPhone: $0) }
                         ))
                         .keyboardType(.phonePad)
+                        
                     } else {
+                        
                         DetailItemStringRow(text: employeeDetailVM.uiState.employee!.name, icon: "person.fill")
                         
                         if !employeeDetailVM.uiState.employee!.email.isEmpty {
@@ -66,6 +73,7 @@ struct EmployeeDetailView: View {
                             systemImage: "shippingbox",
                             description: Text("Diesem Mitarbeiter sind aktuell keine Assets zugewiesen.")
                         )
+                        .foregroundStyle(Color.primary)
                     } else {
                         ForEach(items, id: \.id) { item in
                             HStack(spacing: 12) {
@@ -113,7 +121,8 @@ struct EmployeeDetailView: View {
                     .foregroundStyle(.secondary)
             }
         }
-        .navigationTitle("Details")
+        .modifier(ListStyle(title: ""))
+//        .navigationTitle("Details")
         .navigationBarTitleDisplayMode(.inline)
         .task {
             employeeDetailVM.load(idString: employeeId)

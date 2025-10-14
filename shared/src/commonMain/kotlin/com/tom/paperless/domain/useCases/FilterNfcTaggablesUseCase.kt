@@ -9,14 +9,18 @@ class FilterNfcTaggablesUseCase {
         typeFilter: TargetType?,
         searchQueryText: String
     ): List<NfcTaggable> {
-        val byType = typeFilter?.let { t -> allItems.filter { it.targetType == t } } ?: allItems
-        if (searchQueryText.isBlank()) return byType
+        val byType = typeFilter?.let { selectedType ->
+            allItems.filter { it.targetType == selectedType }
+        } ?: allItems
 
-        val q = searchQueryText.trim().lowercase()
+        if (searchQueryText.isBlank()) {
+            return byType.sortedBy { it.name.lowercase() }
+        }
+
+        val query = searchQueryText.trim().lowercase()
         return byType.filter { item ->
             val name = item.name.lowercase()
-            // Hier ggf. weitere Felder einbeziehen (z. B. plate, serialNumber)
-            name.contains(q)
-        }
+            name.contains(query)
+        }.sortedBy { it.name.lowercase() }
     }
 }
