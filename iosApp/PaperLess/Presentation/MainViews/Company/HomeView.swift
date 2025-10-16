@@ -13,16 +13,12 @@ import KMPNativeCoroutinesAsync
 
 
 struct HomeView: View {
-    @StateViewModel var companyVM: CompanyViewModel
-
+    @StateViewModel var companyVM: CompanyViewModel = KoinStarter.shared.companyViewModel()
+    
     @State private var addVehicle = false
     @State private var addTool = false
     @State private var addKey = false
     @State private var searchText: String = ""
-
-    init() {
-        _companyVM = StateViewModel(wrappedValue: KoinStarter.shared.companyViewModel())
-    }
 
     private var filterBinding: Binding<FilterOption> {
         Binding(

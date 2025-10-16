@@ -2,11 +2,13 @@ package com.tom.paperless.domain.useCases
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.tom.paperless.data.repositories.NfcTaggableRepository
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class DeleteNfcTaggableUseCase(
-    private val repository: NfcTaggableRepository
-) {
+class DeleteNfcTaggableUseCase() : KoinComponent {
+
+    private val repository: NfcTaggableRepository by inject()
     @NativeCoroutines
     suspend operator fun invoke(id: Uuid): Boolean =
         repository.delete(id)

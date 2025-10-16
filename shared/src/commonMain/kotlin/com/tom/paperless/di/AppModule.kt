@@ -68,13 +68,13 @@ val appModule = module {
 
     //NfcTaggables
     single { FilterNfcTaggablesUseCase() }
-    single { GetAllNfcTaggablesFlowUseCase( repository = get()) }
-    single { AddNfcTaggableUseCase(repository = get()) }
-    single { SaveNfcTaggableUseCase(repository = get()) }
-    single { DeleteNfcTaggableUseCase(repository = get()) }
-    single { GetAllNfcTaggablesUseCase(repository = get()) }
-    single { GetNfcTaggableByIdUseCase(repository = get()) }
-    single { UpdateNfcTaggableUseCase(repository = get()) }
+    single { GetAllNfcTaggablesFlowUseCase() }
+    single { AddNfcTaggableUseCase() }
+    single { SaveNfcTaggableUseCase() }
+    single { DeleteNfcTaggableUseCase() }
+    single { GetAllNfcTaggablesUseCase() }
+    single { GetNfcTaggableByIdUseCase() }
+    single { UpdateNfcTaggableUseCase() }
 
     //Employees
     single { GetAllEmployeesFlowUseCase(get()) }
@@ -128,11 +128,11 @@ val appModule = module {
 
     factory {
         CompanyViewModel(
-            getAllNfcTaggablesFlowUseCase = get(),
-            addNfcTaggableUseCase = get(),
-            saveNfcTaggableUseCase = get(),
-            deleteNfcTaggableUseCase = get(),
-            filterNfcTaggablesUseCase = get()
+            get(),
+            get(),
+            get(),
+            get(),
+            get()
         )
     }
     factory {
