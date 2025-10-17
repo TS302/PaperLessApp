@@ -10,11 +10,13 @@ import com.tom.paperless.domain.useCases.employeesUseCases.AddEmployeeUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class AddEmployeeViewModel(
-    private val addEmployee: AddEmployeeUseCase
-) : ViewModel() {
+class AddEmployeeViewModel() : ViewModel(), KoinComponent {
+
+    private val addEmployee: AddEmployeeUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, AddEmployeeUiState())
     @NativeCoroutinesState

@@ -13,11 +13,11 @@ import KMPNativeCoroutinesAsync
 struct AddVehicleSheet: View {
     @Environment(\.dismiss) private var dismiss
     
-    @StateViewModel private var addVehicleVM: AddVehicleViewModel
+    @StateViewModel private var addVehicleVM = AddVehicleViewModel()
     
-    init() {
-        _addVehicleVM = StateViewModel(wrappedValue: KoinStarter.shared.addVehicleViewModel())
-    }
+//    init() {
+//        _addVehicleVM = StateViewModel(wrappedValue: KoinStarter.shared.addVehicleViewModel())
+//    }
     
     private enum Field { case name, plate }
     

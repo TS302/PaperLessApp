@@ -6,9 +6,6 @@ import com.tom.paperless.domain.errors.RegistrationException
 import com.tom.paperless.domain.models.Role
 import com.tom.paperless.domain.models.User
 
-/**
- * Ergebnis-Typ ohne rohe Exceptions nach außen.
- */
 sealed class RegisterUserOutcome {
     data class Success(val user: User) : RegisterUserOutcome()
     data class Failure(val error: RegistrationError) : RegisterUserOutcome()

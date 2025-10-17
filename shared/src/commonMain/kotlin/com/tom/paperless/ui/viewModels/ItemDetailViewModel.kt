@@ -14,13 +14,15 @@ import com.tom.paperless.domain.mappers.withName
 import com.tom.paperless.domain.mappers.withStatus
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class ItemDetailViewModel(
-    private val getTagById: GetNfcTaggableByIdUseCase,
-    private val saveTag: SaveNfcTaggableUseCase,
-    private val deleteTag: DeleteNfcTaggableUseCase
-) : ViewModel() {
+class ItemDetailViewModel() : ViewModel(), KoinComponent {
+
+    private val getTagById: GetNfcTaggableByIdUseCase by inject()
+    private val saveTag: SaveNfcTaggableUseCase by inject()
+    private val deleteTag: DeleteNfcTaggableUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, ItemDetailUiState())
     @NativeCoroutinesState

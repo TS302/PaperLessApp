@@ -11,13 +11,16 @@ import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class AddKeyViewModel(
-    private val addNfcTaggable: AddNfcTaggableUseCase
-) : ViewModel() {
+class AddKeyViewModel() : ViewModel(), KoinComponent {
+
+    private val addNfcTaggable: AddNfcTaggableUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, AddKeyUiState())
+
     @NativeCoroutinesState
     val uiState: StateFlow<AddKeyUiState> = _uiState.asStateFlow()
 

@@ -13,11 +13,11 @@ import KMPNativeCoroutinesAsync
 
 struct AddEmployeeSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @StateViewModel private var addEmployeeVM: AddEmployeeViewModel
+    @StateViewModel private var addEmployeeVM = AddEmployeeViewModel()
     
-    init() {
-        _addEmployeeVM = StateViewModel(wrappedValue: KoinStarter.shared.addEmployeeViewModel())
-    }
+//    init() {
+//        _addEmployeeVM = StateViewModel(wrappedValue: KoinStarter.shared.addEmployeeViewModel())
+//    }
     
     private var canSave: Bool {
         !addEmployeeVM.uiState.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !addEmployeeVM.uiState.isSaving

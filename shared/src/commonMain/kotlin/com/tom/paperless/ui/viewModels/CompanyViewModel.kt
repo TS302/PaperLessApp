@@ -15,15 +15,18 @@ import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class CompanyViewModel(
-    private val getAllNfcTaggablesFlowUseCase: GetAllNfcTaggablesFlowUseCase,
-    private val addNfcTaggableUseCase: AddNfcTaggableUseCase,
-    private val saveNfcTaggableUseCase: SaveNfcTaggableUseCase,
-    private val deleteNfcTaggableUseCase: DeleteNfcTaggableUseCase,
-    private val filterNfcTaggablesUseCase: FilterNfcTaggablesUseCase
-) : ViewModel() {
+class CompanyViewModel() : ViewModel(), KoinComponent {
+
+    private val getAllNfcTaggables: GetAllNfcTaggablesFlowUseCase by inject()
+    private val addNfcTaggable: AddNfcTaggableUseCase by inject()
+    private val saveNfcTaggable: SaveNfcTaggableUseCase by inject()
+    private val deleteNfcTaggable: DeleteNfcTaggableUseCase by inject()
+    private val filterNfcTaggables: FilterNfcTaggablesUseCase by inject()
+
     private val _uiState = MutableStateFlow(viewModelScope, NfcTaggablesUiState.empty())
 
     @NativeCoroutinesState
@@ -33,11 +36,11 @@ class CompanyViewModel(
 
 init {
     viewModelScope.launch {
-        getAllNfcTaggablesFlowUseCase().collectLatest { allItems ->
+        getAllNfcTaggables().collectLatest { allItems ->
             lastAllItems = allItems
 
             val state = _uiState.value
-            val visible = filterNfcTaggablesUseCase(
+            val visible = filterNfcTaggables(
                 allItems = allItems,
                 typeFilter = state.activeTypeFilter,
                 searchQueryText = state.searchQueryText
@@ -63,7 +66,7 @@ init {
 
     private fun recomputeVisibleItems() {
         val state = _uiState.value
-        val visible = filterNfcTaggablesUseCase(
+        val visible = filterNfcTaggables(
             allItems = lastAllItems,
             typeFilter = state.activeTypeFilter,
             searchQueryText = state.searchQueryText
@@ -72,17 +75,17 @@ init {
     }
 
     fun addItem(itemToAdd: NfcTaggable) = viewModelScope.launch {
-        runCatching { addNfcTaggableUseCase(itemToAdd) }
+        runCatching { addNfcTaggable(itemToAdd) }
             .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
     }
 
     fun updateItem(itemToSave: NfcTaggable) = viewModelScope.launch {
-        runCatching { saveNfcTaggableUseCase(itemToSave) }
+        runCatching { saveNfcTaggable(itemToSave) }
             .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
     }
 
     fun deleteItem(id: Uuid) = viewModelScope.launch {
-        runCatching { deleteNfcTaggableUseCase(id) }
+        runCatching { deleteNfcTaggable(id) }
             .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
     }
 

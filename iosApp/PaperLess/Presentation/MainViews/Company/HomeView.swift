@@ -13,7 +13,7 @@ import KMPNativeCoroutinesAsync
 
 
 struct HomeView: View {
-    @StateViewModel var companyVM: CompanyViewModel = KoinStarter.shared.companyViewModel()
+    @StateViewModel var companyVM = CompanyViewModel()
     
     @State private var addVehicle = false
     @State private var addTool = false

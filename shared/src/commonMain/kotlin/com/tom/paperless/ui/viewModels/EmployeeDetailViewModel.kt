@@ -17,15 +17,18 @@ import com.tom.paperless.domain.models.Vehicle
 import com.tom.paperless.domain.models.Tool
 import com.tom.paperless.domain.models.KeyRing
 import com.tom.paperless.domain.models.ui.AssignedItemUi
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class EmployeeDetailViewModel(
-    private val getEmployeeById: GetEmployeeByIdUseCase,
-    private val updateEmployee: UpdateEmployeeUseCase,
-    private val deleteEmployee: DeleteEmployeeUseCase,
-    private val getAssetsOfEmployee: GetAssetsOfEmployeeUseCase
-) : ViewModel() {
+class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
+
+    private val getEmployeeById: GetEmployeeByIdUseCase by inject()
+    private val updateEmployee: UpdateEmployeeUseCase by inject()
+    private val deleteEmployee: DeleteEmployeeUseCase by inject()
+    private val getAssetsOfEmployee: GetAssetsOfEmployeeUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, EmployeeDetailUiState())
+
     @NativeCoroutinesState
     val uiState: StateFlow<EmployeeDetailUiState> = _uiState.asStateFlow()
 

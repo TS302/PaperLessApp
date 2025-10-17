@@ -2,10 +2,14 @@ package com.tom.paperless.domain.useCases
 
 import com.tom.paperless.data.repositories.UserRepository
 import com.tom.paperless.domain.models.User
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class LoginUserUseCase(
-    private val repository: UserRepository = UserRepository
-) {
+class LoginUserUseCase() : KoinComponent {
+
+    private val repository: UserRepository by inject()
+
+
     operator fun invoke(email: String, password: String): Result<User> {
         val user = repository.getByEmail(email) ?: return Result.failure(
             IllegalArgumentException("E-Mail nicht gefunden")

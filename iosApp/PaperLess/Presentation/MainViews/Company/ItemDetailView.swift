@@ -14,7 +14,7 @@ struct ItemDetailView: View {
     let item: NfcTaggable
     var onSaved: ((NfcTaggable) -> Void)? = nil
     
-    @StateViewModel var itemDetailVM: ItemDetailViewModel
+    @StateViewModel var itemDetailVM = ItemDetailViewModel()
     @Environment(\.dismiss) private var dismiss
     
     @State private var isEditing = false
@@ -23,7 +23,7 @@ struct ItemDetailView: View {
     init(item: NfcTaggable, onSaved: ((NfcTaggable) -> Void)? = nil) {
         self.item = item
         self.onSaved = onSaved
-        self._itemDetailVM = StateViewModel(wrappedValue: KoinStarter.shared.itemDetailViewModel())
+//        self._itemDetailVM = StateViewModel(wrappedValue: KoinStarter.shared.itemDetailViewModel())
     }
         
     private var nameBinding: Binding<String> {

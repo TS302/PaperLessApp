@@ -8,6 +8,7 @@ import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.data.repositories.NfcTaggableRepositoryImpl
 import com.tom.paperless.data.repositories.TaggableRepository
 import com.tom.paperless.data.repositories.TaggableRepositoryAdapter
+import com.tom.paperless.data.repositories.UserRepository
 import com.tom.paperless.domain.services.VehicleService
 import com.tom.paperless.domain.services.VehicleServiceImpl
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
@@ -53,6 +54,7 @@ val appModule = module {
     single<CoroutineScope> { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
 
     // Repositories
+    single<UserRepository>{ UserRepository }
     single<NfcTaggableRepository> { NfcTaggableRepositoryImpl() }
     single<EmployeeRepository> { EmployeeRepositoryImpl }
     single<TaggableRepository> { TaggableRepositoryAdapter(get<NfcTaggableRepository>()) }
@@ -77,91 +79,35 @@ val appModule = module {
     single { UpdateNfcTaggableUseCase() }
 
     //Employees
-    single { GetAllEmployeesFlowUseCase(get()) }
-    single { GetEmployeeByIdUseCase(get()) }
-    single { AddEmployeeUseCase(get()) }
-    single { UpdateEmployeeUseCase(get()) }
-    single { DeleteEmployeeUseCase(get()) }
+    single { GetAllEmployeesFlowUseCase() }
+    single { GetEmployeeByIdUseCase() }
+    single { AddEmployeeUseCase() }
+    single { UpdateEmployeeUseCase() }
+    single { DeleteEmployeeUseCase() }
     single { FilterEmployeesUseCase() }
 
-
-    factory {
-        AssignAssetsToEmployeeUseCase(
-            assignmentRepository = get<AssignmentRepository>(),
-            taggableRepository = get<TaggableRepository>()
-        )
-    }
-
-    factory {
-        ReturnAssetsUseCase(
-            assignmentRepository = get<AssignmentRepository>(),
-            taggableRepository = get<TaggableRepository>()
-        )
-    }
-
-    factory {
-        GetAssetsOfEmployeeUseCase(
-            assignmentRepository = get<AssignmentRepository>()
-        )
-    }
+    // Assignment
+    single { AssignAssetsToEmployeeUseCase() }
+    single { ReturnAssetsUseCase() }
+    single { GetAssetsOfEmployeeUseCase() }
 
     //Viewmodels
+    factory { CompanyViewModel() }
+    factory { AddEmployeeViewModel() }
+    factory { AddKeyViewModel() }
+    factory { AddToolViewModel() }
+    factory { AddVehicleViewModel() }
+    factory { EmployeeDetailViewModel() }
+    factory { EmployeesViewModel() }
+    factory { ItemDetailViewModel() }
+    factory { LoginViewModel(get(), get(), get()) }
+    factory { SettingsViewModel() }
+
     factory {
         RegistrationViewModel(
             registerUserUseCase = get<RegisterUserUseCase>(),
             loginUserUseCase = get<LoginUserUseCase>())
     }
-
-    factory {
-        LoginViewModel(
-            loginUserUseCase = get<LoginUserUseCase>(),
-            getLoggedInUserUseCase = get<GetLoggedInUserUseCase>(),
-            logoutUserUseCase = get<LogoutUserUseCase>()
-        )
-    }
-
-    factory {
-        SettingsViewModel(
-            logoutUserUseCase = get<LogoutUserUseCase>()
-        )
-    }
-
-    factory {
-        CompanyViewModel(
-            get(),
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
-    factory {
-        ItemDetailViewModel(
-            get(),
-            get(),
-            get()
-        )
-    }
-
-    factory {
-        EmployeesViewModel(
-            getAllEmployeesFlow = get(),
-            addEmployee = get(),
-            updateEmployee = get(),
-            deleteEmployee = get(),
-            filterEmployees = get()
-        )
-    }
-
-    factory {
-        EmployeeDetailViewModel(
-            getEmployeeById = get(),
-            updateEmployee = get(),
-            deleteEmployee = get(),
-            getAssetsOfEmployee = get()
-        )
-    }
-
     factory { params ->
         val itemIdString: String = params.get()
         val itemId = kotlin.uuid.Uuid.parse(itemIdString)
@@ -172,10 +118,10 @@ val appModule = module {
         )
     }
 
-    factory { AddEmployeeViewModel(get()) }
 
-    factory { AddVehicleViewModel(get()) }
-    factory { AddToolViewModel(get()) }
-    factory { AddKeyViewModel(get()) }
+
+
+
+
 
 }

@@ -7,11 +7,12 @@ import com.tom.paperless.domain.useCases.LogoutUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class SettingsViewModel(
-    private val logoutUserUseCase: LogoutUserUseCase
-) : ViewModel() {
+class SettingsViewModel() : ViewModel(), KoinComponent {
 
+    private val logoutUserUseCase: LogoutUserUseCase by inject()
     private val _uiStateInternal = MutableStateFlow(SettingsUiState())
 
     @NativeCoroutinesState

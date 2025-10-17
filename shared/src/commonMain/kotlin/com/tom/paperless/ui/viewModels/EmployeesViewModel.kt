@@ -14,15 +14,17 @@ import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class EmployeesViewModel(
-    private val getAllEmployeesFlow: GetAllEmployeesFlowUseCase,
-    private val addEmployee: AddEmployeeUseCase,
-    private val updateEmployee: UpdateEmployeeUseCase,
-    private val deleteEmployee: DeleteEmployeeUseCase,
-    private val filterEmployees: FilterEmployeesUseCase
-) : ViewModel() {
+class EmployeesViewModel() : ViewModel(), KoinComponent {
+
+    private val getAllEmployeesFlow: GetAllEmployeesFlowUseCase by inject()
+    private val addEmployee: AddEmployeeUseCase by inject()
+    private val updateEmployee: UpdateEmployeeUseCase by inject()
+    private val deleteEmployee: DeleteEmployeeUseCase by inject()
+    private val filterEmployees: FilterEmployeesUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, EmployeesUiState.empty())
     @NativeCoroutinesState
