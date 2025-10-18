@@ -1,28 +1,24 @@
 package com.tom.paperless.ui.viewModels
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.tom.paperless.domain.models.uiStates.LoginUiState
 import com.tom.paperless.domain.useCases.GetLoggedInUserUseCase
 import com.tom.paperless.domain.useCases.LoginUserUseCase
 import com.tom.paperless.domain.useCases.LogoutUserUseCase
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class LoginViewModel(
-    private val loginUserUseCase: LoginUserUseCase,
-    private val getLoggedInUserUseCase: GetLoggedInUserUseCase,
-    private val logoutUserUseCase: LogoutUserUseCase
-) : ViewModel() {
+class LoginViewModel() : ViewModel(), KoinComponent {
 
-//    private val loginUserUseCase: LoginUserUseCase by inject()
-//    private val getLoggedInUserUseCase: GetLoggedInUserUseCase by inject()
-//    private val logoutUserUseCase: LogoutUserUseCase by inject()
+    private val loginUserUseCase: LoginUserUseCase by inject()
+    private val getLoggedInUserUseCase: GetLoggedInUserUseCase by inject()
+    private val logoutUserUseCase: LogoutUserUseCase by inject()
 
-    private val _uiState = MutableStateFlow(LoginUiState())
+    private val _uiState = MutableStateFlow(viewModelScope, LoginUiState())
 
     @NativeCoroutinesState
     val uiState: StateFlow<LoginUiState> = _uiState

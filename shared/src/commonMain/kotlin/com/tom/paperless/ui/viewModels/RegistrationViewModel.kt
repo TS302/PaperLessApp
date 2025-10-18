@@ -1,6 +1,7 @@
 package com.tom.paperless.ui.viewModels
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
+import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.tom.paperless.domain.models.User
 import com.tom.paperless.domain.models.uiStates.RegistrationUiState
@@ -8,16 +9,17 @@ import com.tom.paperless.domain.useCases.LoginUserUseCase
 import com.tom.paperless.domain.useCases.RegisterUserUseCase
 import com.tom.paperless.domain.useCases.RegisterUserOutcome
 import com.tom.paperless.domain.errors.RegistrationError
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-class RegistrationViewModel(
-    private val registerUserUseCase: RegisterUserUseCase,
-    private val loginUserUseCase: LoginUserUseCase
-) : ViewModel() {
+class RegistrationViewModel() : ViewModel(), KoinComponent {
 
-    private val _uiState = MutableStateFlow(RegistrationUiState())
+    private val registerUserUseCase: RegisterUserUseCase by inject()
+    private val loginUserUseCase: LoginUserUseCase by inject()
+
+    private val _uiState = MutableStateFlow(viewModelScope, RegistrationUiState())
 
     @NativeCoroutinesState
     val uiState: StateFlow<RegistrationUiState> = _uiState

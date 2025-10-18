@@ -9,14 +9,14 @@ import com.tom.paperless.domain.models.uiStates.AssignAssetUiState
 import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetsToEmployeeUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class AssignAssetViewModel(
-    private val itemId: Uuid,
-    private val employeeRepository: EmployeeRepository,
-    private val assignAssetsToEmployeeUseCase: AssignAssetsToEmployeeUseCase
-) : ViewModel() {
+class AssignAssetViewModel(private val itemId: Uuid) : ViewModel(), KoinComponent {
 
+    private val employeeRepository: EmployeeRepository by inject()
+    private val assignAssetsToEmployeeUseCase: AssignAssetsToEmployeeUseCase by inject()
     private val _uiState = MutableStateFlow(viewModelScope, AssignAssetUiState(isLoading = true))
 
     @NativeCoroutinesState

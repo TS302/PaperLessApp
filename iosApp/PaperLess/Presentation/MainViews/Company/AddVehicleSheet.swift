@@ -15,10 +15,6 @@ struct AddVehicleSheet: View {
     
     @StateViewModel private var addVehicleVM = AddVehicleViewModel()
     
-//    init() {
-//        _addVehicleVM = StateViewModel(wrappedValue: KoinStarter.shared.addVehicleViewModel())
-//    }
-    
     private enum Field { case name, plate }
     
     private var canSave: Bool {

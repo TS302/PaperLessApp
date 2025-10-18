@@ -100,28 +100,13 @@ val appModule = module {
     factory { EmployeeDetailViewModel() }
     factory { EmployeesViewModel() }
     factory { ItemDetailViewModel() }
-    factory { LoginViewModel(get(), get(), get()) }
+    factory { LoginViewModel() }
     factory { SettingsViewModel() }
 
-    factory {
-        RegistrationViewModel(
-            registerUserUseCase = get<RegisterUserUseCase>(),
-            loginUserUseCase = get<LoginUserUseCase>())
-    }
+    factory { RegistrationViewModel() }
     factory { params ->
         val itemIdString: String = params.get()
         val itemId = kotlin.uuid.Uuid.parse(itemIdString)
-        AssignAssetViewModel(
-            itemId = itemId,
-            employeeRepository = get(),
-            assignAssetsToEmployeeUseCase = get()
-        )
+        AssignAssetViewModel(itemId = itemId)
     }
-
-
-
-
-
-
-
 }

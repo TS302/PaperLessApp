@@ -12,47 +12,22 @@ import KMPNativeCoroutinesAsync
 
 struct RootView: View {
     
-    @ObservedViewModel var loginViewModel: LoginViewModel
+    @StateViewModel var loginVM = LoginViewModel()
     
-    @State private var loginUiState = LoginUiState(
-        email: "",
-        password: "",
-        success: false,
-        errorMessage: nil
-    )
-    
-    @State private var uiStateTask: Task<Void, Never>? = nil
-    
-    init() {
-        let loginViewModel = KoinStarter.shared.loginViewModel()
-        self._loginViewModel = ObservedViewModel(wrappedValue: loginViewModel)
+    private var uiState: LoginUiState {
+        loginVM.uiState
     }
     
     var body: some View {
         Group {
-            if loginUiState.success {
-                MainTabView(loginViewModel: loginViewModel)
+            if uiState.success {
+                MainTabView(loginViewModel: loginVM)
             } else {
-                LoginView(loginViewModel: loginViewModel)
+                LoginView(loginVM: loginVM)
             }
         }
         .onAppear {
-            if uiStateTask == nil {
-                uiStateTask = Task {
-                    do {
-                        for try await newState in asyncSequence(for: loginViewModel.uiStateFlow) {
-                            self.loginUiState = newState
-                        }
-                    } catch {
-                        print("RootView uiState stream error:", error)
-                    }
-                }
-                loginViewModel.checkIfAlreadyLoggedIn()
-            }
-        }
-        .onDisappear {
-            uiStateTask?.cancel()
-            uiStateTask = nil
+            loginVM.checkIfAlreadyLoggedIn()
         }
     }
 }

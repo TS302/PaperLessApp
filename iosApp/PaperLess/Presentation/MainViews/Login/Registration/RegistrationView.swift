@@ -12,9 +12,8 @@ import KMPNativeCoroutinesAsync
 
 struct RegistrationView: View {
     @Environment(\.dismiss) private var dismiss
-    @ObservedViewModel var registrationViewModel: RegistrationViewModel
+    @StateViewModel var registrationVM = RegistrationViewModel()
     
-    // Spiegel des KMP-States
     @State private var state = RegistrationUiState(
         firstname: "",
         lastname: "",
@@ -25,7 +24,6 @@ struct RegistrationView: View {
         errorMessage: nil
     )
     
-    // Alert-Zustand (lokal)
     @State private var showErrorAlert = false
     @State private var alertMessage = ""
     
@@ -36,33 +34,27 @@ struct RegistrationView: View {
         !state.password.isEmpty && state.password == state.confirmPassword
     }
     
-    init() {
-        let vm = KoinStarter.shared.registrationViewModel()
-        self._registrationViewModel = ObservedViewModel(wrappedValue: vm)
-    }
-    
     var body: some View {
         VStack {
-            // Änderungen gehen ins ViewModel (ohne $)
             let firstnameBinding = Binding<String>(
                 get: { state.firstname },
-                set: { registrationViewModel.onFirstnameChanged(newFirstname: $0) }
+                set: { registrationVM.onFirstnameChanged(newFirstname: $0) }
             )
             let lastnameBinding = Binding<String>(
                 get: { state.lastname },
-                set: { registrationViewModel.onLastnameChanged(newLastname: $0) }
+                set: { registrationVM.onLastnameChanged(newLastname: $0) }
             )
             let emailBinding = Binding<String>(
                 get: { state.email },
-                set: { registrationViewModel.onEmailChanged(newEmail: $0) }
+                set: { registrationVM.onEmailChanged(newEmail: $0) }
             )
             let passwordBinding = Binding<String>(
                 get: { state.password },
-                set: { registrationViewModel.onPasswordChanged(newPassword: $0) }
+                set: { registrationVM.onPasswordChanged(newPassword: $0) }
             )
             let confirmBinding = Binding<String>(
                 get: { state.confirmPassword },
-                set: { registrationViewModel.onConfirmPasswordChanged(newConfirmPassword: $0) }
+                set: { registrationVM.onConfirmPasswordChanged(newConfirmPassword: $0) }
             )
             
             VStack {
@@ -127,7 +119,7 @@ struct RegistrationView: View {
                     Spacer()
                     
                     Button("Konto erstellen") {
-                        registrationViewModel.register()
+                        registrationVM.register()
                     }
                     .frame(width: 160, height: 40)
                     .background(Color.appPrimary)
@@ -145,7 +137,7 @@ struct RegistrationView: View {
                 if uiStateTask == nil {
                     uiStateTask = Task {
                         do {
-                            for try await newState in asyncSequence(for: registrationViewModel.uiStateFlow) {
+                            for try await newState in asyncSequence(for: registrationVM.uiStateFlow) {
                                 if let message = newState.errorMessage, !message.isEmpty {
                                     alertMessage = message
                                     showErrorAlert = true

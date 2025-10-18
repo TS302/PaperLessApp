@@ -7,15 +7,33 @@
 
 import SwiftUI
 import Shared
+import KMPObservableViewModelSwiftUI
+
 
 struct LoginView: View {
     
-    let loginViewModel: LoginViewModel
+    @ObservedViewModel var loginVM: LoginViewModel
 
-    @State private var email: String = ""
-    @State private var password: String = ""
     @State private var showPassword: Bool = false
     @State private var showRegistrationSheet: Bool = false
+    
+    private var uiState: LoginUiState {
+        loginVM.uiState
+    }
+    
+    private var emailBinding: Binding<String> {
+        Binding(
+            get: { uiState.email },
+            set: { loginVM.onEmailChanged(newEmail: $0) }
+        )
+    }
+        
+    private var passwordBinding: Binding<String> {
+        Binding<String>(
+            get: { uiState.password },
+            set: { loginVM.onPasswordChanged(newPassword: $0) }
+            )
+    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -33,30 +51,24 @@ struct LoginView: View {
                 .padding(.bottom, 60)
 
             
-            TextFieldInput(label: "Benutzername", text: $email)
+            TextFieldInput(label: "Benutzername", text: emailBinding)
                 .padding(.bottom, 20)
                 .autocapitalization(.none)
-                .onChange(of: email) { _, newValue in
-                    loginViewModel.onEmailChanged(newEmail: newValue)
-                }
 
             SecureTextFieldInput(
                 label: "Passwort",
-                text: $password,
+                text: passwordBinding,
                 showPassword: $showPassword,
                 showEyeIcon: false
             )
             .padding(.bottom, 20)
-            .onChange(of: password) { _, newValue in
-                loginViewModel.onPasswordChanged(newPassword: newValue)
-            }
+
 
             HStack {
                 Button("Registrieren") {
                     showRegistrationSheet.toggle()
-                    email = ""
-                    password = ""
                 }
+                
                 .sheet(isPresented: $showRegistrationSheet) {
                     RegistrationView()
                 }
@@ -67,7 +79,7 @@ struct LoginView: View {
                 Spacer()
 
                 Button("Anmelden") {
-                    loginViewModel.login()
+                    loginVM.login()
                 }
                 .frame(width: 160, height: 40)
                 .background(Color.appPrimary)

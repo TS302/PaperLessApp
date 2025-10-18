@@ -13,7 +13,6 @@ import KMPObservableViewModelSwiftUI
 struct MainTabView: View {
     @ObservedViewModel var loginViewModel: LoginViewModel
     
-    
     var body: some View {
         TabView {
             HomeView()
