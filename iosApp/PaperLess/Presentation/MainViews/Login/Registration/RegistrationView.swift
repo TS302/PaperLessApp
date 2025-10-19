@@ -12,51 +12,59 @@ import KMPNativeCoroutinesAsync
 
 struct RegistrationView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateViewModel var registrationVM = RegistrationViewModel()
     
-    @State private var state = RegistrationUiState(
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        success: false,
-        errorMessage: nil
-    )
+    @StateViewModel var registrationVM = RegistrationViewModel()
     
     @State private var showErrorAlert = false
     @State private var alertMessage = ""
-    
     @State private var showPassword = false
-    @State private var uiStateTask: Task<Void, Never>? = nil
+    
+    private var uiState: RegistrationUiState {
+        registrationVM.uiState
+    }
     
     private var passwordsMatch: Bool {
-        !state.password.isEmpty && state.password == state.confirmPassword
+        !uiState.password.isEmpty && uiState.password == uiState.confirmPassword
     }
+    
+    private var firstnameBinding: Binding<String> {
+        Binding<String>(
+            get: { uiState.firstname },
+            set: { registrationVM.onFirstnameChanged(newFirstname: $0) }
+        )
+    }
+    
+    private var lastnameBinding: Binding<String> {
+        Binding<String>(
+            get: { uiState.lastname },
+            set: { registrationVM.onLastnameChanged(newLastname: $0) }
+        )
+    }
+    
+    private var emailBinding: Binding<String> {
+        Binding<String>(
+            get: { uiState.email },
+            set: { registrationVM.onEmailChanged(newEmail: $0) }
+        )
+    }
+    
+    private var passwordBinding: Binding<String> {
+        Binding<String>(
+            get: { uiState.password },
+            set: { registrationVM.onPasswordChanged(newPassword: $0) }
+        )
+    }
+    
+    private var confirmBinding: Binding<String> {
+        Binding<String>(
+            get: { uiState.confirmPassword },
+            set: { registrationVM.onConfirmPasswordChanged(newConfirmPassword: $0) }
+        )
+    }
+    
     
     var body: some View {
         VStack {
-            let firstnameBinding = Binding<String>(
-                get: { state.firstname },
-                set: { registrationVM.onFirstnameChanged(newFirstname: $0) }
-            )
-            let lastnameBinding = Binding<String>(
-                get: { state.lastname },
-                set: { registrationVM.onLastnameChanged(newLastname: $0) }
-            )
-            let emailBinding = Binding<String>(
-                get: { state.email },
-                set: { registrationVM.onEmailChanged(newEmail: $0) }
-            )
-            let passwordBinding = Binding<String>(
-                get: { state.password },
-                set: { registrationVM.onPasswordChanged(newPassword: $0) }
-            )
-            let confirmBinding = Binding<String>(
-                get: { state.confirmPassword },
-                set: { registrationVM.onConfirmPasswordChanged(newConfirmPassword: $0) }
-            )
-            
             VStack {
                 Spacer()
                 
@@ -108,7 +116,7 @@ struct RegistrationView: View {
                     .foregroundStyle(Color.error)
                     .padding(.bottom, 6)
                     .padding(.horizontal, 40)
-                    .opacity((!passwordsMatch && !state.confirmPassword.isEmpty) ? 1.0 : 0.0)
+                    .opacity((!passwordsMatch && !uiState.confirmPassword.isEmpty) ? 1.0 : 0.0)
                 
                 HStack {
                     Button("Abbrechen") { dismiss() }
@@ -133,28 +141,14 @@ struct RegistrationView: View {
                 Spacer()
             }
             .padding(.horizontal, 24)
-            .onAppear {
-                if uiStateTask == nil {
-                    uiStateTask = Task {
-                        do {
-                            for try await newState in asyncSequence(for: registrationVM.uiStateFlow) {
-                                if let message = newState.errorMessage, !message.isEmpty {
-                                    alertMessage = message
-                                    showErrorAlert = true
-                                }
-                                self.state = newState
-                            }
-                        } catch {
-                            print("uiState stream error:", error)
-                        }
-                    }
+            .onChange(of: uiState.errorMessage) { _, message in
+                if let message = message, !message.isEmpty {
+                    alertMessage = message
+                    showErrorAlert = true
                 }
+                
             }
-            .onDisappear {
-                uiStateTask?.cancel()
-                uiStateTask = nil
-            }
-            .onChange(of: state.success) { _, isSuccess in
+            .onChange(of: uiState.success) { _, isSuccess in
                 if isSuccess { dismiss() }
             }
         }
