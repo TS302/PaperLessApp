@@ -12,55 +12,66 @@ import KMPNativeCoroutinesAsync
 
 struct RegistrationView: View {
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject private var auth: IOSAuthService
     
-    @StateViewModel var registrationVM = RegistrationViewModel()
-    
+    @State private var firstname = ""
+    @State private var lastname = ""
+    @State private var email = ""
+    @State private var password = ""
+    @State private var confirmPassword = ""
     @State private var showErrorAlert = false
     @State private var alertMessage = ""
     @State private var showPassword = false
     
-    private var uiState: RegistrationUiState {
-        registrationVM.uiState
-    }
-    
     private var passwordsMatch: Bool {
-        !uiState.password.isEmpty && uiState.password == uiState.confirmPassword
+        !password.isEmpty && password == confirmPassword
     }
     
-    private var firstnameBinding: Binding<String> {
-        Binding<String>(
-            get: { uiState.firstname },
-            set: { registrationVM.onFirstnameChanged(newFirstname: $0) }
-        )
-    }
     
-    private var lastnameBinding: Binding<String> {
-        Binding<String>(
-            get: { uiState.lastname },
-            set: { registrationVM.onLastnameChanged(newLastname: $0) }
-        )
-    }
+//    @StateViewModel var registrationVM = RegistrationViewModel()
     
-    private var emailBinding: Binding<String> {
-        Binding<String>(
-            get: { uiState.email },
-            set: { registrationVM.onEmailChanged(newEmail: $0) }
-        )
-    }
+//    private var uiState: RegistrationUiState {
+//        registrationVM.uiState
+//    }
     
-    private var passwordBinding: Binding<String> {
-        Binding<String>(
-            get: { uiState.password },
-            set: { registrationVM.onPasswordChanged(newPassword: $0) }
-        )
-    }
-    
-    private var confirmBinding: Binding<String> {
-        Binding<String>(
-            get: { uiState.confirmPassword },
-            set: { registrationVM.onConfirmPasswordChanged(newConfirmPassword: $0) }
-        )
-    }
+//    private var passwordsMatch: Bool {
+//        !uiState.password.isEmpty && uiState.password == uiState.confirmPassword
+//    }
+//    
+//    private var firstnameBinding: Binding<String> {
+//        Binding<String>(
+//            get: { uiState.firstname },
+//            set: { registrationVM.onFirstnameChanged(newFirstname: $0) }
+//        )
+//    }
+//    
+//    private var lastnameBinding: Binding<String> {
+//        Binding<String>(
+//            get: { uiState.lastname },
+//            set: { registrationVM.onLastnameChanged(newLastname: $0) }
+//        )
+//    }
+//    
+//    private var emailBinding: Binding<String> {
+//        Binding<String>(
+//            get: { uiState.email },
+//            set: { registrationVM.onEmailChanged(newEmail: $0) }
+//        )
+//    }
+//    
+//    private var passwordBinding: Binding<String> {
+//        Binding<String>(
+//            get: { uiState.password },
+//            set: { registrationVM.onPasswordChanged(newPassword: $0) }
+//        )
+//    }
+//    
+//    private var confirmBinding: Binding<String> {
+//        Binding<String>(
+//            get: { uiState.confirmPassword },
+//            set: { registrationVM.onConfirmPasswordChanged(newConfirmPassword: $0) }
+//        )
+//    }
     
     
     var body: some View {
@@ -80,21 +91,21 @@ struct RegistrationView: View {
                     .opacity(0.8)
                     .padding(.bottom, 60)
                 
-                TextFieldInput(label: "Vorname", text: firstnameBinding)
+                TextFieldInput(label: "Vorname", text: $firstname)
                     .padding(.bottom, 20)
                     .autocapitalization(.none)
                 
-                TextFieldInput(label: "Nachname", text: lastnameBinding)
+                TextFieldInput(label: "Nachname", text: $lastname)
                     .padding(.bottom, 20)
                     .autocapitalization(.none)
                 
-                TextFieldInput(label: "E-mail", text: emailBinding)
+                TextFieldInput(label: "E-mail", text: $email)
                     .padding(.bottom, 20)
                     .autocapitalization(.none)
                 
                 SecureTextFieldInput(
                     label: "Passwort",
-                    text: passwordBinding,
+                    text: $password,
                     showPassword: $showPassword,
                     showEyeIcon: true
                 )
@@ -103,7 +114,7 @@ struct RegistrationView: View {
                 
                 SecureTextFieldInput(
                     label: "Passwort bestätigen",
-                    text: confirmBinding,
+                    text: $confirmPassword,
                     showPassword: $showPassword,
                     showEyeIcon: true
                 )
@@ -116,7 +127,7 @@ struct RegistrationView: View {
                     .foregroundStyle(Color.error)
                     .padding(.bottom, 6)
                     .padding(.horizontal, 40)
-                    .opacity((!passwordsMatch && !uiState.confirmPassword.isEmpty) ? 1.0 : 0.0)
+                    .opacity((!passwordsMatch && !confirmPassword.isEmpty) ? 1.0 : 0.0)
                 
                 HStack {
                     Button("Abbrechen") { dismiss() }
@@ -126,31 +137,49 @@ struct RegistrationView: View {
                     
                     Spacer()
                     
-                    Button("Konto erstellen") {
-                        registrationVM.register()
+                    Button {
+                        guard passwordsMatch else {
+                            alertMessage = "Passwörter stimmen nicht überein."
+                            showErrorAlert = true
+                            return
+                        }
+                        
+                        Task {
+                            await auth.signUp(email: email, password: password)
+                            if auth.user != nil {
+                                dismiss()
+                            } else if let message = auth.errorMessage {
+                                alertMessage = message
+                                showErrorAlert = true
+                            }
+                        }
+                    } label: {
+                        Text(auth.isBusy ? "Erstellen..." : "Konto erstellen")
+                            .frame(width: 160, height: 40)
+                                 .background(Color.appPrimary)
+                                 .foregroundStyle(Color.appSecondary)
+                                 .fontWeight(.bold)
+                                 .cornerRadius(6)
+                                 .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
                     }
-                    .frame(width: 160, height: 40)
-                    .background(Color.appPrimary)
-                    .foregroundStyle(Color.appSecondary)
-                    .fontWeight(.bold)
-                    .cornerRadius(6)
-                    .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
+                    .disabled(auth.isBusy)
+                    
+//                    Button("Konto erstellen") {
+//                        registrationVM.register()
+//                    }
+//                    .frame(width: 160, height: 40)
+//                    .background(Color.appPrimary)
+//                    .foregroundStyle(Color.appSecondary)
+//                    .fontWeight(.bold)
+//                    .cornerRadius(6)
+//                    .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
                 }
                 .padding(.horizontal, 40)
                 
                 Spacer()
             }
             .padding(.horizontal, 24)
-            .onChange(of: uiState.errorMessage) { _, message in
-                if let message = message, !message.isEmpty {
-                    alertMessage = message
-                    showErrorAlert = true
-                }
-                
-            }
-            .onChange(of: uiState.success) { _, isSuccess in
-                if isSuccess { dismiss() }
-            }
+            
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appSecondary)

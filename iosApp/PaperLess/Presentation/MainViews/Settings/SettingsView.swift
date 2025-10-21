@@ -11,56 +11,50 @@ import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
 struct SettingsView: View {
-    
-    let loginViewModel: LoginViewModel
-
-    @ObservedViewModel var settingsViewModel: SettingsViewModel
-
-    @State private var settingsUiState = SettingsUiState(
-        logoutSuccess: false,
-        errorMessage: nil
-    )
-    @State private var uiStateTask: Task<Void, Never>? = nil
-
-    init(loginViewModel: LoginViewModel) {
-        self.loginViewModel = loginViewModel
-        let vm = KoinStarter.shared.settingsViewModel()
-        self._settingsViewModel = ObservedViewModel(wrappedValue: vm)
-    }
+    @EnvironmentObject private var auth: IOSAuthService
+    @State private var showLogoutConfirm = false
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section(header: Text("Konto")) {
+                    HStack {
+                        Image(systemName: "person.crop.fill")
+                        VStack(alignment: .leading) {
+                            Text(auth.user?.email ?? "Unbekannter Nutzer")
+                                .font(.subheadline)
+                                .foregroundStyle(Color.primary)
+                            Text("angemeldet")
+                                .font(.caption)
+                                .foregroundStyle(Color.primary)
+                        }
+                    }
+                    
                     Button(role: .destructive) {
-                        settingsViewModel.logout()
-                        loginViewModel.logout()
+                        showLogoutConfirm = true
                     } label: {
                         HStack {
-                            Image(systemName: "rectangle.portrait.and.arrow.forward")
+                            Image(systemName: "power.circle.fill")
+                                .foregroundStyle(Color.error)
                             Text("Abmelden")
+                                .font(.subheadline)
+                                .foregroundStyle(Color.primary)
                         }
                     }
                 }
             }
-            .navigationTitle("Einstellungen")
+            .modifier(ListStyle(title: "Einstellungen"))
         }
-        .onAppear {
-            if uiStateTask == nil {
-                uiStateTask = Task {
-                    do {
-                        for try await newState in asyncSequence(for: settingsViewModel.uiStateFlow) {
-                            self.settingsUiState = newState
-                        }
-                    } catch {
-                        print("SettingsView uiState stream error:", error)
-                    }
-                }
+        .confirmationDialog(
+            "Wirklich abmelden?",
+            isPresented: $showLogoutConfirm,
+            titleVisibility: .visible
+        ) {
+            Button("Abmelden", role: .destructive) {
+                auth.signOut()
             }
-        }
-        .onDisappear {
-            uiStateTask?.cancel()
-            uiStateTask = nil
+            
+            Button("Abbrechen", role: .cancel) { }
         }
     }
 }

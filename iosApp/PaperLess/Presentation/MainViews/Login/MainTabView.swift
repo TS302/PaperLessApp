@@ -11,7 +11,7 @@ import KMPObservableViewModelSwiftUI
 
 
 struct MainTabView: View {
-    @ObservedViewModel var loginViewModel: LoginViewModel
+    @EnvironmentObject private var auth: IOSAuthService
     
     var body: some View {
         TabView {
@@ -27,7 +27,7 @@ struct MainTabView: View {
                     Text("Personal")
                 }
             
-            SettingsView(loginViewModel: loginViewModel)
+            SettingsView()
             .tabItem {
                 Image(systemName: "gear")
                 Text("Einstellungen")

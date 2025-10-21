@@ -11,29 +11,33 @@ import KMPObservableViewModelSwiftUI
 
 
 struct LoginView: View {
+    @EnvironmentObject private var auth: IOSAuthService
     
-    @ObservedViewModel var loginVM: LoginViewModel
-
+    @State private var email: String = ""
+    @State private var password: String = ""
     @State private var showPassword: Bool = false
     @State private var showRegistrationSheet: Bool = false
     
-    private var uiState: LoginUiState {
-        loginVM.uiState
-    }
+//    @ObservedViewModel var loginVM: LoginViewModel
+
     
-    private var emailBinding: Binding<String> {
-        Binding(
-            get: { uiState.email },
-            set: { loginVM.onEmailChanged(newEmail: $0) }
-        )
-    }
-        
-    private var passwordBinding: Binding<String> {
-        Binding<String>(
-            get: { uiState.password },
-            set: { loginVM.onPasswordChanged(newPassword: $0) }
-            )
-    }
+//    private var uiState: LoginUiState {
+//        loginVM.uiState
+//    }
+    
+//    private var emailBinding: Binding<String> {
+//        Binding(
+//            get: { uiState.email },
+//            set: { loginVM.onEmailChanged(newEmail: $0) }
+//        )
+//    }
+//        
+//    private var passwordBinding: Binding<String> {
+//        Binding<String>(
+//            get: { uiState.password },
+//            set: { loginVM.onPasswordChanged(newPassword: $0) }
+//            )
+//    }
 
     var body: some View {
         VStack(spacing: 16) {
@@ -51,13 +55,13 @@ struct LoginView: View {
                 .padding(.bottom, 60)
 
             
-            TextFieldInput(label: "Benutzername", text: emailBinding)
+            TextFieldInput(label: "Benutzername", text: $email)
                 .padding(.bottom, 20)
                 .autocapitalization(.none)
 
             SecureTextFieldInput(
                 label: "Passwort",
-                text: passwordBinding,
+                text: $password,
                 showPassword: $showPassword,
                 showEyeIcon: false
             )
@@ -78,17 +82,28 @@ struct LoginView: View {
 
                 Spacer()
 
-                Button("Anmelden") {
-                    loginVM.login()
+                Button {
+                    Task {
+                        await auth.signIn(email: email, password: password)
+                    }
+                } label: {
+                    Text(auth.isBusy ? "Anmelden..." : "Anmelden")
+                        .frame(width: 160, height: 40)
+                        .background(Color.appPrimary)
+                        .foregroundStyle(Color.appSecondary)
+                        .fontWeight(.bold)
+                        .cornerRadius(6)
+                        .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
                 }
-                .frame(width: 160, height: 40)
-                .background(Color.appPrimary)
-                .foregroundStyle(Color.appSecondary)
-                .fontWeight(.bold)
-                .cornerRadius(6)
-                .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
+                .disabled(auth.isBusy)
             }
             .padding(.horizontal, 40)
+            if let message = auth.errorMessage {
+                Text(message)
+                    .foregroundColor(.red)
+                    .font(.caption)
+                    .padding(.top, 10)
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.secondary)

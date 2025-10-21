@@ -11,24 +11,17 @@ import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
 struct RootView: View {
-    
-    @StateViewModel var loginVM = LoginViewModel()
-    
-    private var uiState: LoginUiState {
-        loginVM.uiState
-    }
+    @StateObject private var auth = IOSAuthService()
     
     var body: some View {
         Group {
-            if uiState.success {
-                MainTabView(loginViewModel: loginVM)
+            if auth.user != nil {
+                MainTabView()
             } else {
-                LoginView(loginVM: loginVM)
+                LoginView()
             }
         }
-        .onAppear {
-            loginVM.checkIfAlreadyLoggedIn()
-        }
+        .environmentObject(auth)
     }
+    
 }
-

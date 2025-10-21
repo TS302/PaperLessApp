@@ -50,6 +50,12 @@ kotlin {
 
 
         }
+
+        androidMain.dependencies {
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.auth.ktx)
+        }
+
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }

@@ -7,11 +7,13 @@
 
 import SwiftUI
 import Shared
+import FirebaseCore
 
 @main
 struct PaperLessApp: App {
 
     init() {
+        FirebaseApp.configure()
         KoinStarter.shared.start()
         print("✅ KoinStarter.start() called")
     }
