@@ -7,77 +7,43 @@
 
 import SwiftUI
 import Shared
-import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
+import KMPObservableViewModelSwiftUI
 
 struct RegistrationView: View {
+    @StateViewModel var viewModel = RegistrationViewModel()
     @Environment(\.dismiss) private var dismiss
-    @EnvironmentObject private var auth: IOSAuthService
+    let onRegisteredAndLoggedIn: (String) -> Void
     
-    @State private var firstname = ""
-    @State private var lastname = ""
-    @State private var email = ""
-    @State private var password = ""
-    @State private var confirmPassword = ""
-    @State private var showErrorAlert = false
     @State private var alertMessage = ""
+    @State private var showAlert = false
     @State private var showPassword = false
     
-    private var passwordsMatch: Bool {
-        !password.isEmpty && password == confirmPassword
+    private var emailBinding: Binding<String> {
+        Binding<String>(
+            get: { viewModel.uiState.email },
+            set: { viewModel.onEmailChanged(newValue: $0) }
+        )
     }
     
+    private var passwordBinding: Binding<String> {
+        Binding<String>(
+            get: { viewModel.uiState.password },
+            set: { viewModel.onPasswordChanged(newValue: $0) }
+        )
+    }
     
-//    @StateViewModel var registrationVM = RegistrationViewModel()
-    
-//    private var uiState: RegistrationUiState {
-//        registrationVM.uiState
-//    }
-    
-//    private var passwordsMatch: Bool {
-//        !uiState.password.isEmpty && uiState.password == uiState.confirmPassword
-//    }
-//    
-//    private var firstnameBinding: Binding<String> {
-//        Binding<String>(
-//            get: { uiState.firstname },
-//            set: { registrationVM.onFirstnameChanged(newFirstname: $0) }
-//        )
-//    }
-//    
-//    private var lastnameBinding: Binding<String> {
-//        Binding<String>(
-//            get: { uiState.lastname },
-//            set: { registrationVM.onLastnameChanged(newLastname: $0) }
-//        )
-//    }
-//    
-//    private var emailBinding: Binding<String> {
-//        Binding<String>(
-//            get: { uiState.email },
-//            set: { registrationVM.onEmailChanged(newEmail: $0) }
-//        )
-//    }
-//    
-//    private var passwordBinding: Binding<String> {
-//        Binding<String>(
-//            get: { uiState.password },
-//            set: { registrationVM.onPasswordChanged(newPassword: $0) }
-//        )
-//    }
-//    
-//    private var confirmBinding: Binding<String> {
-//        Binding<String>(
-//            get: { uiState.confirmPassword },
-//            set: { registrationVM.onConfirmPasswordChanged(newConfirmPassword: $0) }
-//        )
-//    }
-    
+    private var confirmPasswordBinding: Binding<String> {
+        Binding<String>(
+            get: { viewModel.uiState.confirmPassword },
+            set: { viewModel.onConfirmPasswordChanged(newValue: $0) }
+        )
+    }
     
     var body: some View {
-        VStack {
+        NavigationStack {
+            
             VStack {
-                Spacer()
                 
                 Text("REGISTRIEREN")
                     .fontWeight(.black)
@@ -91,21 +57,13 @@ struct RegistrationView: View {
                     .opacity(0.8)
                     .padding(.bottom, 60)
                 
-                TextFieldInput(label: "Vorname", text: $firstname)
-                    .padding(.bottom, 20)
-                    .autocapitalization(.none)
-                
-                TextFieldInput(label: "Nachname", text: $lastname)
-                    .padding(.bottom, 20)
-                    .autocapitalization(.none)
-                
-                TextFieldInput(label: "E-mail", text: $email)
+                TextFieldInput(label: "E-mail", text: emailBinding)
                     .padding(.bottom, 20)
                     .autocapitalization(.none)
                 
                 SecureTextFieldInput(
                     label: "Passwort",
-                    text: $password,
+                    text: passwordBinding,
                     showPassword: $showPassword,
                     showEyeIcon: true
                 )
@@ -114,79 +72,64 @@ struct RegistrationView: View {
                 
                 SecureTextFieldInput(
                     label: "Passwort bestätigen",
-                    text: $confirmPassword,
+                    text: confirmPasswordBinding,
                     showPassword: $showPassword,
                     showEyeIcon: true
                 )
-                .padding(.bottom, 10)
+                .padding(.bottom, 20)
                 .autocapitalization(.none)
                 
-                Text("Passwörter stimmen nicht überein.")
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.caption)
-                    .foregroundStyle(Color.error)
-                    .padding(.bottom, 6)
-                    .padding(.horizontal, 40)
-                    .opacity((!passwordsMatch && !confirmPassword.isEmpty) ? 1.0 : 0.0)
-                
                 HStack {
-                    Button("Abbrechen") { dismiss() }
-                        .font(.footnote)
-                        .foregroundStyle(.appPrimary)
-                        .opacity(0.8)
+                    Button {
+                        dismiss()
+                    } label: {
+                        Text("Abbrechen")
+                            .font(.footnote)
+                            .foregroundStyle(.appPrimary)
+                            .opacity(0.8)
+                    }
                     
                     Spacer()
                     
                     Button {
-                        guard passwordsMatch else {
+                        guard viewModel.uiState.password == viewModel.uiState.confirmPassword else {
                             alertMessage = "Passwörter stimmen nicht überein."
-                            showErrorAlert = true
+                            showAlert = true
                             return
                         }
-                        
-                        Task {
-                            await auth.signUp(email: email, password: password)
-                            if auth.user != nil {
-                                dismiss()
-                            } else if let message = auth.errorMessage {
-                                alertMessage = message
-                                showErrorAlert = true
-                            }
-                        }
+                        viewModel.register()
                     } label: {
-                        Text(auth.isBusy ? "Erstellen..." : "Konto erstellen")
+                        Text("Registrieren")
                             .frame(width: 160, height: 40)
-                                 .background(Color.appPrimary)
-                                 .foregroundStyle(Color.appSecondary)
-                                 .fontWeight(.bold)
-                                 .cornerRadius(6)
-                                 .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
+                            .background(Color.appPrimary)
+                            .foregroundStyle(Color.appSecondary)
+                            .fontWeight(.bold)
+                            .cornerRadius(6)
+                            .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
                     }
-                    .disabled(auth.isBusy)
-                    
-//                    Button("Konto erstellen") {
-//                        registrationVM.register()
-//                    }
-//                    .frame(width: 160, height: 40)
-//                    .background(Color.appPrimary)
-//                    .foregroundStyle(Color.appSecondary)
-//                    .fontWeight(.bold)
-//                    .cornerRadius(6)
-//                    .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
+                    .disabled(viewModel.uiState.isLoading)
                 }
+                .padding(.top, 40)
                 .padding(.horizontal, 40)
-                
-                Spacer()
             }
-            .padding(.horizontal, 24)
-            
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.appSecondary)
-        .alert("Fehler bei der Registrierung", isPresented: $showErrorAlert) {
-            Button("OK") { showErrorAlert = false }
-        } message: {
-            Text(alertMessage)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .background(Color.secondary)
+            .task(id: viewModel.uiState.success) {
+                if viewModel.uiState.success {
+                    onRegisteredAndLoggedIn(viewModel.uiState.email)
+                    dismiss()
+                }
+            }
+            .task(id: viewModel.uiState.errorMessage) {
+                if let msg = viewModel.uiState.errorMessage, !msg.isEmpty {
+                    alertMessage = msg
+                    showAlert = true
+                }
+            }
+            .alert("Fehler", isPresented: $showAlert) {
+                Button("OK") { showAlert = false }
+            } message: { Text(alertMessage) }
         }
     }
 }
+

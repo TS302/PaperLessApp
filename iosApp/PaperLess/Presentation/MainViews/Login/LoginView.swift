@@ -7,87 +7,68 @@
 
 import SwiftUI
 import Shared
+import KMPNativeCoroutinesAsync
 import KMPObservableViewModelSwiftUI
 
-
 struct LoginView: View {
-    @EnvironmentObject private var auth: IOSAuthService
+    let onLoggedIn: (String) -> Void
     
-    @State private var email: String = ""
-    @State private var password: String = ""
-    @State private var showPassword: Bool = false
-    @State private var showRegistrationSheet: Bool = false
+    @StateViewModel var loginVM = LoginViewModel()
     
-//    @ObservedViewModel var loginVM: LoginViewModel
-
+    @State private var showPassword = false
+    @State private var showRegistration: Bool = false
+    @State private var isBusy: Bool = false
+    @State private var errorText: String?
     
-//    private var uiState: LoginUiState {
-//        loginVM.uiState
-//    }
+    private var emailBinding: Binding<String> {
+        Binding<String>(
+            get: { loginVM.uiState.email},
+            set: { loginVM.onEmailChanged(newEmail: $0)}
+        )
+    }
     
-//    private var emailBinding: Binding<String> {
-//        Binding(
-//            get: { uiState.email },
-//            set: { loginVM.onEmailChanged(newEmail: $0) }
-//        )
-//    }
-//        
-//    private var passwordBinding: Binding<String> {
-//        Binding<String>(
-//            get: { uiState.password },
-//            set: { loginVM.onPasswordChanged(newPassword: $0) }
-//            )
-//    }
-
+    private var passwordBinding: Binding<String> {
+        Binding<String>(
+            get: { loginVM.uiState.password},
+            set: { loginVM.onPasswordChanged(newPassword: $0)}
+        )
+    }
+    
     var body: some View {
-        VStack(spacing: 16) {
-
-            Text("PAPERLESS")
-                .fontWeight(.black)
-                .font(.largeTitle)
-                .foregroundStyle(Color.primary)
-
-            Text("DIGITALISIEREN & VERWALTEN!")
-                .font(.caption2)
-                .fontWeight(.bold)
-                .foregroundStyle(Color.primary)
-                .opacity(0.8)
-                .padding(.bottom, 60)
-
+        
+        VStack {
+            Spacer()
+            Image("AppLogo")
+                .resizable()
+                .scaledToFit()
+                .frame(maxWidth: .infinity)
+                .padding(.horizontal, 60)
+                .padding(.bottom, 40)
             
-            TextFieldInput(label: "Benutzername", text: $email)
+            TextFieldInput(label: "Email", text: emailBinding)
                 .padding(.bottom, 20)
                 .autocapitalization(.none)
-
-            SecureTextFieldInput(
-                label: "Passwort",
-                text: $password,
-                showPassword: $showPassword,
-                showEyeIcon: false
-            )
-            .padding(.bottom, 20)
-
-
+            
+            SecureTextFieldInput(label: "Passwort", text: passwordBinding, showPassword: $showPassword)
+                .padding(.bottom, 40)
+            
             HStack {
-                Button("Registrieren") {
-                    showRegistrationSheet.toggle()
-                }
-                
-                .sheet(isPresented: $showRegistrationSheet) {
-                    RegistrationView()
-                }
-                .font(.footnote)
-                .foregroundColor(.appPrimary)
-                .opacity(0.8)
-
-                Spacer()
-
                 Button {
-                    Task {
-                        await auth.signIn(email: email, password: password)
-                    }
+                    showRegistration.toggle()
                 } label: {
-                    Text(auth.isBusy ? "Anmelden..." : "Anmelden")
+                    Text("Registrieren")
+                        .font(.footnote)
+                        .foregroundStyle(.appPrimary)
+                        .opacity(0.8)
+                }
+                .sheet(isPresented: $showRegistration) {
+                    RegistrationView(onRegisteredAndLoggedIn: onLoggedIn)
+                }
+                Spacer()
+                Button {
+                    loginVM.login()
+                } label: {
+                    Text("Anmelden")
                         .frame(width: 160, height: 40)
                         .background(Color.appPrimary)
                         .foregroundStyle(Color.appSecondary)
@@ -95,17 +76,27 @@ struct LoginView: View {
                         .cornerRadius(6)
                         .shadow(color: .gray.opacity(0.6), radius: 4, x: 0, y: 2)
                 }
-                .disabled(auth.isBusy)
+                
             }
+//            .padding(.top, 40)
             .padding(.horizontal, 40)
-            if let message = auth.errorMessage {
-                Text(message)
-                    .foregroundColor(.red)
-                    .font(.caption)
-                    .padding(.top, 10)
+            if let msg = errorText, !msg.isEmpty {
+                Text(msg).foregroundColor(.red).font(.caption)
             }
+            
+            Spacer()
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.secondary)
+        .task(id: loginVM.uiState) {
+            let state = loginVM.uiState
+            isBusy = state.isLoading
+            errorText = state.errorMessage ?? ""
+            if state.success {
+                Task { @MainActor in
+                    onLoggedIn(state.email)
+                }
+            }
+        }
     }
 }

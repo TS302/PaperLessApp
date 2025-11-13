@@ -7,21 +7,34 @@
 
 import SwiftUI
 import Shared
-import KMPObservableViewModelSwiftUI
-import KMPNativeCoroutinesAsync
+import FirebaseAuth
 
 struct RootView: View {
-    @StateObject private var auth = IOSAuthService()
-    
+    @State private var isLoggedIn: Bool = false
+    @State private var currentEmail: String = ""
+
+    private let check = CheckUserLoggedInUseCase()
+
     var body: some View {
         Group {
-            if auth.user != nil {
-                MainTabView()
+            if isLoggedIn {
+                MainTabView(
+                    currentEmail: currentEmail,
+                    onLoggedOut: {
+                        isLoggedIn = false
+                        currentEmail = ""
+                    }
+                )
             } else {
-                LoginView()
+                LoginView(onLoggedIn: { email in
+                    currentEmail = email
+                    isLoggedIn = true
+                })
             }
         }
-        .environmentObject(auth)
+        .onAppear {
+            isLoggedIn = check.invoke()
+            currentEmail = Auth.auth().currentUser?.email ?? ""
+        }
     }
-    
 }

@@ -1,9 +1,10 @@
 [versions]
 kotlin = "2.2.10"
+compose_ui = "1.8.2"
 agp = "8.11.2"
-android-compileSdk = "34"
+android-compileSdk = "35"
 android-minSdk = "24"
-android-targetSdk = "36"
+android-targetSdk = "35"
 androidx-activity = "1.10.1"
 androidx-appcompat = "1.7.1"
 androidx-core = "1.17.0"
@@ -14,17 +15,16 @@ composeMultiplatform = "1.8.2"
 junit = "4.13.2"
 firebase-bom = "33.5.1"
 gms = "4.4.2"
-
-
 kmp-ovm = "1.0.0-BETA-13"
 kmp-nativecoroutines = "1.0.0-ALPHA-46"
-
 koin = "3.5.6"
 ktor = "3.2.3"
 coroutines = "1.10.2"
 serialization = "1.7.3"
 
 [libraries]
+androidx-compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "compose_ui" }
+compose-material-icons-extended-android = { group = "androidx.compose.material", name = "material-icons-extended-android", version.ref = "compose_ui" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-testJunit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 junit = { module = "junit:junit", version.ref = "junit" }

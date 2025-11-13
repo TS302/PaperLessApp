@@ -10,29 +10,23 @@ import Shared
 import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
-struct ItemDetailView: View {
+struct AssetDetailView: View {
     let item: NfcTaggable
     var onSaved: ((NfcTaggable) -> Void)? = nil
-    
+
     @StateViewModel var itemDetailVM = ItemDetailViewModel()
     @Environment(\.dismiss) private var dismiss
-    
+
     @State private var isEditing = false
     @State private var isAssignSheetPresented = false
-    
-    init(item: NfcTaggable, onSaved: ((NfcTaggable) -> Void)? = nil) {
-        self.item = item
-        self.onSaved = onSaved
-//        self._itemDetailVM = StateViewModel(wrappedValue: KoinStarter.shared.itemDetailViewModel())
-    }
-        
+
     private var nameBinding: Binding<String> {
         Binding(
             get: { itemDetailVM.uiState.item?.name ?? item.name },
             set: { itemDetailVM.setNameInState(newName: $0) }
         )
     }
-    
+
     private var statusCaseNameBinding: Binding<String> {
         Binding(
             get: { itemDetailVM.uiState.item?.tagStatus.caseName ?? item.tagStatus.caseName },
@@ -43,13 +37,13 @@ struct ItemDetailView: View {
             }
         )
     }
-    
+
     var body: some View {
         NavigationStack {
             List {
                 TextField("Bezeichnung", text: nameBinding)
                     .disabled(!isEditing)
-                
+
                 if isEditing {
                     Picker("Status", selection: statusCaseNameBinding) {
                         ForEach(TagStatus.all, id: \.caseName) { status in
@@ -69,7 +63,7 @@ struct ItemDetailView: View {
                             .foregroundStyle((itemDetailVM.uiState.item?.tagStatus.color ?? item.tagStatus.color))
                     }
                 }
-                
+
                 if let error = itemDetailVM.uiState.errorMessage, !error.isEmpty {
                     Text(error).foregroundStyle(.red)
                 }
@@ -77,8 +71,8 @@ struct ItemDetailView: View {
                     ProgressView("Speichern…")
                 }
             }
-            
-            
+
+
             Button {
                 isAssignSheetPresented.toggle()
             } label: {
@@ -91,9 +85,9 @@ struct ItemDetailView: View {
             .sheet(isPresented: $isAssignSheetPresented) {
                 if let loaded = itemDetailVM.uiState.item {
                     AssignAssetSheet(
-                        itemIdString: loaded.idString,
-                        onClose: { isAssignSheetPresented = false },
-                        onAssigned: { itemDetailVM.start(item: item, refresh: true) }
+//                        itemIdString: loaded.idString,
+                        itemIdString: item.id.description(), onClose: { isAssignSheetPresented = false },
+//                        onAssigned: { itemDetailVM.start(item: item, refresh: true) }
                     )
                 } else {
                     ProgressView("Item wird geladen…").padding()

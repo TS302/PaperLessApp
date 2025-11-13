@@ -8,5 +8,14 @@ data class AssignAssetUiState(
     val employees: List<Employee> = emptyList(),
     val selectedEmployeeId: Uuid? = null,
     val errorMessage: String? = null,
-    val didAssignSuccessfully: Boolean = false
-)
+    val didAssignSuccessfully: Boolean = false,
+    val currentAssigneeId: Uuid? = null,
+    val currentAssigneeName: String? = null,
+    val assetDisplayName: String? = null,
+    val dialogType: DialogType? = null
+) {
+    enum class DialogType {
+        CONFIRM_ASSIGN,
+        CONFIRM_REASSIGN
+    }
+}

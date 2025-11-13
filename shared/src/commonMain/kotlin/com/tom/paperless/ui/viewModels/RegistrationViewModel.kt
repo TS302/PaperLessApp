@@ -3,18 +3,17 @@ package com.tom.paperless.ui.viewModels
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
-import com.tom.paperless.domain.models.User
+import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.uiStates.RegistrationUiState
 import com.tom.paperless.domain.useCases.LoginUserUseCase
 import com.tom.paperless.domain.useCases.RegisterUserUseCase
-import com.tom.paperless.domain.useCases.RegisterUserOutcome
-import com.tom.paperless.domain.errors.RegistrationError
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class RegistrationViewModel() : ViewModel(), KoinComponent {
+class RegistrationViewModel : ViewModel(), KoinComponent {
 
     private val registerUserUseCase: RegisterUserUseCase by inject()
     private val loginUserUseCase: LoginUserUseCase by inject()
@@ -22,113 +21,57 @@ class RegistrationViewModel() : ViewModel(), KoinComponent {
     private val _uiState = MutableStateFlow(viewModelScope, RegistrationUiState())
 
     @NativeCoroutinesState
-    val uiState: StateFlow<RegistrationUiState> = _uiState
+    val uiState: StateFlow<RegistrationUiState> = _uiState.asStateFlow()
 
-    fun onFirstnameChanged(newFirstname: String) {
-        _uiState.update { prev ->
-            prev.copy(firstname = newFirstname.trim(), errorMessage = null, success = false)
-        }
+
+    fun onFirstnameChanged(newValue: String) {
+        _uiState.update { it.copy(firstname = newValue.trim(), errorMessage = null, success = false) }
     }
 
-    fun onLastnameChanged(newLastname: String) {
-        _uiState.update { prev ->
-            prev.copy(lastname = newLastname.trim(), errorMessage = null, success = false)
-        }
+    fun onLastnameChanged(newValue: String) {
+        _uiState.update { it.copy(lastname = newValue.trim(), errorMessage = null, success = false) }
     }
 
-    fun onEmailChanged(newEmail: String) {
-        _uiState.update { prev ->
-            prev.copy(email = newEmail.trim(), errorMessage = null, success = false)
-        }
+    fun onEmailChanged(newValue: String) {
+        _uiState.update { it.copy(email = newValue.trim(), errorMessage = null, success = false) }
     }
 
-    fun onPasswordChanged(newPassword: String) {
-        _uiState.update { prev ->
-            prev.copy(password = newPassword, errorMessage = null, success = false)
-        }
+    fun onPasswordChanged(newValue: String) {
+        _uiState.update { it.copy(password = newValue, errorMessage = null, success = false) }
     }
 
-    fun onConfirmPasswordChanged(newConfirmPassword: String) {
-        _uiState.update { prev ->
-            prev.copy(confirmPassword = newConfirmPassword, errorMessage = null, success = false)
-        }
+    fun onConfirmPasswordChanged(newValue: String) {
+        _uiState.update { it.copy(confirmPassword = newValue, errorMessage = null, success = false) }
     }
 
-    fun register() {
+    fun register() = viewModelScope.launch {
         val current = _uiState.value
+        val registerResult = registerUserUseCase(
+            firstName = current.firstname,
+            lastName = current.lastname,
+            emailAddress = current.email,
+            plainPassword = current.password
+        )
 
-        if (current.password.isBlank() ||
-            current.confirmPassword.isBlank() ||
-            current.password != current.confirmPassword
-        ) {
-            setError("Passwörter stimmen nicht überein.")
-            return
-        }
-
-        val normalizedEmail = current.email.trim().lowercase()
-
-        when (val outcome = registerUserUseCase(
-            firstname = current.firstname,
-            lastname = current.lastname,
-            email = normalizedEmail,
-            password = current.password
-        )) {
-            is RegisterUserOutcome.Success -> {
-                val loginResult: Result<User> = loginUserUseCase(
-                    email = normalizedEmail,
-                    password = current.password
+        if (registerResult.isSuccess) {
+            val loginResult = loginUserUseCase(
+                emailAddress = current.email,
+                plainPassword = current.password
+            )
+            _uiState.update { prev ->
+                loginResult.fold(
+                    onSuccess = { prev.copy(success = true, errorMessage = null, password = "") },
+                    onFailure = { e -> prev.copy(success = false, errorMessage = e.message) }
                 )
-
-                val newState: RegistrationUiState = loginResult.fold(
-                    onSuccess = { _: User ->
-                        current.copy(
-                            success = true,
-                            errorMessage = null,
-                            password = "",
-                            confirmPassword = ""
-                        )
-                    },
-                    onFailure = { e: Throwable ->
-                        current.copy(
-                            success = false,
-                            errorMessage = e.message
-                        )
-                    }
-                )
-                _uiState.value = newState
             }
-
-            is RegisterUserOutcome.Failure -> {
-                _uiState.update { prev ->
-                    prev.copy(
-                        success = false,
-                        errorMessage = outcome.error.toHumanMessage()
-                    )
-                }
+        } else {
+            _uiState.update { prev ->
+                prev.copy(success = false, errorMessage = registerResult.exceptionOrNull()?.message)
             }
         }
     }
 
     fun reset() {
         _uiState.update { RegistrationUiState() }
-    }
-
-    fun clearError() {
-        _uiState.update { prev -> prev.copy(errorMessage = null) }
-    }
-
-    private fun setError(message: String) {
-        _uiState.update { prev ->
-            prev.copy(success = false, errorMessage = message)
-        }
-    }
-
-    /** Mapping der domänenspezifischen Fehler auf Anzeigenachrichten. */
-    private fun RegistrationError.toHumanMessage(): String = when (this) {
-        RegistrationError.MissingFirstnameOrLastname -> "Bitte Vor- und Nachname eingeben"
-        RegistrationError.MissingEmail -> "Bitte E-Mail eingeben"
-        RegistrationError.PasswordTooShort -> "Passwort zu kurz (min. 4 Zeichen)"
-        RegistrationError.EmailAlreadyUsed -> "E-Mail ist bereits registriert"
-        is RegistrationError.Unknown -> this.message ?: "Unbekannter Fehler"
     }
 }

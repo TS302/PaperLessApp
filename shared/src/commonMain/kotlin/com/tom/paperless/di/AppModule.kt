@@ -1,5 +1,6 @@
 package com.tom.paperless.di
 
+
 import com.tom.paperless.data.repositories.AssignmentRepository
 import com.tom.paperless.data.repositories.AssignmentRepositoryImpl
 import com.tom.paperless.data.repositories.EmployeeRepository
@@ -9,66 +10,34 @@ import com.tom.paperless.data.repositories.NfcTaggableRepositoryImpl
 import com.tom.paperless.data.repositories.TaggableRepository
 import com.tom.paperless.data.repositories.TaggableRepositoryAdapter
 import com.tom.paperless.data.repositories.UserRepository
-import com.tom.paperless.domain.services.VehicleService
-import com.tom.paperless.domain.services.VehicleServiceImpl
-import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.FilterNfcTaggablesUseCase
-import com.tom.paperless.domain.useCases.GetAllNfcTaggablesFlowUseCase
-import com.tom.paperless.domain.useCases.GetAllNfcTaggablesUseCase
-import com.tom.paperless.domain.useCases.GetLoggedInUserUseCase
-import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
-import com.tom.paperless.domain.useCases.LoginUserUseCase
-import com.tom.paperless.domain.useCases.LogoutUserUseCase
-import com.tom.paperless.domain.useCases.RegisterUserUseCase
-import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.UpdateNfcTaggableUseCase
+import com.tom.paperless.domain.useCases.*
+import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetToEmployeeUseCase
 import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetsToEmployeeUseCase
 import com.tom.paperless.domain.useCases.assetsUseCases.GetAssetsOfEmployeeUseCase
+import com.tom.paperless.domain.useCases.assetsUseCases.ReturnAssetUseCase
 import com.tom.paperless.domain.useCases.assetsUseCases.ReturnAssetsUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.AddEmployeeUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.DeleteEmployeeUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.FilterEmployeesUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetAllEmployeesFlowUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetEmployeeByIdUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
-import com.tom.paperless.ui.viewModels.AddEmployeeViewModel
-import com.tom.paperless.ui.viewModels.AddKeyViewModel
-import com.tom.paperless.ui.viewModels.AddToolViewModel
-import com.tom.paperless.ui.viewModels.AddVehicleViewModel
-import com.tom.paperless.ui.viewModels.AssignAssetViewModel
-import com.tom.paperless.ui.viewModels.CompanyViewModel
-import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
-import com.tom.paperless.ui.viewModels.EmployeesViewModel
-import com.tom.paperless.ui.viewModels.ItemDetailViewModel
-import com.tom.paperless.ui.viewModels.LoginViewModel
-import com.tom.paperless.ui.viewModels.RegistrationViewModel
-import com.tom.paperless.ui.viewModels.SettingsViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import com.tom.paperless.domain.useCases.employeesUseCases.*
+import com.tom.paperless.ui.viewModels.*
 import org.koin.dsl.module
+import kotlin.uuid.Uuid
 
 val appModule = module {
 
-    single<CoroutineScope> { CoroutineScope(SupervisorJob() + Dispatchers.Default) }
-
-    // Repositories
-    single<UserRepository>{ UserRepository }
+    // Repositories (shared)
+    single<UserRepository> { UserRepository }
     single<NfcTaggableRepository> { NfcTaggableRepositoryImpl() }
     single<EmployeeRepository> { EmployeeRepositoryImpl }
-    single<TaggableRepository> { TaggableRepositoryAdapter(get<NfcTaggableRepository>()) }
+    single<TaggableRepository> { TaggableRepositoryAdapter(get()) }
     single<AssignmentRepository> { AssignmentRepositoryImpl(get(), get()) }
 
-    single<VehicleService> { VehicleServiceImpl(get(), get()) }
-
-    // UseCases
+    // Auth UseCases (shared)
     single { RegisterUserUseCase() }
     single { LoginUserUseCase() }
     single { LogoutUserUseCase() }
     single { GetLoggedInUserUseCase() }
+    single { CheckUserLoggedInUseCase() }
 
-    //NfcTaggables
+    // NfcTaggables UseCases
     single { FilterNfcTaggablesUseCase() }
     single { GetAllNfcTaggablesFlowUseCase() }
     single { AddNfcTaggableUseCase() }
@@ -78,7 +47,7 @@ val appModule = module {
     single { GetNfcTaggableByIdUseCase() }
     single { UpdateNfcTaggableUseCase() }
 
-    //Employees
+    // Employees UseCases
     single { GetAllEmployeesFlowUseCase() }
     single { GetEmployeeByIdUseCase() }
     single { AddEmployeeUseCase() }
@@ -86,27 +55,24 @@ val appModule = module {
     single { DeleteEmployeeUseCase() }
     single { FilterEmployeesUseCase() }
 
-    // Assignment
+    // Assignment UseCases
     single { AssignAssetsToEmployeeUseCase() }
+    single { AssignAssetToEmployeeUseCase() }
+    single { ReturnAssetUseCase() }
     single { ReturnAssetsUseCase() }
     single { GetAssetsOfEmployeeUseCase() }
 
-    //Viewmodels
+    // ViewModels (shared)
     factory { CompanyViewModel() }
+    factory { EmployeesViewModel() }
+    factory { EmployeeDetailViewModel() }
     factory { AddEmployeeViewModel() }
-    factory { AddKeyViewModel() }
     factory { AddToolViewModel() }
     factory { AddVehicleViewModel() }
-    factory { EmployeeDetailViewModel() }
-    factory { EmployeesViewModel() }
-    factory { ItemDetailViewModel() }
+    factory { AddKeyViewModel() }
     factory { LoginViewModel() }
-    factory { SettingsViewModel() }
-
     factory { RegistrationViewModel() }
-    factory { params ->
-        val itemIdString: String = params.get()
-        val itemId = kotlin.uuid.Uuid.parse(itemIdString)
-        AssignAssetViewModel(itemId = itemId)
-    }
+    factory { SettingsViewModel() }
+    factory { ItemDetailViewModel() }
+    factory { AssignAssetViewModel() }
 }

@@ -9,13 +9,14 @@ import SwiftUI
 import Shared
 import KMPObservableViewModelSwiftUI
 
-
 struct MainTabView: View {
-    @EnvironmentObject private var auth: IOSAuthService
+    
+    let currentEmail: String
+    let onLoggedOut: () -> Void
     
     var body: some View {
         TabView {
-            HomeView()
+            AssetsView()
                 .tabItem {
                     Image(systemName: "house.lodge.fill")
                     Text("Firma")
@@ -27,12 +28,12 @@ struct MainTabView: View {
                     Text("Personal")
                 }
             
-            SettingsView()
+            SettingsView(currentEmail: currentEmail, onLoggedOut: onLoggedOut)
             .tabItem {
                 Image(systemName: "gear")
                 Text("Einstellungen")
             }
         }
-        .tint(.appPrimary)
+        .tint(.primary)
     }
 }

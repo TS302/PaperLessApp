@@ -38,12 +38,10 @@ kotlin {
 
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
 
-            // KMP OVM & NativeCoroutines
-            implementation(libs.kmp.observableviewmodel.core)
+            api(libs.kmp.observableviewmodel.core)
             implementation(libs.kmp.nativecoroutines.core)
-//            api(libs.kmp.observableviewmodel.core)
-//            implementation(libs.kmp.nativecoroutines.core)
-            implementation(libs.koin.core)
+
+            api(libs.koin.core)
 
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kotlinx.coroutines.core)
@@ -54,6 +52,7 @@ kotlin {
         androidMain.dependencies {
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.auth.ktx)
+            implementation("io.insert-koin:koin-android:3.5.6")
         }
 
         commonTest.dependencies {

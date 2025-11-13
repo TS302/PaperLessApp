@@ -14,15 +14,12 @@ struct PaperLessApp: App {
 
     init() {
         FirebaseApp.configure()
-        KoinStarter.shared.start()
-        print("✅ KoinStarter.start() called")
+        startKoinOnIos()
     }
     
     var body: some Scene {
-        
         WindowGroup {
             RootView()
         }
     }
 }
-

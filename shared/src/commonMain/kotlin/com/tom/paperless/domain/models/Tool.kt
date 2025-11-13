@@ -8,6 +8,6 @@ data class Tool(
     override val id: Uuid,
     override val name: String,
     val serialNumber: String?,
-    override val targetType: TargetType = TargetType.Employee,
+    override val targetType: TargetType = TargetType.Tool,
     override val tagStatus: TagStatus
 ) : NfcTaggable

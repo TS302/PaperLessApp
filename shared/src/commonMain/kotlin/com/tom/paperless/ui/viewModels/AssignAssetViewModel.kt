@@ -4,61 +4,112 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
+import com.tom.paperless.data.repositories.AssignmentRepository
 import com.tom.paperless.data.repositories.EmployeeRepository
+import com.tom.paperless.data.repositories.TaggableRepository
+import com.tom.paperless.domain.models.Employee
 import com.tom.paperless.domain.models.uiStates.AssignAssetUiState
-import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetsToEmployeeUseCase
+import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetToEmployeeUseCase
+import com.tom.paperless.domain.useCases.assetsUseCases.ReturnAssetUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class AssignAssetViewModel(private val itemId: Uuid) : ViewModel(), KoinComponent {
+class AssignAssetViewModel : ViewModel(), KoinComponent {
 
     private val employeeRepository: EmployeeRepository by inject()
-    private val assignAssetsToEmployeeUseCase: AssignAssetsToEmployeeUseCase by inject()
-    private val _uiState = MutableStateFlow(viewModelScope, AssignAssetUiState(isLoading = true))
+    private val taggableRepository: TaggableRepository by inject()
+    private val assignmentRepository: AssignmentRepository by inject()
+    private val assignAssetToEmployeeUseCase: AssignAssetToEmployeeUseCase by inject()
+    private val returnAssetUseCase: ReturnAssetUseCase by inject()
 
+    private val _uiState = MutableStateFlow(viewModelScope, AssignAssetUiState())
     @NativeCoroutinesState
     val uiState: StateFlow<AssignAssetUiState> = _uiState.asStateFlow()
 
-    init {
-        loadEmployees()
-    }
+    private var itemId: Uuid? = null
 
-    fun loadEmployees() {
+
+    fun attach(itemIdString: String) {
+        val parsed = runCatching { Uuid.parse(itemIdString) }.getOrNull() ?: run {
+            _uiState.value = _uiState.value.copy(errorMessage = "Ungültige Item-ID.")
+            return
+        }
+        if (itemId == parsed) return
+        itemId = parsed
+
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
-            runCatching { employeeRepository.getAll() }
-                .onSuccess { list ->
-                    _uiState.value = AssignAssetUiState(
-                        isLoading = false,
-                        employees = list,
-                        selectedEmployeeId = null,
-                        errorMessage = null,
-                        didAssignSuccessfully = false
-                    )
-                }
-                .onFailure { e ->
-                    _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = e.message)
-                }
+            try {
+                val employees = employeeRepository.getAll()
+                val asset = taggableRepository.getById(parsed)
+                val currentAssignee: Employee? = assignmentRepository.currentAssigneeOf(parsed)
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    employees = employees,
+                    currentAssigneeId = currentAssignee?.id,
+                    currentAssigneeName = currentAssignee?.name,
+                    assetDisplayName = asset?.name ?: "Asset"
+                )
+            } catch (t: Throwable) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = t.message ?: "Fehler beim Laden."
+                )
+            }
         }
     }
 
-    fun selectEmployee(employeeId: Uuid) {
-        _uiState.value = _uiState.value.copy(selectedEmployeeId = employeeId)
+    fun assignToEmployee(employeeId: Uuid) {
+        val assetId = itemId ?: run {
+            _uiState.value = _uiState.value.copy(errorMessage = "Kein Asset ausgewählt.")
+            return
+        }
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(
+                isLoading = true,
+                errorMessage = null,
+                didAssignSuccessfully = false
+            )
+            try {
+                assignAssetToEmployeeUseCase(employeeId = employeeId, assetId = assetId)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    didAssignSuccessfully = true,
+                    currentAssigneeId = employeeId
+                )
+            } catch (t: Throwable) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = t.message ?: "Unbekannter Fehler beim Zuweisen."
+                )
+            }
+        }
     }
 
-    fun assignSelectedEmployee() {
-        val employeeId = _uiState.value.selectedEmployeeId ?: return
+    fun reassignToEmployee(employeeId: Uuid) {
+        val assetId = itemId ?: run {
+            _uiState.value = _uiState.value.copy(errorMessage = "Kein Asset ausgewählt.")
+            return
+        }
         viewModelScope.launch {
-            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null, didAssignSuccessfully = false)
-            runCatching {
-                assignAssetsToEmployeeUseCase(employeeId, listOf(itemId))
-            }.onSuccess {
-                _uiState.value = _uiState.value.copy(isLoading = false, didAssignSuccessfully = true)
-            }.onFailure { e ->
-                _uiState.value = _uiState.value.copy(isLoading = false, errorMessage = e.message)
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+            try {
+                returnAssetUseCase(assetId)
+                assignAssetToEmployeeUseCase(employeeId = employeeId, assetId = assetId)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    didAssignSuccessfully = true,
+                    currentAssigneeId = employeeId
+                )
+            } catch (t: Throwable) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = t.message ?: "Fehler beim Neu-Zuweisen."
+                )
             }
         }
     }
@@ -66,4 +117,47 @@ class AssignAssetViewModel(private val itemId: Uuid) : ViewModel(), KoinComponen
     fun resetSuccessFlag() {
         _uiState.value = _uiState.value.copy(didAssignSuccessfully = false)
     }
+
+    fun onEmployeeTapped(employee: Employee) {
+        val state = _uiState.value
+        val currentId = state.currentAssigneeId
+
+        if (currentId == null) {
+            _uiState.value = state.copy(
+                selectedEmployeeId = employee.id,
+                dialogType = AssignAssetUiState.DialogType.CONFIRM_ASSIGN
+            )
+        } else if (currentId == employee.id) {
+            _uiState.value = state.copy(
+                selectedEmployeeId = null,
+                dialogType = null
+            )
+        } else {
+            _uiState.value = state.copy(
+                selectedEmployeeId = employee.id,
+                dialogType = AssignAssetUiState.DialogType.CONFIRM_REASSIGN
+            )
+        }
+    }
+
+    fun cancelDialog() {
+        val state = _uiState.value
+        _uiState.value = state.copy(
+            selectedEmployeeId = null,
+            dialogType = null
+        )
+    }
+
+    fun confirmAssign() {
+        val employeeId = _uiState.value.selectedEmployeeId ?: return
+        cancelDialog()
+        assignToEmployee(employeeId)
+    }
+
+    fun confirmReassign() {
+        val employeeId = _uiState.value.selectedEmployeeId ?: return
+        cancelDialog()
+        reassignToEmployee(employeeId)
+    }
+
 }

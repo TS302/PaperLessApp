@@ -12,12 +12,12 @@ import KMPNativeCoroutinesAsync
 
 struct EmployeeDetailView: View {
     let employeeId: String
-    @StateViewModel private var employeeDetailVM: EmployeeDetailViewModel
+    @StateViewModel private var employeeDetailVM = EmployeeDetailViewModel()
     
-    init(employeeId: String) {
-        self.employeeId = employeeId
-        _employeeDetailVM = StateViewModel(wrappedValue: KoinStarter.shared.employeesDetailViewModel())
-    }
+//    init(employeeId: String) {
+//        self.employeeId = employeeId
+//        _employeeDetailVM = StateViewModel(wrappedValue: KoinStarter.shared.employeesDetailViewModel())
+//    }
     
     var body: some View {
         Form {

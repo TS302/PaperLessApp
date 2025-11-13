@@ -23,6 +23,7 @@ kotlin {
             implementation(project.dependencies.platform(libs.firebase.bom))
 
             implementation(libs.firebase.auth.ktx)
+            implementation(compose.materialIconsExtended)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -70,5 +71,10 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    // Koin Android – auch im App-Modul einbinden (u.a. für AndroidX-Integration)
+    implementation("io.insert-koin:koin-android:3.5.6")
+
+    // (optional) wenn du Koin für Compose nutzt:
+     implementation("io.insert-koin:koin-androidx-compose:3.5.6")
 }
 

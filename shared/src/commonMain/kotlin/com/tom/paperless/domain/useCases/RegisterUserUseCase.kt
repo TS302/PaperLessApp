@@ -1,63 +1,33 @@
 package com.tom.paperless.domain.useCases
 
-import com.tom.paperless.data.repositories.UserRepository
-import com.tom.paperless.domain.errors.RegistrationError
-import com.tom.paperless.domain.errors.RegistrationException
+import com.tom.paperless.auth.AuthService
 import com.tom.paperless.domain.models.Role
 import com.tom.paperless.domain.models.User
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
-sealed class RegisterUserOutcome {
-    data class Success(val user: User) : RegisterUserOutcome()
-    data class Failure(val error: RegistrationError) : RegisterUserOutcome()
-}
+class RegisterUserUseCase : KoinComponent {
+    private val authService: AuthService by inject()
 
-class RegisterUserUseCase(
-    private val repository: UserRepository = UserRepository
-) {
-    operator fun invoke(
-        firstname: String,
-        lastname: String,
-        email: String,
-        password: String
-    ): RegisterUserOutcome {
-        val trimmedFirstname = firstname.trim()
-        val trimmedLastname = lastname.trim()
-        val trimmedEmail = email.trim()
+    suspend operator fun invoke(
+        firstName: String,
+        lastName: String,
+        emailAddress: String,
+        plainPassword: String
+    ): Result<User> = runCatching {
+        val normalizedEmail = emailAddress.trim()
+        require(normalizedEmail.isNotEmpty()) { "E-Mail fehlt" }
+        require(plainPassword.length >= 4) { "Passwort zu kurz" }
 
-        val result = runCatching {
-            if (trimmedFirstname.isEmpty() || trimmedLastname.isEmpty()) {
-                throw RegistrationException(RegistrationError.MissingFirstnameOrLastname)
-            }
-            if (trimmedEmail.isEmpty()) {
-                throw RegistrationException(RegistrationError.MissingEmail)
-            }
-            if (password.length < 4) {
-                throw RegistrationException(RegistrationError.PasswordTooShort)
-            }
-            if (repository.getByEmail(trimmedEmail) != null) {
-                throw RegistrationException(RegistrationError.EmailAlreadyUsed)
-            }
+        authService.registerEmailPassword(normalizedEmail, plainPassword)
 
-            // --- Anlage ---
-            val newUser = User(
-                firstname = trimmedFirstname,
-                lastname = trimmedLastname,
-                email = trimmedEmail,
-                password = password,
-                role = Role.USER,
-                isLoggedIn = false
-            )
-            repository.add(newUser)
-            newUser
-        }
-
-        return result.fold(
-            onSuccess = { user -> RegisterUserOutcome.Success(user) },
-            onFailure = { throwable ->
-                val error = (throwable as? RegistrationException)?.reason
-                    ?: RegistrationError.Unknown(throwable.message)
-                RegisterUserOutcome.Failure(error)
-            }
+        User(
+            firstname = firstName.trim(),
+            lastname = lastName.trim(),
+            email = normalizedEmail,
+            password = "",
+            role = Role.USER,
+            isLoggedIn = true
         )
     }
 }

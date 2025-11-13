@@ -10,9 +10,7 @@ import Shared
 import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
-
-
-struct HomeView: View {
+struct AssetsView: View {
     @StateViewModel var companyVM = CompanyViewModel()
     
     @State private var addVehicle = false
@@ -57,7 +55,7 @@ struct HomeView: View {
                 Section {
                     ForEach(companyVM.uiState.items, id: \.idString) { item in
                         NavigationLink {
-                            ItemDetailView(item: item)
+                            AssetDetailView(item: item)
                         } label: {
                             ItemRow(item: item)
                         }
@@ -92,19 +90,16 @@ struct HomeView: View {
         }
         .sheet(isPresented: $addVehicle) {
             AddVehicleSheet()
-//                .presentationDetents([.medium])
         }
         .sheet(isPresented: $addTool) {
             AddToolSheet()
-//                .presentationDetents([.medium])
         }
         .sheet(isPresented: $addKey) {
             AddKeySheet()
-//                .presentationDetents([.medium])
         }
     }
 }
 
 #Preview {
-    HomeView()
+    AssetsView()
 }

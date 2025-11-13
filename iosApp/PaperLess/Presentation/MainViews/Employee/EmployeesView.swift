@@ -10,18 +10,9 @@ import Shared
 import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
-private extension Employee {
-    var idString: String { String(describing: id) }
-}
 
 struct EmployeesView: View {
-    @StateViewModel var employeesVM: EmployeesViewModel
-    
-    init() {
-        _employeesVM = StateViewModel(
-            wrappedValue: KoinStarter.shared.employeesViewModel()
-        )
-    }
+    @StateViewModel var employeesVM = EmployeesViewModel()
     
     @State private var searchText: String = ""
     @State private var addEmployeeSheetIsPresent: Bool = false
