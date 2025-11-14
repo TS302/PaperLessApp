@@ -7,7 +7,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class GetAllNfcTaggablesUseCase() : KoinComponent {
-
     private val repository: NfcTaggableRepository by inject()
     @NativeCoroutines
     suspend operator fun invoke(): List<NfcTaggable> = repository.getAll()

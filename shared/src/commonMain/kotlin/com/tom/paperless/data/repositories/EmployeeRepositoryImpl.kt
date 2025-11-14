@@ -48,13 +48,85 @@ object EmployeeRepositoryImpl : EmployeeRepository {
     }
 
     private fun initialEmployees(): List<Employee> = listOf(
-        Employee(Uuid.random(), "Clara Becker", "clara.becker@example.com", "+49 151 0000003", TargetType.Employee, TagStatus.available),
-        Employee(Uuid.random(), "David Wagner", "david.wagner@example.com", "+49 151 0000004", TargetType.Employee, TagStatus.available),
-        Employee(Uuid.random(), "Elena Schulz", "elena.schulz@example.com", "+49 151 0000005", TargetType.Employee, TagStatus.available),
-        Employee(Uuid.random(), "Felix Hoffmann", "felix.hoffmann@example.com", "+49 151 0000006", TargetType.Employee, TagStatus.available),
-        Employee(Uuid.random(), "Greta Klein", "greta.klein@example.com", "+49 151 0000007", TargetType.Employee, TagStatus.available),
-        Employee(Uuid.random(), "Hannah Vogel", "hannah.vogel@example.com", "+49 151 0000008", TargetType.Employee, TagStatus.available),
-        Employee(Uuid.random(), "Jonas Krause", "jonas.krause@example.com", "+49 151 0000009", TargetType.Employee, TagStatus.available),
-        Employee(Uuid.random(), "Laura Neumann", "laura.neumann@example.com", "+49 151 0000010", TargetType.Employee, TagStatus.available),
+        Employee(
+            Uuid.random(),
+            "Clara Becker",
+            "clara.becker@example.com",
+            "+49 151 0000003",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
+        Employee(
+            Uuid.random(),
+            "David Wagner",
+            "david.wagner@example.com",
+            "+49 151 0000004",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
+        Employee(
+            Uuid.random(),
+            "Elena Schulz",
+            "elena.schulz@example.com",
+            "+49 151 0000005",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
+        Employee(
+            Uuid.random(),
+            "Felix Hoffmann",
+            "felix.hoffmann@example.com",
+            "+49 151 0000006",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
+        Employee(
+            Uuid.random(),
+            "Greta Klein",
+            "greta.klein@example.com",
+            "+49 151 0000007",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
+        Employee(
+            Uuid.random(),
+            "Hannah Vogel",
+            "hannah.vogel@example.com",
+            "+49 151 0000008",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
+        Employee(
+            Uuid.random(),
+            "Jonas Krause",
+            "jonas.krause@example.com",
+            "+49 151 0000009",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
+        Employee(
+            Uuid.random(),
+            "Laura Neumann",
+            "laura.neumann@example.com",
+            "+49 151 0000010",
+            TargetType.Employee,
+            TagStatus.available,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
+        ),
     )
 }

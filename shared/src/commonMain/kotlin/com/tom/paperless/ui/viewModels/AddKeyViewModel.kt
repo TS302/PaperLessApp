@@ -38,8 +38,7 @@ class AddKeyViewModel() : ViewModel(), KoinComponent {
         runCatching {
             val newItem = KeyRing(
                 id = Uuid.random(),
-                name = s.name.trim(),
-                tagStatus = TagStatus.available
+                name = s.name.trim()
             )
             addNfcTaggable(newItem)
         }.onSuccess {

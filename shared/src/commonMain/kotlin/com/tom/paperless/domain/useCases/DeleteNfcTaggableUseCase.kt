@@ -7,7 +7,6 @@ import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
 class DeleteNfcTaggableUseCase() : KoinComponent {
-
     private val repository: NfcTaggableRepository by inject()
     @NativeCoroutines
     suspend operator fun invoke(id: Uuid): Boolean =

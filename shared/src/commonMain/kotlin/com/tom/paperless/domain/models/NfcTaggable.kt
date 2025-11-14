@@ -9,4 +9,6 @@ interface NfcTaggable {
     val name: String
     val targetType: TargetType
     val tagStatus: TagStatus
+    val currentAssigneeId: Uuid?
+    val lastAssigneeIds: List<Uuid>
 }

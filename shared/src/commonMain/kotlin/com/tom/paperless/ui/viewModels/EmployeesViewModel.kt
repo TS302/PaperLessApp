@@ -84,7 +84,6 @@ class EmployeesViewModel() : ViewModel(), KoinComponent {
             }
     }
 
-    /** iOS-Helper (gleiche Funktion, nur anderer Name für Swift-Aufrufe). */
     fun setSearchQueryForIos(searchText: String) = setSearchQuery(searchText)
 
 }

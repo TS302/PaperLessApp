@@ -6,7 +6,7 @@ import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.data.repositories.AssignmentRepository
 import com.tom.paperless.data.repositories.EmployeeRepository
-import com.tom.paperless.data.repositories.TaggableRepository
+import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.domain.models.Employee
 import com.tom.paperless.domain.models.uiStates.AssignAssetUiState
 import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetToEmployeeUseCase
@@ -20,7 +20,7 @@ import kotlin.uuid.Uuid
 class AssignAssetViewModel : ViewModel(), KoinComponent {
 
     private val employeeRepository: EmployeeRepository by inject()
-    private val taggableRepository: TaggableRepository by inject()
+    private val nfcTaggableRepository: NfcTaggableRepository by inject()
     private val assignmentRepository: AssignmentRepository by inject()
     private val assignAssetToEmployeeUseCase: AssignAssetToEmployeeUseCase by inject()
     private val returnAssetUseCase: ReturnAssetUseCase by inject()
@@ -44,7 +44,7 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             try {
                 val employees = employeeRepository.getAll()
-                val asset = taggableRepository.getById(parsed)
+                val asset = nfcTaggableRepository.getById(parsed)
                 val currentAssignee: Employee? = assignmentRepository.currentAssigneeOf(parsed)
 
                 _uiState.value = _uiState.value.copy(

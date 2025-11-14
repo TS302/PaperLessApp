@@ -7,8 +7,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class GetAllEmployeesFlowUseCase() : KoinComponent {
-
     private val repository: EmployeeRepository by inject()
-
     operator fun invoke(): Flow<List<Employee>> = repository.getAllFlow()
 }

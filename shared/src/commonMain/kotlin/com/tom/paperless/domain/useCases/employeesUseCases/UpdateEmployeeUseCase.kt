@@ -6,7 +6,6 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class UpdateEmployeeUseCase() : KoinComponent {
-
     private val repository: EmployeeRepository by inject()
 
     suspend operator fun invoke(employee: Employee): Employee {

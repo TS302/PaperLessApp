@@ -19,10 +19,8 @@ class RegistrationViewModel : ViewModel(), KoinComponent {
     private val loginUserUseCase: LoginUserUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, RegistrationUiState())
-
     @NativeCoroutinesState
     val uiState: StateFlow<RegistrationUiState> = _uiState.asStateFlow()
-
 
     fun onFirstnameChanged(newValue: String) {
         _uiState.update { it.copy(firstname = newValue.trim(), errorMessage = null, success = false) }

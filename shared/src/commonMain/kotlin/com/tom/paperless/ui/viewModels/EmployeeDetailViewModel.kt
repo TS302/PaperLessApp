@@ -126,8 +126,6 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
         return true
     }
 
-
-    // iOS/Navigation-Helper
     fun load(idString: String) {
         val id = runCatching { Uuid.parse(idString) }.getOrNull() ?: return
         load(id)

@@ -2,6 +2,7 @@ package com.tom.paperless.data.repositories
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.tom.paperless.domain.models.NfcTaggable
+import com.tom.paperless.domain.models.enums.TagStatus
 import com.tom.paperless.domain.models.enums.TargetType
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.uuid.Uuid
@@ -22,6 +23,9 @@ interface NfcTaggableRepository {
 
     @NativeCoroutines
     suspend fun update(itemToUpdate: NfcTaggable): NfcTaggable?
+
+    @NativeCoroutines
+    suspend fun updateStatus(id: Uuid, status: TagStatus): NfcTaggable
 
     @NativeCoroutines
     suspend fun delete(id: Uuid): Boolean

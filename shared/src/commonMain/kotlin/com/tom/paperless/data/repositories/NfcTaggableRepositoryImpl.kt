@@ -31,35 +31,45 @@ class NfcTaggableRepositoryImpl(
             name = "VW Crafter",
             plate = "RT-BC 4567",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Vehicle
+            targetType = TargetType.Vehicle,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         Vehicle(
             id = Uuid.random(),
             name = "Mercedes Vito",
             plate = "BL-DK 9876",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Vehicle
+            targetType = TargetType.Vehicle,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         Vehicle(
             id = Uuid.random(),
             name = "Opel Vivaro",
             plate = "TÜ-EF 1122",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Vehicle
+            targetType = TargetType.Vehicle,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         Vehicle(
             id = Uuid.random(),
             name = "Ford Transit",
             plate = "S-XY 4455",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Vehicle
+            targetType = TargetType.Vehicle,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         Vehicle(
             id = Uuid.random(),
             name = "Peugeot Boxer",
             plate = "BB-ZZ 3344",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Vehicle
+            targetType = TargetType.Vehicle,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
 
         // Tools
@@ -68,42 +78,60 @@ class NfcTaggableRepositoryImpl(
             name = "Bosch GSR 18V",
             serialNumber = "B-GSR18V-3344",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Tool
+            targetType = TargetType.Tool,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList(),
+            brand = "Bosch",
         ),
         Tool(
             id = Uuid.random(),
             name = "Makita DHP482",
             serialNumber = "M-DHP482-5566",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Tool
+            targetType = TargetType.Tool,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList(),
+            brand = "Makita"
         ),
         Tool(
             id = Uuid.random(),
             name = "Stihl Kettensäge MS 261",
             serialNumber = "S-MS261-7788",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Tool
+            targetType = TargetType.Tool,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList(),
+            brand = "Stihl"
         ),
         Tool(
             id = Uuid.random(),
             name = "Hilti TE 60",
             serialNumber = "H-TE60-9900",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Tool
+            targetType = TargetType.Tool,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList(),
+            brand = "Hilti"
         ),
         Tool(
             id = Uuid.random(),
             name = "Festool Absaugmobil CTL MIDI",
             serialNumber = "F-CTL-MIDI-1122",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Tool
+            targetType = TargetType.Tool,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList(),
+            brand = "Festool"
         ),
         Tool(
             id = Uuid.random(),
             name = "DeWalt Bohrmaschine ",
             serialNumber = "D-DWD024-2233",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Tool
+            targetType = TargetType.Tool,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList(),
+            brand = "DeWalt"
         ),
 
         // KeyRings
@@ -111,61 +139,81 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Nebeneingang Lagerhalle",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Serverraum Schlüssel",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Büro 1.OG",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Werkstatt Schlüsselbund",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Kellerschlüssel Verwaltung",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Ersatzschlüssel Fuhrpark",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Zentralschlüssel Hauptgebäude",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Schlüsselbund Hausmeister",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Garagenschlüssel Büro",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         ),
         KeyRing(
             id = Uuid.random(),
             name = "Tresorschlüssel Verwaltung",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Key
+            targetType = TargetType.Key,
+            currentAssigneeId = null,
+            lastAssigneeIds = emptyList()
         )
     )
 
@@ -195,6 +243,17 @@ class NfcTaggableRepositoryImpl(
             }
         }
         return savedItem
+    }
+
+    override suspend fun updateStatus(id: Uuid, status: TagStatus): NfcTaggable {
+        val current = getById(id) ?: error("Taggable $id existiert nicht.")
+        val updated = when (current) {
+            is Tool -> current.copy(tagStatus = status)
+            is Vehicle -> current.copy(tagStatus = status)
+            is KeyRing -> current.copy(tagStatus = status)
+            else -> error("Unbekannter Typ: ${current::class.simpleName}")
+        }
+        return update(updated) ?: error("Update fehlgeschlagen.")
     }
 
     override suspend fun delete(id: Uuid): Boolean {

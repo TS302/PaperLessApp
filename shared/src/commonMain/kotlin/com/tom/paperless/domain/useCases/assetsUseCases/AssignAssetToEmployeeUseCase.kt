@@ -1,7 +1,7 @@
 package com.tom.paperless.domain.useCases.assetsUseCases
 
 import com.tom.paperless.data.repositories.AssignmentRepository
-import com.tom.paperless.data.repositories.TaggableRepository
+import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.domain.models.enums.TagStatus
 import com.tom.paperless.domain.models.enums.TargetType
 import org.koin.core.component.KoinComponent
@@ -11,13 +11,13 @@ import kotlin.uuid.Uuid
 class AssignAssetToEmployeeUseCase : KoinComponent {
 
     private val assignmentRepository: AssignmentRepository by inject()
-    private val taggableRepository: TaggableRepository by inject()
+    private val nfcTaggableRepository: NfcTaggableRepository by inject()
 
     suspend operator fun invoke(
         employeeId: Uuid,
         assetId: Uuid
     ) {
-        val asset = taggableRepository.getById(assetId)
+        val asset = nfcTaggableRepository.getById(assetId)
             ?: error("Asset $assetId nicht gefunden.")
 
         when (asset.targetType) {
@@ -25,6 +25,6 @@ class AssignAssetToEmployeeUseCase : KoinComponent {
             else -> error("Asset vom Typ ${asset.targetType} kann nicht zugewiesen werden.")
         }
         assignmentRepository.assign(asset.id, employeeId)
-        taggableRepository.updateStatus(asset.id, TagStatus.inUse)
+        nfcTaggableRepository.updateStatus(asset.id, TagStatus.inUse)
     }
 }

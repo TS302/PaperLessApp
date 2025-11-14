@@ -48,6 +48,5 @@ class AddVehicleViewModel() : ViewModel(), KoinComponent {
             _uiState.update { it.copy(isSaving = false, errorMessage = e.message ?: "Unbekannter Fehler") }
         }
     }
-
     fun resetDidSave() = _uiState.update { it.copy(didSave = false) }
 }

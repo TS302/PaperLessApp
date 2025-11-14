@@ -12,11 +12,9 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 class SettingsViewModel : ViewModel(), KoinComponent {
-
     private val logoutUserUseCase: LogoutUserUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, SettingsUiState())
-
     @NativeCoroutinesState
     val uiState: StateFlow<SettingsUiState> = _uiState
 

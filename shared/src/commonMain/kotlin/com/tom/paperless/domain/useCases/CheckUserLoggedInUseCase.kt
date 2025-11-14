@@ -6,6 +6,5 @@ import org.koin.core.component.inject
 
 class CheckUserLoggedInUseCase : KoinComponent {
     private val authService: AuthService by inject()
-
     operator fun invoke(): Boolean = authService.isUserLoggedIn()
 }

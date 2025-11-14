@@ -5,7 +5,6 @@ import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.Tool
-import com.tom.paperless.domain.models.enums.TagStatus
 import com.tom.paperless.domain.models.uiStates.AddToolUiState
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import kotlinx.coroutines.flow.StateFlow
@@ -40,8 +39,7 @@ class AddToolViewModel() : ViewModel(), KoinComponent {
             val newItem = Tool(
                 id = Uuid.random(),
                 name = s.name.trim(),
-                serialNumber = s.serialNumber.trim().ifEmpty { null },
-                tagStatus = TagStatus.available
+                serialNumber = s.serialNumber.trim().ifEmpty { null }
             )
             addNfcTaggable(newItem)
         }.onSuccess {
@@ -50,6 +48,5 @@ class AddToolViewModel() : ViewModel(), KoinComponent {
             _uiState.update { it.copy(isSaving = false, errorMessage = e.message ?: "Unbekannter Fehler") }
         }
     }
-
     fun resetDidSave() = _uiState.update { it.copy(didSave = false) }
 }

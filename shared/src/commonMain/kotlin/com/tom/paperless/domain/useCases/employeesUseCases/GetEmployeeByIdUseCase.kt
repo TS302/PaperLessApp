@@ -9,7 +9,6 @@ import kotlin.uuid.Uuid
 
 class GetEmployeeByIdUseCase() : KoinComponent {
     private val repository: EmployeeRepository by inject()
-
     @NativeCoroutines
     suspend operator fun invoke(id: Uuid): Employee? =
         repository.getById(id)

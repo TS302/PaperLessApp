@@ -7,7 +7,10 @@ import kotlin.uuid.Uuid
 data class Tool(
     override val id: Uuid,
     override val name: String,
-    val serialNumber: String?,
     override val targetType: TargetType = TargetType.Tool,
-    override val tagStatus: TagStatus
+    override val tagStatus: TagStatus = TagStatus.available,
+    override val currentAssigneeId: Uuid? = null,
+    override val lastAssigneeIds: List<Uuid> = emptyList(),
+    val brand: String? = "",
+    val serialNumber: String? = ""
 ) : NfcTaggable

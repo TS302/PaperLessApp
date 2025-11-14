@@ -8,7 +8,6 @@ import org.koin.core.component.inject
 class GetLoggedInUserUseCase() : KoinComponent {
 
     private val repository: UserRepository by inject()
-
     operator fun invoke(): User? = repository.getAll()
         .firstOrNull { it.isLoggedIn }
 }
