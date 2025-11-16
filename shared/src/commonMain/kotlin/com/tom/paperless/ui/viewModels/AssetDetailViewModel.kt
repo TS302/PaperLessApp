@@ -4,9 +4,11 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
+import com.tom.paperless.data.repositories.AssignmentRepository
+import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.domain.models.NfcTaggable
 import com.tom.paperless.domain.models.enums.TagStatus
-import com.tom.paperless.domain.models.uiStates.ItemDetailUiState
+import com.tom.paperless.domain.models.uiStates.AssetDetailUiState
 import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
 import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
@@ -18,19 +20,23 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class ItemDetailViewModel() : ViewModel(), KoinComponent {
+class AssetDetailViewModel() : ViewModel(), KoinComponent {
 
     private val getTagById: GetNfcTaggableByIdUseCase by inject()
     private val saveTag: SaveNfcTaggableUseCase by inject()
     private val deleteTag: DeleteNfcTaggableUseCase by inject()
+    private val nfcTaggableRepository: NfcTaggableRepository by inject()
+    private val assignmentRepository: AssignmentRepository by inject()
 
-    private val _uiState = MutableStateFlow(viewModelScope, ItemDetailUiState())
+
+
+    private val _uiState = MutableStateFlow(viewModelScope, AssetDetailUiState())
     @NativeCoroutinesState
-    val uiState: StateFlow<ItemDetailUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<AssetDetailUiState> = _uiState.asStateFlow()
 
     fun hydrate(item: NfcTaggable) {
         _uiState.value = _uiState.value.copy(
-            item = item,
+            asset = item,
             isLoading = false,
             errorMessage = null,
             operationSucceeded = false
@@ -42,7 +48,49 @@ class ItemDetailViewModel() : ViewModel(), KoinComponent {
         if (refresh) loadByIdInternal(item.id)
     }
 
-    fun load(id: Uuid) = loadByIdInternal(id)
+    fun load(assetId: Uuid) {
+        viewModelScope.launch {
+            _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
+
+            try {
+                val asset = nfcTaggableRepository.getById(assetId)
+                val current = assignmentRepository.currentAssigneeOf(assetId)
+                val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
+
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    asset = asset,
+                    name = asset?.name.orEmpty(),
+                    status = asset?.tagStatus,
+                    currentAssigneeName = current?.name,
+                    lastAssignees = lastAssignees
+                )
+            } catch (t: Throwable) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = t.message ?: "Fehler beim Laden."
+                )
+            }
+        }
+    }
+
+    fun reloadAssignments(assetId: Uuid) {
+        viewModelScope.launch {
+            try {
+                val current = assignmentRepository.currentAssigneeOf(assetId)
+                val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
+
+                _uiState.value = _uiState.value.copy(
+                    currentAssigneeName = current?.name,
+                    lastAssignees = lastAssignees
+                )
+            } catch (t: Throwable) {
+                _uiState.value = _uiState.value.copy(
+                    errorMessage = t.message ?: "Fehler beim Laden."
+                )
+            }
+        }
+    }
 
     private fun loadByIdInternal(id: Uuid) {
         viewModelScope.launch {
@@ -60,7 +108,7 @@ class ItemDetailViewModel() : ViewModel(), KoinComponent {
                         currentState.isEditing || currentState.isDirty ->
                             currentState.copy(isLoading = false)
                         else ->
-                            currentState.copy(item = loadedItem, isLoading = false)
+                            currentState.copy(asset = loadedItem, isLoading = false)
                     }
                 }
                 .onFailure { error ->
@@ -77,17 +125,17 @@ class ItemDetailViewModel() : ViewModel(), KoinComponent {
     }
 
     fun setNameInState(newName: String) {
-        val current = _uiState.value.item ?: return
+        val current = _uiState.value.asset ?: return
         _uiState.value = _uiState.value.copy(
-            item = current.withName(newName),
+            asset = current.withName(newName),
             isDirty = true
         )
     }
 
     fun setStatusInState(newStatus: TagStatus) {
-        val current = _uiState.value.item ?: return
+        val current = _uiState.value.asset ?: return
         _uiState.value = _uiState.value.copy(
-            item = current.withStatus(newStatus),
+            asset = current.withStatus(newStatus),
             isDirty = true
         )
     }
@@ -96,7 +144,7 @@ class ItemDetailViewModel() : ViewModel(), KoinComponent {
         try { TagStatus.entries } catch (_: Throwable) { TagStatus.values().toList() }
 
     fun saveCurrentItem() {
-        val itemToSave = _uiState.value.item ?: return
+        val itemToSave = _uiState.value.asset ?: return
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(
                 isSaving = true,
@@ -106,7 +154,7 @@ class ItemDetailViewModel() : ViewModel(), KoinComponent {
             runCatching { saveTag(itemToSave) }
                 .onSuccess { savedItem ->
                     _uiState.value = _uiState.value.copy(
-                        item = savedItem,
+                        asset = savedItem,
                         isSaving = false,
                         operationSucceeded = true,
                         isDirty = false
@@ -132,7 +180,7 @@ class ItemDetailViewModel() : ViewModel(), KoinComponent {
                 .onSuccess { wasDeleted ->
                     _uiState.value = if (wasDeleted) {
                         _uiState.value.copy(
-                            item = null,
+                            asset = null,
                             isDeleting = false,
                             operationSucceeded = true
                         )

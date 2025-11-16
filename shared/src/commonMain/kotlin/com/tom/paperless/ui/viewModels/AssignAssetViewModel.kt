@@ -46,13 +46,15 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
                 val employees = employeeRepository.getAll()
                 val asset = nfcTaggableRepository.getById(parsed)
                 val currentAssignee: Employee? = assignmentRepository.currentAssigneeOf(parsed)
+                val lastAssignees: List<Employee> = assignmentRepository.lastAssigneesOf(parsed)
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     employees = employees,
                     currentAssigneeId = currentAssignee?.id,
                     currentAssigneeName = currentAssignee?.name,
-                    assetDisplayName = asset?.name ?: "Asset"
+                    assetDisplayName = asset?.name ?: "Asset",
+                    lastAssignees = lastAssignees
                 )
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(
@@ -76,10 +78,14 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
             )
             try {
                 assignAssetToEmployeeUseCase(employeeId = employeeId, assetId = assetId)
+                val employee = employeeRepository.getById(employeeId)
+                val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     didAssignSuccessfully = true,
-                    currentAssigneeId = employeeId
+                    currentAssigneeId = employeeId,
+                    currentAssigneeName = employee?.name,
+                    lastAssignees = lastAssignees
                 )
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(
@@ -100,10 +106,15 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
             try {
                 returnAssetUseCase(assetId)
                 assignAssetToEmployeeUseCase(employeeId = employeeId, assetId = assetId)
+                val employee = employeeRepository.getById(employeeId)
+                val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
+
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
                     didAssignSuccessfully = true,
-                    currentAssigneeId = employeeId
+                    currentAssigneeId = employeeId,
+                    currentAssigneeName = employee?.name,
+                    lastAssignees = lastAssignees
                 )
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(
@@ -141,8 +152,7 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
     }
 
     fun cancelDialog() {
-        val state = _uiState.value
-        _uiState.value = state.copy(
+        _uiState.value = _uiState.value.copy(
             selectedEmployeeId = null,
             dialogType = null
         )

@@ -11,6 +11,7 @@ data class AssignAssetUiState(
     val didAssignSuccessfully: Boolean = false,
     val currentAssigneeId: Uuid? = null,
     val currentAssigneeName: String? = null,
+    val lastAssignees: List<Employee> = emptyList(),
     val assetDisplayName: String? = null,
     val dialogType: DialogType? = null
 ) {

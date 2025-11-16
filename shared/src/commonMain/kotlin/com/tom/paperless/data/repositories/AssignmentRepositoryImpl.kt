@@ -107,6 +107,35 @@ class AssignmentRepositoryImpl(
         return employeeRepository.getById(openAssignment.employeeId)
     }
 
+    override suspend fun lastAssigneesOf(
+        taggableId: Uuid,
+        limit: Int
+    ): List<Employee> {
+        // Alle Zuordnungen für dieses Asset nach Zeit sortieren (neueste zuerst)
+        val assignmentsForAsset: List<Assignment> = assignmentsState.value
+            .filter { it.taggableId == taggableId }
+            .sortedByDescending { it.from }
+
+        // Nur abgeschlossene Zuordnungen betrachten (until != null),
+        // damit der aktuelle Nutzer nicht in der "letzte 3" Liste auftaucht.
+        val previousAssignments: List<Assignment> = assignmentsForAsset
+            .filter { it.until != null }
+
+        val result = mutableListOf<Employee>()
+        val seenEmployeeIds = mutableSetOf<Uuid>()
+
+        for (assignment in previousAssignments) {
+            if (result.size >= limit) break
+            if (!seenEmployeeIds.add(assignment.employeeId)) continue
+
+            val employee = employeeRepository.getById(assignment.employeeId)
+            if (employee != null) {
+                result.add(employee)
+            }
+        }
+        return result
+    }
+
     override suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable> {
         val openAssignments: List<Assignment> = assignmentsState.value
             .filter { a -> a.employeeId == employeeId && a.until == null }

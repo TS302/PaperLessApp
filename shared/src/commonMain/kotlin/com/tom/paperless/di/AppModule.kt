@@ -38,7 +38,8 @@ import com.tom.paperless.ui.viewModels.AssignAssetViewModel
 import com.tom.paperless.ui.viewModels.CompanyViewModel
 import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
-import com.tom.paperless.ui.viewModels.ItemDetailViewModel
+import com.tom.paperless.ui.viewModels.AssetDetailViewModel
+import com.tom.paperless.ui.viewModels.EditAssetSheetViewModel
 import com.tom.paperless.ui.viewModels.LoginViewModel
 import com.tom.paperless.ui.viewModels.RegistrationViewModel
 import com.tom.paperless.ui.viewModels.SettingsViewModel
@@ -46,13 +47,13 @@ import org.koin.dsl.module
 
 val appModule = module {
 
-    // Repositories (shared)
+    // Repositories
     single<UserRepository> { UserRepository }
     single<NfcTaggableRepository> { NfcTaggableRepositoryImpl() }
     single<EmployeeRepository> { EmployeeRepositoryImpl }
     single<AssignmentRepository> { AssignmentRepositoryImpl(get(), get()) }
 
-    // Auth UseCases (shared)
+    // Auth UseCases
     single { RegisterUserUseCase() }
     single { LoginUserUseCase() }
     single { LogoutUserUseCase() }
@@ -82,7 +83,7 @@ val appModule = module {
     single { ReturnAssetUseCase() }
     single { GetAssetsOfEmployeeUseCase() }
 
-    // ViewModels (shared)
+    // ViewModels
     factory { CompanyViewModel() }
     factory { EmployeesViewModel() }
     factory { EmployeeDetailViewModel() }
@@ -93,6 +94,7 @@ val appModule = module {
     factory { LoginViewModel() }
     factory { RegistrationViewModel() }
     factory { SettingsViewModel() }
-    factory { ItemDetailViewModel() }
+    factory { AssetDetailViewModel() }
     factory { AssignAssetViewModel() }
+    factory { EditAssetSheetViewModel() }
 }

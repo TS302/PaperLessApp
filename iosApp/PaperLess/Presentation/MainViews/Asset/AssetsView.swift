@@ -55,7 +55,7 @@ struct AssetsView: View {
                 Section {
                     ForEach(companyVM.uiState.items, id: \.idString) { item in
                         NavigationLink {
-                            AssetDetailView(item: item)
+                            AssetDetailView(asset: item)
                         } label: {
                             ItemRow(item: item)
                         }
