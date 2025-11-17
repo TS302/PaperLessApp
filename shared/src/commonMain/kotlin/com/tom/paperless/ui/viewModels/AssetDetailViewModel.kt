@@ -62,6 +62,7 @@ class AssetDetailViewModel() : ViewModel(), KoinComponent {
                     asset = asset,
                     name = asset?.name.orEmpty(),
                     status = asset?.tagStatus,
+                    currentAssigneeId = current?.id?.toString(),
                     currentAssigneeName = current?.name,
                     lastAssignees = lastAssignees
                 )
