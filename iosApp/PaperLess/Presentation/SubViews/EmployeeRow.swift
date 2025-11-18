@@ -14,33 +14,25 @@ struct EmployeeRow: View {
     
     var body: some View {
         
-        HStack {
-            HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.primary.opacity(0.2))
-                        
-                    employee.targetType.icon
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 15, height: 15)
-                        .foregroundStyle(Color.primary)
-                }
+        HStack(spacing: 12) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 8)
+                    .frame(width: 40, height: 40)
+                    .foregroundColor(.primary.opacity(0.2))
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(employee.name)
-                        .modifier(ListRowTitle())
-                    
-                    HStack {
-                        Image(systemName: "ellipsis.rectangle.fill")
-                            .foregroundStyle(employee.tagStatus.color)
-                        
-                        Text(employee.tagStatus.displayName)
-                            .modifier(ListRowSubtitle())
-                    }
-                }
-                .padding(.leading, 2)
+                Image(systemName: "person.fill")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 15, height: 15)
+                    .foregroundStyle(Color.primary)
+            }
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(employee.name)
+                    .fontWeight(.semibold)
+                Text(employee.phoneNumber)
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 4)
