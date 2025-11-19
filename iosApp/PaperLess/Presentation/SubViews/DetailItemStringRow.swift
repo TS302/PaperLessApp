@@ -13,7 +13,6 @@ struct DetailItemStringRow: View {
     
     var body: some View {
         HStack {
-            
             ZStack {
                 RoundedRectangle(cornerRadius: 6)
                     .frame(width: 40, height: 40)

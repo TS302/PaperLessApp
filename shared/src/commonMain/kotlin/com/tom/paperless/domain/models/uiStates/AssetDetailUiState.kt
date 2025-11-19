@@ -9,6 +9,7 @@ data class AssetDetailUiState(
     val isLoading: Boolean = false,
     val name: String = "",
     val status: TagStatus? = null,
+    val currentAssignedEmployee: Employee? = null,
     val currentAssigneeId: String? = null,
     val currentAssigneeName: String? = null,
     val lastAssignees: List<Employee> = emptyList(),

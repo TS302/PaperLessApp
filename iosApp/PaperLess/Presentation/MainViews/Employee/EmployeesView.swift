@@ -32,18 +32,10 @@ struct EmployeesView: View {
                     SectionHeader(text: "Mitarbeiter")
                 }
             }
-            .toolbar {
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button {
-                        addEmployeeSheetIsPresent.toggle()
-                    } label: {
-                        Image(systemName: "person.crop.circle.badge.plus")
-                            .foregroundStyle(Color.primary)
-                    }
-                }
-            }
             .modifier(ListStyle(title: ""))
-            
+            .toolbar {
+                AddEmployeeToolbar(isPresented: $addEmployeeSheetIsPresent)
+            }
         }
         .sheet(isPresented: $addEmployeeSheetIsPresent) {
             AddEmployeeSheet()
