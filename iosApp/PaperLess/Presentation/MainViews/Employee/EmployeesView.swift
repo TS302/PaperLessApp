@@ -34,7 +34,7 @@ struct EmployeesView: View {
             }
             .modifier(ListStyle(title: ""))
             .toolbar {
-                AddEmployeeToolbar(isPresented: $addEmployeeSheetIsPresent)
+                EmployeesToolbar(isPresented: $addEmployeeSheetIsPresent)
             }
         }
         .sheet(isPresented: $addEmployeeSheetIsPresent) {

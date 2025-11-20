@@ -194,7 +194,9 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
                         type = "vehicle",
                         subtype = null,
                         code = nfcTag.plate,
-                        statusText = nfcTag.tagStatus.name
+                        statusText = nfcTag.tagStatus.name,
+                        status = nfcTag.tagStatus
+
                     )
                     is Tool -> AssignedItemUi(
                         id = nfcTag.id.toString(),
@@ -202,7 +204,9 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
                         type = "tool",
                         subtype = null,
                         code = nfcTag.serialNumber,
-                        statusText = nfcTag.tagStatus.name
+                        statusText = nfcTag.tagStatus.name,
+                        status = nfcTag.tagStatus
+
                     )
                     is KeyRing -> AssignedItemUi(
                         id = nfcTag.id.toString(),
@@ -210,7 +214,9 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
                         type = "key",
                         subtype = null,
                         code = null,
-                        statusText = nfcTag.tagStatus.name
+                        statusText = nfcTag.tagStatus.name,
+                        status = nfcTag.tagStatus
+
                     )
                     else -> AssignedItemUi(
                         id = nfcTag.id.toString(),
@@ -218,7 +224,8 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
                         type = nfcTag.targetType.name.lowercase(),
                         subtype = null,
                         code = null,
-                        statusText = nfcTag.tagStatus.name
+                        statusText = nfcTag.tagStatus.name,
+                        status = nfcTag.tagStatus
                     )
                 }
             }

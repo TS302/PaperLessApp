@@ -23,47 +23,31 @@ struct EmployeeDetailView: View {
                     EmployeeDetailsSection(employee: employee)
                 }
             }
-            Section("Zugewiesene Items") {
+            Section("Zugewiesene Assets") {
                 let items = employeeDetailVM.uiState.assignedItems
                 if items.isEmpty {
-                    ContentUnavailableView(
-                        "Keine Items zugewiesen",
-                        systemImage: "shippingbox",
-                        description: Text("Diesem Mitarbeiter sind aktuell keine Assets zugewiesen.")
-                    )
-                    .foregroundStyle(Color.primary)
+                    NoAssignedAssetsView()
                 } else {
                     ForEach(items, id: \.id) { item in
-                        
                         EmployeeAssignedItemRow(
                             displayName: item.displayName,
                             code: item.code,
                             type: item.type,
-                            status: item.statusText
+                            statusColor: item.status?.color ?? .gray
                         )
                     }
                 }
             }
         }
         .modifier(ListStyle(title: ""))
-        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    isEditSheetPresented.toggle()
-                } label: {
-                    Image(systemName: "slider.horizontal.3")
-                }
-            }
+            EmployeeDetailToolbar(isPresented: $isEditSheetPresented)
         }
         .sheet(isPresented: $isEditSheetPresented) {
             EditEmployeeSheet()
         }
         .task {
             employeeDetailVM.load(idString: employeeId)
-        }
-        .sheet(isPresented: $isEditSheetPresented) {
-            EditEmployeeSheet()
         }
     }
 }

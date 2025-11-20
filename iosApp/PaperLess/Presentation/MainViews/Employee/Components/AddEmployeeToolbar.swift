@@ -2,22 +2,33 @@
 //  AddEmployeeToolbar.swift
 //  PaperLess
 //
-//  Created by Tom Salih on 19.11.25.
+//  Created by Tom Salih on 20.11.25.
 //
 
 import SwiftUI
 
 struct AddEmployeeToolbar: ToolbarContent {
-    @Binding var isPresented: Bool
+    @Environment(\.dismiss) private var dismiss
+    let submit: () -> Void
+    let canSave: Bool
     
     var body: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarTrailing) {
+        ToolbarItem(placement: .cancellationAction) {
             Button {
-                isPresented.toggle()
+                dismiss()
             } label: {
-                Image(systemName: "person.crop.circle.badge.plus")
-                    .foregroundStyle(Color.primary)
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundStyle(Color.error)
             }
         }
+        ToolbarItem(placement: .confirmationAction) {
+            Button {
+                submit()
+            } label: {
+                 Text("Speichern")
+            }
+            .disabled(!canSave)
+        }
     }
+    
 }

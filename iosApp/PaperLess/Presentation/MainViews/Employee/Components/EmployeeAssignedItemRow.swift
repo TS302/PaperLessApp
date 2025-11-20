@@ -12,7 +12,7 @@ struct EmployeeAssignedItemRow: View {
     let displayName: String
     let code: String?
     let type: String?
-    let status: String?
+    let statusColor: Color
     
     private func sfSymbol(for type: String?) -> String {
         switch (type ?? "").lowercased() {
@@ -40,11 +40,12 @@ struct EmployeeAssignedItemRow: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(displayName)
-                        .modifier(ListRowTitle())
+                        .fontWeight(.semibold)
                     
                     if let code = code, !code.isEmpty {
                         Text(code)
-                            .modifier(ListRowSubtitle())
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -52,13 +53,8 @@ struct EmployeeAssignedItemRow: View {
             
             Spacer()
             
-            if let status = status, !status.isEmpty {
-                Text(status)
-                    .font(.caption2)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 4)
-                    .background(.thinMaterial, in: Capsule())
-            }
+            Image(systemName: "ellipsis.rectangle.fill")
+                .foregroundStyle(statusColor)
         }
         .contentShape(Rectangle())
     }
