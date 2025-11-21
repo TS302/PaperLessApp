@@ -10,7 +10,7 @@ import SwiftUI
 struct ListRowSubtitle: ViewModifier {
     func body(content: Content) -> some View {
         content
-            .font(AppFonts.subtitle)
+            .font(.footnote)
             .foregroundColor(Color.appPrimary)
             .opacity(0.7)
             .lineLimit(1)

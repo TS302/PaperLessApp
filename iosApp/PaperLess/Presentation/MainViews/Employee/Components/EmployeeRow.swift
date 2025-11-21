@@ -29,10 +29,9 @@ struct EmployeeRow: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(employee.name)
-                    .fontWeight(.semibold)
+                    .modifier(ListRowTitle())
                 Text(employee.phoneNumber)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .modifier(ListRowSubtitle())
             }
         }
         .padding(.vertical, 4)
