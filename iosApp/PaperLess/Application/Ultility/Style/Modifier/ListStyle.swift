@@ -8,12 +8,13 @@
 import SwiftUI
 
 struct ListStyle: ViewModifier {
-    var title: String
+    var title: String?
     func body(content: Content) -> some View {
+        let safeTitle = (title?.isEmpty == false) ? title! : ""
         content
             .scrollContentBackground(.hidden)
             .background(Color.secondary)
-            .navigationTitle("\(title)")
+            .navigationTitle(safeTitle)
             .navigationBarTitleDisplayMode(.inline)
     }
 }

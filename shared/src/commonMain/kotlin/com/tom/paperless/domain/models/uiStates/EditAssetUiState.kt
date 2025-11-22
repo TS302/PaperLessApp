@@ -10,6 +10,7 @@ data class EditAssetUiState(
     val name: String = "",
     val status: TagStatus? = null,
     val brand: String? = "",
+    val plate: String? = null,
     val serialNumber: String? = "",
 
     // UI-Zustände

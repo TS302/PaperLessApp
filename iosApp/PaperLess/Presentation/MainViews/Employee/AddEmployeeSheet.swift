@@ -38,7 +38,7 @@ struct AddEmployeeSheet: View {
                     error: addEmployeeVM.uiState.errorMessage
                 )
             }
-            .modifier(ListStyle(title: ""))
+            .modifier(ListStyle())
             .toolbar {
                 AddEmployeeToolbar(
                     submit: { addEmployeeVM.submit() },

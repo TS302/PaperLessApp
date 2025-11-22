@@ -12,22 +12,8 @@ struct KeyDetailsSection: View {
     let asset: KeyRing
     
     var body: some View {
-        
-        LabeledContent {
-            Text(asset.name)
-        } label: {
-            Text("Bezeichnung:")
-                .foregroundStyle(.secondary)
-        }
-        
-        LabeledContent {
-            HStack {
-                Text(asset.tagStatus.displayName)
-            }
-        } label: {
-            Text("Status:")
-                .foregroundStyle(.secondary)
-        }
+        CustomLabeledContent(label: "Bezeichnung", content: asset.name)
+        CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
     }
 }
 

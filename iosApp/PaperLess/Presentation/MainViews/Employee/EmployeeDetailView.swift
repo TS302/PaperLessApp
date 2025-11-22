@@ -18,11 +18,13 @@ struct EmployeeDetailView: View {
     
     var body: some View {
         List {
+            
             Section("Mitarbeiter") {
                 if let employee = employeeDetailVM.uiState.employee {
                     EmployeeDetailsSection(employee: employee)
                 }
             }
+            
             Section("Zugewiesene Assets") {
                 let items = employeeDetailVM.uiState.assignedItems
                 if items.isEmpty {
@@ -30,16 +32,17 @@ struct EmployeeDetailView: View {
                 } else {
                     ForEach(items, id: \.id) { item in
                         EmployeeAssignedItemRow(
-                            displayName: item.displayName,
-                            code: item.code,
-                            type: item.type,
+                            title: item.displayName,
+                            subTitle: item.code,
+                            iconType: item.type,
                             statusColor: item.status?.color ?? .gray
                         )
                     }
                 }
             }
+            
         }
-        .modifier(ListStyle(title: ""))
+        .modifier(ListStyle())
         .toolbar {
             EmployeeDetailToolbar(isPresented: $isEditSheetPresented)
         }

@@ -7,6 +7,8 @@ import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.mappers.withName
 import com.tom.paperless.domain.mappers.withStatus
 import com.tom.paperless.domain.models.NfcTaggable
+import com.tom.paperless.domain.models.Tool
+import com.tom.paperless.domain.models.Vehicle
 import com.tom.paperless.domain.models.enums.TagStatus
 import com.tom.paperless.domain.models.uiStates.EditAssetUiState
 import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
@@ -34,6 +36,9 @@ class EditAssetSheetViewModel() : ViewModel(), KoinComponent {
             operationSucceeded = false,
             name = asset.name,
             status = asset.tagStatus,
+            brand = (asset as? Tool)?.brand ?: (asset as? Vehicle)?.brand,
+            plate = (asset as? Vehicle)?.plate,
+            serialNumber = (asset as? Tool)?.serialNumber,
             isDirty = false,
             isEditing = true
         )
@@ -80,24 +85,6 @@ class EditAssetSheetViewModel() : ViewModel(), KoinComponent {
         }
     }
 
-    fun setNameinState(newName: String) {
-        val currentName = _uiState.value.asset ?: return
-        _uiState.value = _uiState.value.copy(
-            asset = currentName.withName(newName),
-            name = newName,
-            isDirty = true
-        )
-    }
-
-    fun setStatusInState(newStatus: TagStatus) {
-        val currentStatus = _uiState.value.asset ?: return
-        _uiState.value = _uiState.value.copy(
-            asset = currentStatus.withStatus(newStatus),
-            status = newStatus,
-            isDirty = true
-        )
-    }
-
     fun allStatuees(): List<TagStatus> =
         try { TagStatus.entries } catch (_: Throwable) { TagStatus.values().toList() }
 
@@ -136,6 +123,61 @@ class EditAssetSheetViewModel() : ViewModel(), KoinComponent {
         )
     }
 
+    fun setNameinState(newName: String) {
+        val currentName = _uiState.value.asset ?: return
+        _uiState.value = _uiState.value.copy(
+            asset = currentName.withName(newName),
+            name = newName,
+            isDirty = true
+        )
+    }
 
+    fun setStatusInState(newStatus: TagStatus) {
+        val currentStatus = _uiState.value.asset ?: return
+        _uiState.value = _uiState.value.copy(
+            asset = currentStatus.withStatus(newStatus),
+            status = newStatus,
+            isDirty = true
+        )
+    }
 
+    fun setBrandInState(newBrand: String) {
+        val current = _uiState.value.asset ?: return
+        val updated = when (current) {
+            is Tool -> current.copy(brand = newBrand)
+            is Vehicle -> current.copy(brand = newBrand)
+            else -> current
+        }
+        _uiState.value = _uiState.value.copy(
+            asset = updated,
+            brand = newBrand,
+            isDirty = true
+        )
+    }
+
+    fun setPlateInState(newPlate: String) {
+        val current = _uiState.value.asset ?: return
+        val updated = when (current) {
+            is Vehicle -> current.copy(plate = newPlate)
+            else -> current
+        }
+        _uiState.value = _uiState.value.copy(
+            asset = updated,
+            plate = newPlate,
+            isDirty = true
+        )
+    }
+
+    fun setSerialNumberInState(newSerial: String) {
+        val current = _uiState.value.asset ?: return
+        val updated = when (current) {
+            is Tool -> current.copy(serialNumber = newSerial)
+            else -> current
+        }
+        _uiState.value = _uiState.value.copy(
+            asset = updated,
+            serialNumber = newSerial,
+            isDirty = true
+        )
+    }
 }

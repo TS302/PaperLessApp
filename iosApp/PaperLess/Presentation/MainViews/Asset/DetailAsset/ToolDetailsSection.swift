@@ -12,35 +12,18 @@ struct ToolDetailsSection: View {
     let asset: Tool
     
     var body: some View {
+        CustomLabeledContent(label: "Bezeichnung", content: asset.name)
+        CustomLabeledContent(label: "Marke", content: asset.brand ?? "")
+        CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "")
         
-        LabeledContent {
-            Text(asset.name)
-        } label: {
-            Text("Bezeichnung:")
-                .foregroundStyle(.secondary)
+        HStack {
+            CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+            
+            Spacer()
+            
+            Image(systemName: "ellipsis.rectangle.fill")
+                .foregroundStyle(asset.tagStatus.color)
         }
         
-        LabeledContent {
-            Text(asset.brand ?? "n/a")
-        } label: {
-            Text("Marke:")
-                .foregroundStyle(.secondary)
-        }
-        
-        LabeledContent {
-            Text(asset.serialNumber ?? "n/a")
-        } label: {
-            Text("Seriennummer:")
-                .foregroundStyle(.secondary)
-        }
-        
-        LabeledContent {
-            HStack {
-                Text(asset.tagStatus.displayName)
-            }
-        } label: {
-            Text("Status:")
-                .foregroundStyle(.secondary)
-        }
     }
 }

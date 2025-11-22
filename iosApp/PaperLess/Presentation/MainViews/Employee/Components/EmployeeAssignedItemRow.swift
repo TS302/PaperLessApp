@@ -9,9 +9,9 @@ import SwiftUI
 import Shared
 
 struct EmployeeAssignedItemRow: View {
-    let displayName: String
-    let code: String?
-    let type: String?
+    let title: String
+    let subTitle: String?
+    let iconType: String?
     let statusColor: Color
     
     private func sfSymbol(for type: String?) -> String {
@@ -26,26 +26,16 @@ struct EmployeeAssignedItemRow: View {
     var body: some View {
         HStack(spacing: 12) {
             HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.primary.opacity(0.1))
-                    
-                    Image(systemName: sfSymbol(for: type))
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 18, height: 18)
-                        .foregroundStyle(Color.primary)
-                }
+                
+                RowIcon(icon: sfSymbol(for: iconType))
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(displayName)
-                        .fontWeight(.semibold)
+                    Text(title)
+                        .modifier(ListRowTitle())
                     
-                    if let code = code, !code.isEmpty {
+                    if let code = subTitle, !code.isEmpty {
                         Text(code)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
+                            .modifier(ListRowSubtitle())
                     }
                 }
             }
