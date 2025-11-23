@@ -15,7 +15,7 @@ struct EmployeeRow: View {
     var body: some View {
         
         HStack(spacing: 12) {
-            RowIcon(icon: "person.fill")
+            RowIcon(icon: "person.and.background.dotted")
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(employee.name)

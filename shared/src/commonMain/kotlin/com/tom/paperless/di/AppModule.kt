@@ -40,6 +40,7 @@ import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
 import com.tom.paperless.ui.viewModels.AssetDetailViewModel
 import com.tom.paperless.ui.viewModels.EditAssetSheetViewModel
+import com.tom.paperless.ui.viewModels.EditEmployeeViewModel
 import com.tom.paperless.ui.viewModels.LoginViewModel
 import com.tom.paperless.ui.viewModels.RegistrationViewModel
 import com.tom.paperless.ui.viewModels.SettingsViewModel
@@ -97,4 +98,5 @@ val appModule = module {
     factory { AssetDetailViewModel() }
     factory { AssignAssetViewModel() }
     factory { EditAssetSheetViewModel() }
+    factory { EditEmployeeViewModel() }
 }

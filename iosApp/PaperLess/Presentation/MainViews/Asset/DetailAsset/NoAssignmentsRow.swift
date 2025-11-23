@@ -11,24 +11,13 @@ struct NoAssignmentsRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(.primary.opacity(0.1))
-                
-                Image(systemName: "clock.arrow.circlepath")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 18, height: 18)
-                    .foregroundStyle(Color.primary)
-            }
+            RowIcon(icon: "clock.arrow.circlepath")
             
             VStack(alignment: .leading, spacing: 2) {
                 Text("Keine bisherigen Zuweisungen")
-                    .foregroundStyle(.secondary)
+                    .modifier(ListRowTitle())
                 Text("Hier siehst du später die letzten Mitarbeiter.")
-                    .font(.footnote)
-                    .foregroundStyle(.tertiary)
+                    .modifier(ListRowSubtitle())
             }
             
             Spacer()

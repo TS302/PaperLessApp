@@ -55,14 +55,12 @@ struct AssetDetailView: View {
                             }
                         }
                         AssignActionRow(
-                            icon: "person.crop.circle.badge.plus",
                             title: "Neue Zuweisung",
                             subtitle: "Dieses Objekt einer anderen Person zuordnen.",
                             action: { isAssignSheetPresented = true }
                         )
                     } else {
                         AssignActionRow(
-                            icon: "person.badge.plus",
                             title: "Mitarbeiter zuweisen",
                             subtitle: "Dieses Objekt ist aktuell niemandem zugeordnet.",
                             action: { isAssignSheetPresented = true }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct AssignActionRow: View {
-    let icon: String
     let title: String
     let subtitle: String
     let action: () -> Void
@@ -18,26 +17,13 @@ struct AssignActionRow: View {
             action()
         } label: {
             HStack(spacing: 12) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.primary.opacity(0.1))
-                    
-                    Image(systemName: icon)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 18, height: 18)
-                        .foregroundStyle(Color.primary)
-                }
+                RowIcon(icon: "person.crop.circle.badge.plus")
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .fontWeight(.semibold)
-                        .foregroundStyle(Color.primary)
-                    
+                        .modifier(ListRowTitle())
                     Text(subtitle)
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
+                        .modifier(ListRowSubtitle())
                 }
                 
                 Spacer()

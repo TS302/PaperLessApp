@@ -13,6 +13,7 @@ struct EmployeeDetailsSection: View {
     
     var body: some View {
         HStack(alignment: .center, spacing: 12) {
+            
             ZStack {
                 Circle()
                     .frame(width: 64)
@@ -27,28 +28,24 @@ struct EmployeeDetailsSection: View {
             
             VStack(alignment: .leading, spacing: 6) {
                 Text(employee.name.isEmpty ? "Unbekannt" : employee.name)
-                    .font(.headline)
+                    .modifier(ListRowTitle())
                 
                 let email = employee.email
                 if !email.isEmpty {
                     Text(email)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .modifier(ListRowSubtitle())
                 } else {
                     Text("Keine E-Mail hinterlegt")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .modifier(ListRowSubtitle())
                 }
                 
                 let phone = employee.phoneNumber
                 if !phone.isEmpty {
                     Text(phone)
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .modifier(ListRowSubtitle())
                 } else {
                     Text("Keine Telefonnummer hinterlegt")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
+                        .modifier(ListRowSubtitle())
                 }
             }
             Spacer()

@@ -12,24 +12,13 @@ struct CurrentAssigneeRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 8)
-                    .frame(width: 40, height: 40)
-                    .foregroundColor(.primary.opacity(0.2))
-                
-                Image(systemName: "person.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 15, height: 15)
-                    .foregroundStyle(Color.primary)
-            }
+            RowIcon(icon: "person.and.background.dotted")
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(name)
-                    .fontWeight(.semibold)
+                    .modifier(ListRowTitle())
                 Text("Aktuell zugewiesen")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                    .modifier(ListRowSubtitle())
             }
         }
         .padding(.vertical, 4)
