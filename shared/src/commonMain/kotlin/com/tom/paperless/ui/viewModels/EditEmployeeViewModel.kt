@@ -44,7 +44,7 @@ class EditEmployeeViewModel : ViewModel(), KoinComponent {
 
         val currentState = _uiState.value
 
-        if (!currentState.isValid || !currentState.hasChanges || currentState.isSaving) return
+        if (!currentState.isValid || currentState.isSaving) return
 
         val employeeToSave = originalEmployee.copy(
             name = currentState.name.trim(),

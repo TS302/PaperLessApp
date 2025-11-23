@@ -40,14 +40,20 @@ struct EmployeeDetailView: View {
                     }
                 }
             }
-            
         }
         .modifier(ListStyle())
         .toolbar {
             EmployeeDetailToolbar(isPresented: $isEditSheetPresented)
         }
         .sheet(isPresented: $isEditSheetPresented) {
-            EditEmployeeSheet()
+            if let employee = employeeDetailVM.uiState.employee {
+                EditEmployeeSheet(employee: employee)
+            }
+        }
+        .onChange(of: isEditSheetPresented) { _, isPresented in
+            if !isPresented {
+                employeeDetailVM.load(idString: employeeId)
+            }
         }
         .task {
             employeeDetailVM.load(idString: employeeId)

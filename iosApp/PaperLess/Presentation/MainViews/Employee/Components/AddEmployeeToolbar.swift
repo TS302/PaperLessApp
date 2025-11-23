@@ -24,6 +24,7 @@ struct AddEmployeeToolbar: ToolbarContent {
         ToolbarItem(placement: .confirmationAction) {
             Button {
                 submit()
+                dismiss()
             } label: {
                  Text("Speichern")
             }

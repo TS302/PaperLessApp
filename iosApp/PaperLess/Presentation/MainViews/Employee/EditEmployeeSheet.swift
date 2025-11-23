@@ -10,8 +10,13 @@ import Shared
 import KMPObservableViewModelSwiftUI
 
 struct EditEmployeeSheet: View {
+    let employee: Employee
+    
     @Environment(\.dismiss) private var dismiss
+
     @StateViewModel private var editEmployeeVM = EditEmployeeViewModel()
+    
+    @State private var didSetup = false
     
     private var canSave: Bool {
         !editEmployeeVM.uiState.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !editEmployeeVM.uiState.isSaving
@@ -40,11 +45,19 @@ struct EditEmployeeSheet: View {
             .toolbar {
                 AddEmployeeToolbar(
                     submit: { editEmployeeVM.save() },
-                    canSave: canSave)
+                    canSave: canSave
+                    
+                )
             }
             .onChange(of: editEmployeeVM.uiState.isSaving) { _, did in
                 if did {
                     dismiss()
+                }
+            }
+            .onAppear {
+                if !didSetup {
+                    editEmployeeVM.setEmployee(employee: employee)
+                    didSetup = true
                 }
             }
         }
