@@ -24,11 +24,12 @@ class AddVehicleViewModel() : ViewModel(), KoinComponent {
 
     fun setName(value: String) = _uiState.update { it.copy(name = value, errorMessage = null) }
     fun setPlate(value: String) = _uiState.update { it.copy(plate = value, errorMessage = null) }
+    fun setBrand(value: String) = _uiState.update { it.copy(brand = value, errorMessage = null) }
 
     fun submit() = viewModelScope.launch {
-        val s = _uiState.value
-        if (s.isSaving) return@launch
-        if (s.name.trim().isEmpty()) {
+        val state = _uiState.value
+        if (state.isSaving) return@launch
+        if (state.name.trim().isEmpty()) {
             _uiState.update { it.copy(errorMessage = "Name darf nicht leer sein.") }
             return@launch
         }
@@ -37,8 +38,9 @@ class AddVehicleViewModel() : ViewModel(), KoinComponent {
         runCatching {
             val newItem = Vehicle(
                 id = Uuid.random(),
-                name = s.name.trim(),
-                plate = s.plate.trim().ifEmpty { null },
+                name = state.name.trim(),
+                brand = state.brand.trim().ifEmpty { null },
+                plate = state.plate.trim().ifEmpty { null },
                 tagStatus = TagStatus.available
             )
             addNfcTaggable(newItem)

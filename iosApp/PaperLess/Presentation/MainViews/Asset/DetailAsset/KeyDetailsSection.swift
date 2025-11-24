@@ -13,7 +13,15 @@ struct KeyDetailsSection: View {
     
     var body: some View {
         CustomLabeledContent(label: "Bezeichnung", content: asset.name)
-        CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+        
+        HStack {
+            CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+            
+            Spacer()
+            
+            Image(systemName: "ellipsis.rectangle.fill")
+                .foregroundStyle(asset.tagStatus.color)
+        }
     }
 }
 

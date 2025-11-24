@@ -18,14 +18,20 @@ struct EmployeeDetailView: View {
     
     var body: some View {
         List {
-            
-            Section("Mitarbeiter") {
+            Section {
                 if let employee = employeeDetailVM.uiState.employee {
-                    EmployeeDetailsSection(employee: employee)
+                    EmployeeIDCardView(
+                        name: employee.name,
+                        phoneNumber: employee.phoneNumber,
+                        email: employee.email,
+                        id: employeeId
+                    )
                 }
+            } header: {
+                SectionHeader(text: "Mitarbeiter Details")
             }
             
-            Section("Zugewiesene Assets") {
+            Section {
                 let items = employeeDetailVM.uiState.assignedItems
                 if items.isEmpty {
                     NoAssignedAssetsView()
@@ -39,6 +45,8 @@ struct EmployeeDetailView: View {
                         )
                     }
                 }
+            } header: {
+                SectionHeader(text: "Zugewiesene Assets")
             }
         }
         .modifier(ListStyle())

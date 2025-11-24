@@ -13,8 +13,16 @@ struct VehicleDetailsSection: View {
     
     var body: some View {
         CustomLabeledContent(label: "Bezeichnung", content: asset.name)
-        CustomLabeledContent(label: "Marke", content: asset.brand ?? "")
-        CustomLabeledContent(label: "KFZ-Kennzeichen", content: asset.plate ?? "")
-        CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+        CustomLabeledContent(label: "Marke", content: asset.brand ?? "Nicht verfügbar")
+        CustomLabeledContent(label: "KFZ-Kennzeichen", content: asset.plate ?? "Nicht verfügbar")
+        
+        HStack {
+            CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+            
+            Spacer()
+            
+            Image(systemName: "ellipsis.rectangle.fill")
+                .foregroundStyle(asset.tagStatus.color)
+        }
     }
 }

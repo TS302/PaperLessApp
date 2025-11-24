@@ -15,11 +15,11 @@ struct CustomLabeledContent: View {
         VStack(alignment: .leading) {
             Text(label)
                 .modifier(ListRowSubtitle())
-                .padding(.bottom, 2)
+                .padding(.bottom, 1)
             Text(content)
                 .modifier(ListRowTitle())
         }
-        .padding(.vertical, 2)
+        .padding(.vertical, 1)
 
     }
 }

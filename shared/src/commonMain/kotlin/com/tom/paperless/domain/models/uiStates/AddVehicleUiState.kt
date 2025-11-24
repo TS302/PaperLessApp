@@ -2,6 +2,7 @@ package com.tom.paperless.domain.models.uiStates
 
 data class AddVehicleUiState(
     val name: String = "",
+    val brand: String = "",
     val plate: String = "",
     val isSaving: Boolean = false,
     val didSave: Boolean = false,

@@ -12,45 +12,26 @@ struct EmployeeDetailsSection: View {
     let employee: Employee
     
     var body: some View {
-        HStack(alignment: .center, spacing: 12) {
-            
-            ZStack {
-                Circle()
-                    .frame(width: 64)
-                    .foregroundStyle(Color.primary.opacity(0.2))
-                
-                Image(systemName: "person.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 30)
-                    .foregroundStyle(Color.primary)
-            }
-            
-            VStack(alignment: .leading, spacing: 6) {
-                Text(employee.name.isEmpty ? "Unbekannt" : employee.name)
-                    .modifier(ListRowTitle())
-                
-                let email = employee.email
-                if !email.isEmpty {
-                    Text(email)
-                        .modifier(ListRowSubtitle())
-                } else {
-                    Text("Keine E-Mail hinterlegt")
-                        .modifier(ListRowSubtitle())
-                }
-                
-                let phone = employee.phoneNumber
-                if !phone.isEmpty {
-                    Text(phone)
-                        .modifier(ListRowSubtitle())
-                } else {
-                    Text("Keine Telefonnummer hinterlegt")
-                        .modifier(ListRowSubtitle())
-                }
-            }
-            Spacer()
+        
+        
+        let name = employee.name
+        CustomLabeledContent(label: "Name", content: name)
+        
+        let phone = employee.phoneNumber
+        if !phone.isEmpty {
+            CustomLabeledContent(label: "Telefonnummer", content: phone)
+        } else {
+            Text("Keine Telefonnummer hinterlegt")
+                .modifier(ListRowSubtitle())
         }
-        .padding(.vertical, 4)
+        
+        let email = employee.email
+        if !email.isEmpty {
+            CustomLabeledContent(label: "Email", content: email)
+        } else {
+            Text("Keine E-Mail hinterlegt")
+                .modifier(ListRowSubtitle())
+        }
     }
 }
 

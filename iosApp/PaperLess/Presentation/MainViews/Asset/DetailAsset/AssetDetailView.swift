@@ -26,7 +26,7 @@ struct AssetDetailView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Allgemeine Informationen") {
+                Section {
                     let displayedAsset = itemDetailVM.uiState.asset ?? asset
                     
                     if let tool = displayedAsset as? Tool {
@@ -36,9 +36,11 @@ struct AssetDetailView: View {
                     } else if let vehicle = displayedAsset as? Vehicle {
                         VehicleDetailsSection(asset: vehicle)
                     }
+                } header: {
+                    SectionHeader(text: "Allgemeine Informationen")
                 }
                 
-                Section("Aktuelle Zuweisung") {
+                Section {
                     
                     if itemDetailVM.uiState.isLoading {
                         ProgressView("Zuweisung wird geladen…")
@@ -66,9 +68,11 @@ struct AssetDetailView: View {
                             action: { isAssignSheetPresented = true }
                         )
                     }
+                } header: {
+                    SectionHeader(text: "Aktuelle Zuweisung")
                 }
                 
-                Section("Vergangene Zuweisungen") {
+                Section {
                     if itemDetailVM.uiState.lastAssignees.isEmpty {
                         NoAssignmentsRow()
                     } else {
@@ -76,6 +80,8 @@ struct AssetDetailView: View {
                             HistoryAssigneeRow(employee: employee)
                         }
                     }
+                } header: {
+                    SectionHeader(text: "Vergangene Zuweisungen")
                 }
             }
             .modifier(ListStyle(title: asset.name))

@@ -18,14 +18,14 @@ struct MainTabView: View {
         TabView {
             AssetsView()
                 .tabItem {
-                    Image(systemName: "house.lodge.fill")
-                    Text("Firma")
+                    Image(systemName: "backpack.sensor.tag.radiowaves.left.and.right.fill")
+                    Text("Assets")
                 }
             
             EmployeesView()
                 .tabItem {
-                    Image(systemName: "person.3.fill")
-                    Text("Personal")
+                    Image(systemName: "person.2.fill")
+                    Text("Asset-Nutzer")
                 }
             
             SettingsView(currentEmail: currentEmail, onLoggedOut: onLoggedOut)

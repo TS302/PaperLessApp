@@ -13,8 +13,8 @@ struct ToolDetailsSection: View {
     
     var body: some View {
         CustomLabeledContent(label: "Bezeichnung", content: asset.name)
-        CustomLabeledContent(label: "Marke", content: asset.brand ?? "")
-        CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "")
+        CustomLabeledContent(label: "Marke", content: asset.brand ?? "Nicht verfügbar")
+        CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "Nicht verfügbar")
         
         HStack {
             CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)

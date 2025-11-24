@@ -19,8 +19,8 @@ data class AssetDetailUiState(
     val operationSucceeded: Boolean = false,
     val isDirty: Boolean = false,
     val isEditing: Boolean = false,
-    val brand: String? = "",
-    val serialNumber: String? = ""
+    val brand: String? = null,
+    val serialNumber: String? = null
 ) {
     companion object Companion {
         fun empty() = AssetDetailUiState()
