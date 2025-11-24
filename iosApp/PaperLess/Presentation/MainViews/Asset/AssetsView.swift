@@ -72,7 +72,7 @@ struct AssetsView: View {
                     FilterPicker(filter: filterBinding)
                 }
             }
-            .modifier(ListStyle(title: ""))
+            .modifier(ListStyle())
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     AddObjectMenu(

@@ -7,6 +7,7 @@ import kotlin.uuid.Uuid
 data class KeyRing(
     override val id: Uuid,
     override val name: String,
+    val serialNumber: String? = null,
     override val targetType: TargetType = TargetType.Key,
     override val tagStatus: TagStatus = TagStatus.available,
     override val currentAssigneeId: Uuid? = null,

@@ -25,6 +25,8 @@ class AddKeyViewModel() : ViewModel(), KoinComponent {
     val uiState: StateFlow<AddKeyUiState> = _uiState.asStateFlow()
 
     fun setName(value: String) = _uiState.update { it.copy(name = value, errorMessage = null) }
+    fun setSerialNumber(value: String) = _uiState.update { it.copy(serialNumber = value, errorMessage = null) }
+
 
     fun submit() = viewModelScope.launch {
         val s = _uiState.value
@@ -38,7 +40,9 @@ class AddKeyViewModel() : ViewModel(), KoinComponent {
         runCatching {
             val newItem = KeyRing(
                 id = Uuid.random(),
-                name = s.name.trim()
+                name = s.name.trim(),
+                serialNumber = s.serialNumber.trim().ifEmpty { null },
+                tagStatus = TagStatus.available
             )
             addNfcTaggable(newItem)
         }.onSuccess {

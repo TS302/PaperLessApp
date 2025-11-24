@@ -24,12 +24,13 @@ class AddToolViewModel() : ViewModel(), KoinComponent {
     val uiState: StateFlow<AddToolUiState> = _uiState.asStateFlow()
 
     fun setName(value: String) = _uiState.update { it.copy(name = value, errorMessage = null) }
+    fun setBrand(value: String) = _uiState.update { it.copy(brand = value, errorMessage = null) }
     fun setSerialNumber(value: String) = _uiState.update { it.copy(serialNumber = value, errorMessage = null) }
 
     fun submit() = viewModelScope.launch {
-        val s = _uiState.value
-        if (s.isSaving) return@launch
-        if (s.name.trim().isEmpty()) {
+        val state = _uiState.value
+        if (state.isSaving) return@launch
+        if (state.name.trim().isEmpty()) {
             _uiState.update { it.copy(errorMessage = "Name darf nicht leer sein.") }
             return@launch
         }
@@ -38,8 +39,9 @@ class AddToolViewModel() : ViewModel(), KoinComponent {
         runCatching {
             val newItem = Tool(
                 id = Uuid.random(),
-                name = s.name.trim(),
-                serialNumber = s.serialNumber.trim().ifEmpty { null }
+                name = state.name.trim(),
+                brand = state.brand.trim().ifEmpty { null },
+                serialNumber = state.serialNumber.trim().ifEmpty { null }
             )
             addNfcTaggable(newItem)
         }.onSuccess {

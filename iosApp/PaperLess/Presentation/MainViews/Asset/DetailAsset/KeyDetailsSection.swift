@@ -13,6 +13,7 @@ struct KeyDetailsSection: View {
     
     var body: some View {
         CustomLabeledContent(label: "Bezeichnung", content: asset.name)
+        CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "001-001-1001")
         
         HStack {
             CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)

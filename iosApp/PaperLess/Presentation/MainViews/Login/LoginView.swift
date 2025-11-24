@@ -78,7 +78,6 @@ struct LoginView: View {
                 }
                 
             }
-//            .padding(.top, 40)
             .padding(.horizontal, 40)
             if let msg = errorText, !msg.isEmpty {
                 Text(msg).foregroundColor(.red).font(.caption)
