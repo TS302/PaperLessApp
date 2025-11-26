@@ -34,7 +34,12 @@ struct EmployeeDetailView: View {
             Section {
                 let items = employeeDetailVM.uiState.assignedItems
                 if items.isEmpty {
-                    NoAssignedAssetsView()
+                    NoAssignedAssetsView(
+                        title: "Keine Items zugewiesen",
+                        description: "Diesem Mitarbeiter sind aktuell keine Assets zugewiesen.",
+                        icon: "shippingbox"
+                        
+                    )
                 } else {
                     ForEach(items, id: \.id) { item in
                         EmployeeAssignedItemRow(

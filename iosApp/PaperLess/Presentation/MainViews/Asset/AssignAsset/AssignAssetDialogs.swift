@@ -12,59 +12,70 @@ extension View {
     func assignAssetDialog(
         uiState: AssignAssetUiState,
         selectedEmployee: Employee?,
+        noteText: String,
+        onNoteChanged: @escaping (String) -> Void,
         confirmAssign: @escaping () -> Void,
         confirmReassign: @escaping () -> Void,
         cancelDialog: @escaping () -> Void
     ) -> some View {
         
-        self
-            .sheet(
-                isPresented: Binding(
-                    get: {
-                        uiState.dialogType == .confirmAssign && selectedEmployee != nil
-                    },
-                    set: { newValue in
-                        if !newValue {
-                            cancelDialog()
-                        }
+        self.sheet(
+            isPresented: Binding(
+                get: {
+                    // Sheet öffnen, wenn ein Dialog aktiv ist
+                    // und ein Mitarbeiter ausgewählt wurde
+                    uiState.dialogType != nil && selectedEmployee != nil
+                },
+                set: { newValue in
+                    if !newValue {
+                        cancelDialog()
+                    }
+                }
+            )
+        ) {
+            if let employee = selectedEmployee {
+                
+                // Ist es eine Neu-Zuweisung?
+                let isReassign = uiState.dialogType == .confirmReassign
+                
+                // Von wem kommt das Asset? (Firma oder aktueller Mitarbeiter)
+                let fromName: String = {
+                    let current = uiState.currentAssigneeName
+                    if let current, !current.isEmpty {
+                        return current
+                    } else {
+                        return "Firma"
+                    }
+                }()
+                
+                // Zu wem geht es?
+                let toName = employee.name
+                
+                // Binding für den Kommentar
+                let noteBinding = Binding<String>(
+                    get: { noteText },
+                    set: { newValue in onNoteChanged(newValue)
                     }
                 )
-            ) {
-                if let employee = selectedEmployee {
-                    ConfirmAssignDialog(
-                        assetName: uiState.assetDisplayName ?? "Asset",
-                        employeeName: employee.name,
-                        onConfirm: {
+                
+                ConfirmAssignDialog(
+                    assetName: uiState.assetDisplayName ?? "Asset",
+                    fromName: fromName,
+                    toName: toName,
+                    isReassign: isReassign,
+                    noteText: noteBinding,
+                    onConfirm: {
+                        if isReassign {
+                            confirmReassign()
+                        } else {
                             confirmAssign()
-                        },
-                        onCancel: {
-                            cancelDialog()
                         }
-                    )
-                }
-            }
-            .alert(
-                "Bereits zugewiesen",
-                isPresented: Binding(
-                    get: {
-                        uiState.dialogType == .confirmReassign
                     },
-                    set: { newValue in
-                        if !newValue {
-                            cancelDialog()
-                        }
+                    onCancel: {
+                        cancelDialog()
                     }
                 )
-            ) {
-                Button("Auflößen & neu zuweisen", role: .destructive) {
-                    confirmAssign()
-                }
-                Button("Abbrechen", role: .cancel) {
-                    cancelDialog()
-                }
-            } message: {
-                let currentName = uiState.currentAssigneeName ?? "Unbekannt"
-                Text("Dieses Asset ist bereits \(currentName) zugewiesen. Möchten Sie es auflösen und neu zuweisen?")
             }
+        }
     }
 }

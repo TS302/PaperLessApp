@@ -46,7 +46,13 @@ class AssignmentRepositoryImpl(
             }
             .stateIn(repoScope, SharingStarted.Eagerly, emptyList())
 
-    override suspend fun assign(taggableId: Uuid, toEmployeeId: Uuid): Assignment {
+
+    override suspend fun assign(
+        taggableId: Uuid,
+        toEmployeeId: Uuid,
+        note: String?
+    ): Assignment {
+        // Offene Zuweisung für dieses Asset schließen
         assignmentsState.update { current: List<Assignment> ->
             val now = Clock.System.now()
             current.map { assignment: Assignment ->
@@ -58,14 +64,47 @@ class AssignmentRepositoryImpl(
             }
         }
 
+        val now = Clock.System.now()
         val newAssignment = Assignment(
             id = Uuid.random(),
             employeeId = toEmployeeId,
-            taggableId = taggableId
+            taggableId = taggableId,
+            from = now,
+            until = null,
+            note = note          // 🔥 Kommentar speichern
         )
         assignmentsState.update { current -> current + newAssignment }
         return newAssignment
     }
+
+
+//    override suspend fun assign(
+//        taggableId: Uuid,
+//        toEmployeeId: Uuid,
+//        note: String?
+//    ): Assignment {
+//        assignmentsState.update { current: List<Assignment> ->
+//            val now = Clock.System.now()
+//            current.map { assignment: Assignment ->
+//                if (assignment.taggableId == taggableId && assignment.until == null) {
+//                    assignment.copy(until = now)
+//                } else {
+//                    assignment
+//                }
+//            }
+//        }
+//
+//        val newAssignment = Assignment(
+//            id = Uuid.random(),
+//            employeeId = toEmployeeId,
+//            taggableId = taggableId,
+//            from = Clock.System.now(),
+//            until = null,
+//            note = note
+//        )
+//        assignmentsState.update { current -> current + newAssignment }
+//        return newAssignment
+//    }
 
     override suspend fun unassign(taggableId: Uuid): Boolean {
         var changed = false
@@ -111,13 +150,10 @@ class AssignmentRepositoryImpl(
         taggableId: Uuid,
         limit: Int
     ): List<Employee> {
-        // Alle Zuordnungen für dieses Asset nach Zeit sortieren (neueste zuerst)
         val assignmentsForAsset: List<Assignment> = assignmentsState.value
             .filter { it.taggableId == taggableId }
             .sortedByDescending { it.from }
 
-        // Nur abgeschlossene Zuordnungen betrachten (until != null),
-        // damit der aktuelle Nutzer nicht in der "letzte 3" Liste auftaucht.
         val previousAssignments: List<Assignment> = assignmentsForAsset
             .filter { it.until != null }
 
@@ -134,6 +170,16 @@ class AssignmentRepositoryImpl(
             }
         }
         return result
+    }
+
+    override suspend fun lastAssignmentsOf(
+        taggableId: Uuid,
+        limit: Int
+    ): List<Assignment> {
+        return assignmentsState.value
+            .filter { it.taggableId == taggableId && it.until != null }
+            .sortedByDescending { it.from }
+            .take(limit)
     }
 
     override suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable> {

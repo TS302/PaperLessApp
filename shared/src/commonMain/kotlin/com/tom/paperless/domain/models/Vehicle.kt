@@ -12,5 +12,6 @@ data class Vehicle(
     override val currentAssigneeId: Uuid? = null,
     override val lastAssigneeIds: List<Uuid> = emptyList(),
     val plate: String? = "",
-    val brand: String? = ""
+    val brand: String? = "",
+    override val note: String? = null
 ) : NfcTaggable

@@ -11,5 +11,6 @@ data class KeyRing(
     override val targetType: TargetType = TargetType.Key,
     override val tagStatus: TagStatus = TagStatus.available,
     override val currentAssigneeId: Uuid? = null,
-    override val lastAssigneeIds: List<Uuid> = emptyList()
+    override val lastAssigneeIds: List<Uuid> = emptyList(),
+    override val note: String? = null
 ) : NfcTaggable

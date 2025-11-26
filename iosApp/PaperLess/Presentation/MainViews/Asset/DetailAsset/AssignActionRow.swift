@@ -27,7 +27,6 @@ struct AssignActionRow: View {
                 }
                 
                 Spacer()
-                
                 Image(systemName: "chevron.right")
                     .font(.footnote)
                     .foregroundStyle(.tertiary)

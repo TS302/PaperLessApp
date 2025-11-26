@@ -9,17 +9,18 @@ import SwiftUI
 import Shared
 
 struct HistoryAssigneeRow: View {
-    let employee: Employee
+    let title: String
+    let periodText: String
     
     var body: some View {
         HStack(spacing: 12) {
             RowIcon(icon: "person.crop.circle.badge.clock")
             
             VStack(alignment: .leading, spacing: 2) {
-                Text(employee.name)
+                Text(title)
                     .modifier(ListRowTitle())
                 
-                Text("01.01.25/12:00 Uhr - 01.02.25/13:43 Uhr")
+                Text(periodText)
                     .modifier(ListRowSubtitle())
             }
         }

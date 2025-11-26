@@ -39,7 +39,8 @@ class AssetDetailViewModel() : ViewModel(), KoinComponent {
             asset = item,
             isLoading = false,
             errorMessage = null,
-            operationSucceeded = false
+            operationSucceeded = false,
+            currentAssignmentNote = null
         )
     }
 
@@ -56,6 +57,10 @@ class AssetDetailViewModel() : ViewModel(), KoinComponent {
                 val asset = nfcTaggableRepository.getById(assetId)
                 val current = assignmentRepository.currentAssigneeOf(assetId)
                 val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
+                val lastAssignments = assignmentRepository.lastAssignmentsOf(assetId, limit = 3)
+                val currentAssignment = lastAssignments.lastOrNull { it.until == null }
+
+
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
@@ -63,8 +68,10 @@ class AssetDetailViewModel() : ViewModel(), KoinComponent {
                     name = asset?.name.orEmpty(),
                     status = asset?.tagStatus,
                     currentAssigneeId = current?.id?.toString(),
+                    currentAssignmentNote = currentAssignment?.note,
                     currentAssigneeName = current?.name,
-                    lastAssignees = lastAssignees
+                    lastAssignees = lastAssignees,
+                    lastAssignments = lastAssignments
                 )
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(
@@ -80,10 +87,14 @@ class AssetDetailViewModel() : ViewModel(), KoinComponent {
             try {
                 val current = assignmentRepository.currentAssigneeOf(assetId)
                 val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
+                val lastAssignments = assignmentRepository.lastAssignmentsOf(assetId, limit = 3)
+
+
 
                 _uiState.value = _uiState.value.copy(
                     currentAssigneeName = current?.name,
-                    lastAssignees = lastAssignees
+                    lastAssignees = lastAssignees,
+                    lastAssignments = lastAssignments
                 )
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(

@@ -9,5 +9,6 @@ data class Assignment(
     val employeeId: Uuid,
     val taggableId: Uuid,
     val from: Instant = Clock.System.now(),
-    val until: Instant? = null
+    val until: Instant? = null,
+    val note: String? = null
 )

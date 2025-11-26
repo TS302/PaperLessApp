@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CurrentAssigneeRow: View {
     let name: String
+    let note: String?
     
     var body: some View {
         HStack(spacing: 12) {
@@ -17,8 +18,14 @@ struct CurrentAssigneeRow: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text(name)
                     .modifier(ListRowTitle())
-                Text("Aktuell zugewiesen")
-                    .modifier(ListRowSubtitle())
+                
+                if let note, !note.isEmpty {
+                    Text(note)
+                        .modifier(ListRowSubtitle())
+                } else {
+                    Text("Aktuell zugewiesen")
+                        .modifier(ListRowSubtitle())
+                }
             }
         }
         .padding(.vertical, 4)

@@ -12,5 +12,6 @@ data class Tool(
     override val currentAssigneeId: Uuid? = null,
     override val lastAssigneeIds: List<Uuid> = emptyList(),
     val brand: String? = "",
-    val serialNumber: String? = ""
+    val serialNumber: String? = "",
+    override val note: String? = null
 ) : NfcTaggable

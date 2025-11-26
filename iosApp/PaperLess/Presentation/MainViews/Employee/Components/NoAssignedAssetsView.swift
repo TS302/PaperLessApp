@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct NoAssignedAssetsView: View {
+    let title: String
+    let description: String
+    let icon: String
     var body: some View {
         ContentUnavailableView {
             Label {
-                Text("Keine Items zugewiesen")
+                Text(title)
                     .modifier(ListRowTitle())
             } icon: {
-                Image(systemName: "shippingbox")
+                Image(systemName: icon)
                     .foregroundStyle(Color.primary)
             }
         } description: {
-            Text("Diesem Mitarbeiter sind aktuell keine Assets zugewiesen.")
+            Text(description)
                 .modifier(ListRowSubtitle())
         }
     }

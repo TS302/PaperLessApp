@@ -19,6 +19,7 @@ import com.tom.paperless.domain.models.KeyRing
 import com.tom.paperless.domain.models.ui.AssignedItemUi
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import kotlin.time.ExperimentalTime
 
 class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
 
@@ -181,6 +182,7 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     fun refreshAssignedItems() {
         val employee = _uiState.value.employee ?: return
         viewModelScope.launch {

@@ -16,9 +16,8 @@ struct ListRowTitle: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .font(.system(size: size ?? 16))
-            .fontWeight(.semibold)
-            .padding(.bottom, 1)
+            .font(.system(size: size ?? 17))
+            .fontWeight(.medium)
             .lineLimit(1)
             .truncationMode(.tail)
     }

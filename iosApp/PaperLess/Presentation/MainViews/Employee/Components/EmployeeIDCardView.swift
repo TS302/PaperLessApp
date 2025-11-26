@@ -14,29 +14,22 @@ struct EmployeeIDCardView: View {
     let id: String?
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 18) {
+                
+                HStack(spacing: 14) {
+                    RowIcon(icon: "person.and.background.dotted")
                     CustomLabeledContent(label: "Name", content: name)
-                        .padding(.bottom, 2)
+                }
+                
+                HStack(spacing: 14) {
+                    RowIcon(icon: "phone.fill")
                     CustomLabeledContent(label: "Telefonnummer", content: phoneNumber)
-                   
                 }
-                Spacer()
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8, style: .continuous)
-                        .fill(Color.primary.opacity(0.15))
-                        .frame(width: 90, height: 110)
-                    Image(systemName: "photo.on.rectangle.angled")
-                        .font(.system(size: 50))
-                        .foregroundColor(.primary)
+                
+                HStack(spacing: 14) {
+                    RowIcon(icon: "envelope.fill")
+                    CustomLabeledContent(label: "Email", content: email)
                 }
-                .padding(.top, 4)
-            }
-            CustomLabeledContent(label: "Email", content: email)
         }
-        .padding(4)
-        
     }
 }

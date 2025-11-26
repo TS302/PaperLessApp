@@ -12,11 +12,12 @@ interface AssignmentRepository {
     fun observeForAsset(taggableId: Uuid): StateFlow<List<Assignment>>
 
     suspend fun currentAssigneeOf(taggableId: Uuid): Employee?
+    suspend fun lastAssignmentsOf(taggableId: Uuid, limit: Int = 3 ): List<Assignment>
 
     suspend fun lastAssigneesOf(taggableId: Uuid, limit: Int = 3): List<Employee>
     suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable>
 
-    suspend fun assign(taggableId: Uuid, toEmployeeId: Uuid): Assignment
+    suspend fun assign(taggableId: Uuid, toEmployeeId: Uuid, note: String?): Assignment
     suspend fun unassign(taggableId: Uuid): Boolean
     suspend fun closeAssignment(assignmentId: Uuid): Boolean
 }

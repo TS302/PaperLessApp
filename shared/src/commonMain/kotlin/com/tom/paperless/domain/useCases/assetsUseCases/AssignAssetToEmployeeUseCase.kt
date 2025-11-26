@@ -15,16 +15,27 @@ class AssignAssetToEmployeeUseCase : KoinComponent {
 
     suspend operator fun invoke(
         employeeId: Uuid,
-        assetId: Uuid
+        assetId: Uuid,
+        note: String?
     ) {
         val asset = nfcTaggableRepository.getById(assetId)
             ?: error("Asset $assetId nicht gefunden.")
 
         when (asset.targetType) {
-            TargetType.Tool, TargetType.Vehicle, TargetType.Key -> {} // erlaubt
+            TargetType.Tool,
+            TargetType.Vehicle,
+            TargetType.Key -> {
+                // erlaubt
+            }
             else -> error("Asset vom Typ ${asset.targetType} kann nicht zugewiesen werden.")
         }
-        assignmentRepository.assign(asset.id, employeeId)
+
+        assignmentRepository.assign(
+            taggableId = asset.id,
+            toEmployeeId = employeeId,
+            note = note
+        )
+
         nfcTaggableRepository.updateStatus(asset.id, TagStatus.inUse)
     }
 }

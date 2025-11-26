@@ -25,7 +25,7 @@ struct EmployeeAssignedItemRow: View {
     
     var body: some View {
         HStack(spacing: 12) {
-            HStack {
+            HStack(spacing: 14) {
                 
                 RowIcon(icon: sfSymbol(for: iconType))
                 
