@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ConfirmAssignDialog: View {
     let assetName: String
@@ -20,60 +21,47 @@ struct ConfirmAssignDialog: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                // Warnung, falls bereits zugewiesen
-                if isReassign {
-                    Section {
-                        HStack(alignment: .top, spacing: 8) {
-                            Image(systemName: "exclamationmark.triangle.fill")
-                                .foregroundStyle(.yellow)
-                            Text("Dieses Asset ist bereits \(fromName) zugewiesen. Es wird nun von \(fromName) zu \(toName) übergeben.")
-                                .font(.subheadline)
-                        }
-                    }
-                }
-                
-                // Von -> An
-                Section("Übergabe") {
-                    HStack {
-                        Text("Von")
-                        Spacer()
-                        Text(fromName)
-                            .foregroundStyle(.secondary)
-                    }
-                    HStack {
-                        Text("An")
-                        Spacer()
-                        Text(toName)
-                            .foregroundStyle(.secondary)
-                    }
-                    HStack {
-                        Text("Asset")
-                        Spacer()
-                        Text(assetName)
-                            .foregroundStyle(.secondary)
-                    }
-                }
-                
-                // Kommentar / Bemerkung
-                Section("Bemerkung") {
-                    TextField(
-                        "Bemerkung zur Übergabe (optional)",
-                        text: $noteText,
-                        axis: .vertical
+            VStack(spacing: 0) {
+                Form {
+                    
+                    ConfirmAssignHeaderSection(
+                        isReassign: isReassign,
+                        fromName: fromName,
+                        toName: toName
                     )
-                    .lineLimit(3, reservesSpace: true)
+                    
+                    ConfirmAssignDetailsSection(
+                        assetName: assetName,
+                        fromName: fromName,
+                        toName: toName
+                    )
+                    
+                    ConfirmAssignNoteSection(noteText: $noteText)
                 }
+                .modifier(ListStyle())
+                HStack(spacing: 12) {
+                    
+                    CustomStandardButton(
+                        action: {
+                            onCancel()
+                        },
+                        Label: "Abbrechen",
+                        color: Color.error
+                    )
+                                                        
+                    CustomStandardButton(
+                        action: {
+                            onConfirm()
+                        },
+                        Label: "Speichern",
+                        color: Color.primary
+                    )
+                }
+                .padding(.horizontal, 12)
             }
-            .navigationTitle("Zuweisung bestätigen")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen", action: onCancel)
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Bestätigen", action: onConfirm)
-                }
-            }
+            .padding(.horizontal, 10)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .background(Color.secondary)
         }
     }
 }

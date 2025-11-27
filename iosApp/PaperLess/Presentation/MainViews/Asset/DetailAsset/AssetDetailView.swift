@@ -5,13 +5,6 @@
 //  Created by Tom Salih on 27.09.25.
 //
 
-//
-//  AssetDetailView.swift
-//  PaperLess
-//
-//  Created by Tom Salih on 27.09.25.
-//
-
 import SwiftUI
 import Shared
 import KMPObservableViewModelSwiftUI
@@ -24,23 +17,11 @@ struct AssetDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var isEditSheetPresented = false
-    @State private var isAssignSheetPresented = false
+//    @State private var isAssignSheetPresented = false
     
     private func reload() {
         itemDetailVM.load(assetId: asset.id)
     }
-    
-    //    // Formatter für "01.01.25/12:00 Uhr"
-    //    private let assignmentDateFormatter: DateFormatter = {
-    //        let df = DateFormatter()
-    //        df.dateFormat = "dd.MM.yy/HH:mm 'Uhr'"
-    //        df.locale = Locale(identifier: "de_DE")
-    //        return df
-    //    }()
-    //
-    //    private func format(_ date: Date) -> String {
-    //        assignmentDateFormatter.string(from: date)
-    //    }
     
     // MARK: - Körper
     
@@ -48,16 +29,11 @@ struct AssetDetailView: View {
         NavigationStack {
             List {
                 generalInfoSection
+                
                 currentAssignmentSection
                 historySection
             }
             .modifier(ListStyle(title: asset.name))
-            .sheet(isPresented: $isAssignSheetPresented,onDismiss: reload) {
-                AssignAssetSheet(
-                    itemIdString: asset.id.description(),
-                    onClose: { isAssignSheetPresented = false }
-                )
-            }
             .sheet(isPresented: $isEditSheetPresented, onDismiss: reload) {
                 EditAssetSheet(asset: asset)
             }
@@ -112,6 +88,7 @@ struct AssetDetailView: View {
                 let currentName = itemDetailVM.uiState.currentAssigneeName,
                 !currentName.isEmpty
             {
+                // Aktueller Mitarbeiter mit Detail-View
                 if let currentEmployeeId = itemDetailVM.uiState.currentAssigneeId {
                     NavigationLink {
                         EmployeeDetailView(employeeId: currentEmployeeId)
@@ -122,17 +99,27 @@ struct AssetDetailView: View {
                         )
                     }
                 }
-                AssignActionRow(
-                    title: "Neue Zuweisung",
-                    subtitle: "Dieses Objekt einer anderen Person zuordnen.",
-                    action: { isAssignSheetPresented = true }
-                )
+                
+                // Neue Zuweisung an jemand anderen
+                NavigationLink {
+                    AssignAssetView(itemIdString: asset.id.description())
+                } label: {
+                    AssignActionRow(
+                        title: "Neue Zuweisung",
+                        subtitle: "Anderer Person zuordnen"
+                    )
+                }
+                
             } else {
-                AssignActionRow(
-                    title: "Mitarbeiter zuweisen",
-                    subtitle: "Dieses Objekt ist aktuell niemandem zugeordnet.",
-                    action: { isAssignSheetPresented = true }
-                )
+                // Noch gar kein Mitarbeiter → direkt zu Auswahl
+                NavigationLink {
+                    AssignAssetView(itemIdString: asset.id.description())
+                } label: {
+                    AssignActionRow(
+                        title: "Mitarbeiter zuweisen",
+                        subtitle: "Keinem Mitarbeiter zugeordnet"
+                    )
+                }
             }
         } header: {
             SectionHeader(text: "Aktuelle Zuweisung")
