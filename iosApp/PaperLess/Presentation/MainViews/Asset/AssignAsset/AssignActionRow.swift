@@ -10,12 +10,8 @@ import SwiftUI
 struct AssignActionRow: View {
     let title: String
     let subtitle: String
-//    let action: () -> Void
     
     var body: some View {
-//        Button {
-//            action()
-//        } label: {
             HStack(spacing: 12) {
                 RowIcon(icon: "person.crop.circle.badge.plus")
                 
@@ -24,19 +20,11 @@ struct AssignActionRow: View {
                         .foregroundStyle(Color.primary)
                         .font(.system(size: 17))
                         .fontWeight(.semibold)
-//                        .modifier(ListRowTitle())
                     Text(subtitle)
                         .modifier(ListRowSubtitle())
                 }
-                
-//                Spacer()
-//                Image(systemName: "chevron.right")
-//                    .font(.footnote)
-//                    .foregroundStyle(.tertiary)
             }
             .padding(.vertical, 4)
-//        }
-//        .buttonStyle(.plain)
         
     }
 }

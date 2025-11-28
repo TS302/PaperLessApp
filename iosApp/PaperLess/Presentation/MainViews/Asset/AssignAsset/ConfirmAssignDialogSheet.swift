@@ -7,16 +7,18 @@
 
 import SwiftUI
 import Shared
+import KMPObservableViewModelSwiftUI
 
 struct ConfirmAssignDialogSheet: View {
-    let vm: AssignAssetViewModel
+    @Environment(\.dismiss) private var dismiss
+    @ObservedViewModel private var assignAssetVM = AssignAssetViewModel()
     let employee: Employee
 
     var body: some View {
-        let isReassign = vm.uiState.dialogType == .confirmReassign
+        let isReassign = assignAssetVM.uiState.dialogType == .confirmReassign
 
         let fromName: String = {
-            let current = vm.uiState.currentAssigneeName
+            let current = assignAssetVM.uiState.currentAssigneeName
             if let current, !current.isEmpty {
                 return current
             } else {
@@ -27,25 +29,28 @@ struct ConfirmAssignDialogSheet: View {
         let toName = employee.name
 
         let noteBinding = Binding<String>(
-            get: { vm.uiState.noteText },
-            set: { vm.setNoteText(value: $0) }
+            get: { assignAssetVM.uiState.noteText },
+            set: { assignAssetVM.setNoteText(value: $0) }
         )
 
         return ConfirmAssignDialog(
-            assetName: vm.uiState.assetDisplayName ?? "Asset",
+            assetName: assignAssetVM.uiState.assetDisplayName ?? "Asset",
             fromName: fromName,
             toName: toName,
             isReassign: isReassign,
             noteText: noteBinding,
             onConfirm: {
                 if isReassign {
-                    vm.confirmReassign()
+                    assignAssetVM.confirmReassign()
+                    dismiss()
                 } else {
-                    vm.confirmAssign()
+                    assignAssetVM.confirmAssign()
+                    dismiss()
                 }
             },
             onCancel: {
-                vm.cancelDialog()
+                assignAssetVM.cancelDialog()
+                dismiss()
             }
         )
     }

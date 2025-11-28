@@ -8,6 +8,9 @@ import com.tom.paperless.data.repositories.AssignmentRepository
 import com.tom.paperless.data.repositories.EmployeeRepository
 import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.KeyRing
+import com.tom.paperless.domain.models.Tool
+import com.tom.paperless.domain.models.Vehicle
 import com.tom.paperless.domain.models.uiStates.AssignAssetUiState
 import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetToEmployeeUseCase
 import com.tom.paperless.domain.useCases.assetsUseCases.ReturnAssetUseCase
@@ -47,6 +50,12 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
                 val currentAssignee: Employee? = assignmentRepository.currentAssigneeOf(parsed)
                 val lastAssignees: List<Employee> =
                     assignmentRepository.lastAssigneesOf(parsed, limit = 3)
+                val iconName = when (asset) {
+                    is Tool -> "wrench.and.screwdriver"
+                    is KeyRing -> "key.horizontal.fill"
+                    is Vehicle -> "car.fill"
+                    else -> "questionmark.circle"
+                }
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
@@ -54,7 +63,8 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
                     currentAssigneeId = currentAssignee?.id,
                     currentAssigneeName = currentAssignee?.name,
                     assetDisplayName = asset?.name ?: "Asset",
-                    lastAssignees = lastAssignees
+                    lastAssignees = lastAssignees,
+                    assetIconSystemName = iconName
                 )
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(

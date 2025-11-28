@@ -7,7 +7,7 @@
 
 import Shared
 
-extension Employee {
+extension Employee: Identifiable {
     var idString: String {
         String(describing: id)
     }

@@ -2,6 +2,7 @@ package com.tom.paperless.domain.models.uiStates
 
 import com.tom.paperless.domain.models.Assignment
 import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.NfcTaggable
 import kotlin.uuid.Uuid
 
 data class AssignAssetUiState(
@@ -10,6 +11,7 @@ data class AssignAssetUiState(
     val selectedEmployeeId: Uuid? = null,
     val errorMessage: String? = null,
     val didAssignSuccessfully: Boolean = false,
+    val assetIconSystemName: String = "questionmark.circle",
     val currentAssigneeId: Uuid? = null,
     val currentAssigneeName: String? = null,
     val lastAssignees: List<Employee> = emptyList(),

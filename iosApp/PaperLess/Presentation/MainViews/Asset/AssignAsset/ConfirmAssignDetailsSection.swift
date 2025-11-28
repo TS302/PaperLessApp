@@ -35,8 +35,6 @@ struct ConfirmAssignDetailsSection: View {
                     .modifier(ListRowTitle())
             }
             .padding(.vertical, 4)
-        } header: {
-            SectionHeader(text: "Übergabe Details")
         }
     }
 }

@@ -24,7 +24,7 @@ struct ConfirmAssignHeaderSection: View {
                     .foregroundStyle(iconColor)
 
                 Text(titleText)
-                    .font(.system(size: 17))
+                    .font(.system(size: 14))
                     .fontWeight(.medium)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -61,7 +61,7 @@ struct ConfirmAssignHeaderSection: View {
 
     private var subtitleText: String {
         if isReassign {
-            return "Es wird nun von \(fromName) zu \(toName) übergeben."
+            return "Es wird nun an \(toName) übergeben."
         } else {
             return "Bitte bestätige um das Asset zu übergeben."
         }

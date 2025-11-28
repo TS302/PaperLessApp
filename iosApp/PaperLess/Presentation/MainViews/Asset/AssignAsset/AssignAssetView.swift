@@ -9,24 +9,23 @@ import SwiftUI
 import Shared
 import KMPObservableViewModelSwiftUI
 
-
-import SwiftUI
-import Shared
-import KMPObservableViewModelSwiftUI
-
 struct AssignAssetView: View {
     
     let itemIdString: String
     
-    @StateViewModel private var vm = AssignAssetViewModel()
-    @State private var searchText: String = ""
-    @State private var isConfirmSheetPresented: Bool = false
-    
     @Environment(\.dismiss) private var dismiss
+    @StateViewModel private var vm = AssignAssetViewModel()
     
-    // Gefilterte Mitarbeiter für die Suche
+    @State private var searchText: String = ""
+    @State private var selectedEmployeeForDialog: Employee?
+    @State private var isSearchPresented: Bool = true
+    
+    @FocusState private var isSearchFocused: Bool
+    
+    @State private var isNoteOn: Bool = false
+    
     private var filteredEmployees: [Employee] {
-        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmed = searchText.trimmingCharacters(in:.whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
             return vm.uiState.employees
         }
@@ -37,14 +36,17 @@ struct AssignAssetView: View {
         }
     }
     
-    // aktuell im ViewModel ausgewählter Mitarbeiter (für das Sheet)
-    private var selectedEmployee: Employee? {
-        guard let selectedId = vm.uiState.selectedEmployeeId else { return nil }
-        return vm.uiState.employees.first { $0.id == selectedId }
-    }
-    
     var body: some View {
         List {
+            if !isSearchFocused {
+                AssignAssetHeaderSection(assetName: vm.uiState.assetDisplayName)
+
+            }
+            
+            AssignAssetContentSection(employeeList: filteredEmployees, onEmployeeTap: {
+                
+            })
+            
             if vm.uiState.isLoading {
                 ProgressView("Mitarbeiter werden geladen...")
             } else if let error = vm.uiState.errorMessage, !error.isEmpty {
@@ -64,33 +66,57 @@ struct AssignAssetView: View {
             } else {
                 ForEach(filteredEmployees, id: \.id) { employee in
                     Button {
-                        // Mitarbeiter im VM setzen
                         vm.onEmployeeTapped(employee: employee)
-                        // Sheet öffnen
-                        isConfirmSheetPresented = true
+                        selectedEmployeeForDialog = employee
                     } label: {
                         EmployeeRow(employee: employee)
                     }
                 }
             }
         }
-        .modifier(ListStyle(title: "Mitarbeiter auswählen"))
-        .searchable(text: $searchText, prompt: "Suchen")
+        .modifier(ListStyle())
+        .navigationBarBackButtonHidden(true)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "arrow.left.circle")
+                            .fontWeight(.bold)
+                            .scaledToFit()
+                            .frame(width: 28, height: 28)
+                    }
+                }
+            }
+            
+            ToolbarItem(placement: .principal) {
+                Text(vm.uiState.assetDisplayName ?? "")
+                    .opacity(0.6)
+                    .font(.callout)
+                    .fontWeight(.black)
+                    .foregroundStyle(Color.primary)
+                    .multilineTextAlignment(.center)
+            }
+        }
+        .searchable(
+            text: $searchText,
+            placement: .navigationBarDrawer(displayMode: .automatic),
+            prompt: ""
+        )
+        .searchFocused($isSearchFocused)
         .onAppear {
             vm.attach(itemIdString: itemIdString)
+            isSearchPresented = true
         }
-        // Wenn Zuweisung erfolgreich → zurück zur Detail-View
         .onChange(of: vm.uiState.didAssignSuccessfully) { _, success in
             if success {
                 dismiss()
                 vm.resetSuccessFlag()
             }
         }
-        // Sheet mit dem bestehenden Confirm-Dialog
-        .sheet(isPresented: $isConfirmSheetPresented) {
-            if let employee = selectedEmployee {
-                ConfirmAssignDialogSheet(vm: vm, employee: employee)
-            }
+        .sheet(item: $selectedEmployeeForDialog) { employee in
+//            ConfirmAssignDialogSheet(assignAssetVM: assignAssetVM, employee: employee)
         }
     }
 }

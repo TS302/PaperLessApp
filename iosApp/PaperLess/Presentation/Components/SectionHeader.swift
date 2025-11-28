@@ -12,7 +12,7 @@ struct SectionHeader: View {
     var body: some View {
         HStack {
             Text(text)
-                .opacity(0.4)
+                .opacity(0.6)
                 .font(.callout)
                 .fontWeight(.black)
                 .foregroundStyle(Color.primary)

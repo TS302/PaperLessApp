@@ -29,15 +29,37 @@ struct AssetDetailView: View {
         NavigationStack {
             List {
                 generalInfoSection
-                
                 currentAssignmentSection
                 historySection
             }
-            .modifier(ListStyle(title: asset.name))
+            .modifier(ListStyle())
+            .navigationBarBackButtonHidden(true)
             .sheet(isPresented: $isEditSheetPresented, onDismiss: reload) {
                 EditAssetSheet(asset: asset)
             }
+            
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "arrow.left.circle")
+                                .fontWeight(.bold)
+                                .scaledToFit()
+                                .frame(width: 28, height: 28)
+                        }
+                    }
+                    
+                }
+                ToolbarItem(placement: .principal) {
+                    Text(itemDetailVM.uiState.asset?.name ?? "")
+                        .opacity(0.6)
+                        .font(.callout)
+                        .fontWeight(.black)
+                        .foregroundStyle(Color.primary)
+                        .multilineTextAlignment(.center)
+                }
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
                         isEditSheetPresented.toggle()
@@ -74,8 +96,6 @@ struct AssetDetailView: View {
             } else if let vehicle = displayedAsset as? Vehicle {
                 VehicleDetailsSection(asset: vehicle)
             }
-        } header: {
-            SectionHeader(text: "Allgemeine Informationen")
         }
     }
     
@@ -121,8 +141,6 @@ struct AssetDetailView: View {
                     )
                 }
             }
-        } header: {
-            SectionHeader(text: "Aktuelle Zuweisung")
         }
     }
     
@@ -135,8 +153,6 @@ struct AssetDetailView: View {
                     description: "Hier siehst du später die letzten Mitarbeiter.",
                     icon: "clock.arrow.circlepath"
                 )
-            } header: {
-                SectionHeader(text: "Vergangene Zuweisungen")
             }
         } else {
             Section {
@@ -185,8 +201,6 @@ struct AssetDetailView: View {
                         )
                     }
                 }
-            } header: {
-                SectionHeader(text: "Vergangene Zuweisungen")
             }
         }
     }

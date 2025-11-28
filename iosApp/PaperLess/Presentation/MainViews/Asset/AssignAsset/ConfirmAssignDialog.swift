@@ -18,6 +18,7 @@ struct ConfirmAssignDialog: View {
     
     let onConfirm: () -> Void
     let onCancel: () -> Void
+    @State private var isNoteOn: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -36,7 +37,14 @@ struct ConfirmAssignDialog: View {
                         toName: toName
                     )
                     
-                    ConfirmAssignNoteSection(noteText: $noteText)
+                    Section {
+                        Toggle("Kommentar hinzufügen", isOn: $isNoteOn)
+                    }
+                    
+                    if isNoteOn {
+                        ConfirmAssignNoteSection(noteText: $noteText)
+                    }
+//                    ConfirmAssignNoteSection(noteText: $noteText)
                 }
                 .modifier(ListStyle())
                 HStack(spacing: 12) {
@@ -58,6 +66,16 @@ struct ConfirmAssignDialog: View {
                     )
                 }
                 .padding(.horizontal, 12)
+            }
+            .onAppear {
+                if !noteText.isEmpty {
+                    isNoteOn = true
+                }
+            }
+            .onChange(of: isNoteOn) { _, newValue in
+                if newValue == false {
+                    noteText = ""
+                }
             }
             .padding(.horizontal, 10)
             .frame(maxWidth: .infinity, alignment: .center)

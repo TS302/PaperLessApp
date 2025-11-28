@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct ListRowTitle: ViewModifier {
-    let size: CGFloat?
+//    let size: CGFloat?
 
-    init(size: CGFloat? = nil) {
-        self.size = size
-    }
+//    init(size: CGFloat? = nil) {
+//        self.size = size
+//    }
 
     func body(content: Content) -> some View {
         content
-            .font(.system(size: size ?? 17))
-            .fontWeight(.medium)
+            .font(.system(size: 15))
+            .font(.subheadline)
             .lineLimit(1)
             .truncationMode(.tail)
     }
