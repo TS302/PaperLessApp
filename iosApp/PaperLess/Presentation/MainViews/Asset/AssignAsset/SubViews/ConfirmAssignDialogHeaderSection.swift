@@ -9,59 +9,57 @@
 import SwiftUI
 import Shared
 
-struct ConfirmAssignHeaderSection: View {
+struct ConfirmAssignDialogHeaderSection: View {
     let isReassign: Bool
     let fromName: String
     let toName: String
-
+    let assetName: String
+    
     var body: some View {
         Section {
-            VStack(alignment: .center, spacing: 12) {
-                Image(systemName: iconName)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 38, height: 38)
-                    .foregroundStyle(iconColor)
-
+            VStack(alignment: .center, spacing: 6) {
+                Text(assetName)
+                    .modifier(HeadlineModi())
+                
                 Text(titleText)
-                    .font(.system(size: 14))
-                    .fontWeight(.medium)
+                    .modifier(TitleModi())
                     .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, alignment: .center)
-
+                    .padding(.horizontal, 15)
+                
                 Text(subtitleText)
-                    .font(.footnote)
-                    .foregroundStyle(Color.primary)
+                    .modifier(TitleModi())
                     .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity, alignment: .center)
+                    .padding(.horizontal, 15)
             }
+            .frame(maxWidth: .infinity, alignment: .center)
+            
             .padding(20)
         }
     }
-
+    
     // MARK: - Private computed properties
-
+    
     private var iconName: String {
         isReassign
         ? "exclamationmark.triangle.fill"
         : "backpack.sensor.tag.radiowaves.left.and.right.fill"
     }
-
+    
     private var iconColor: Color {
         isReassign ? Color.appYellow : Color.primary
     }
-
+    
     private var titleText: String {
         if isReassign {
             return "Dieses Asset ist bereits \(fromName) zugewiesen."
         } else {
-            return "Dieses Asset jetzt \(toName) zuweisen?"
+            return "Dieses Asset wird jetzt \(toName) zugewiesen."
         }
     }
-
+    
     private var subtitleText: String {
         if isReassign {
-            return "Es wird nun an \(toName) übergeben."
+            return "Bitte bestätige um es nun an \(toName) übergeben."
         } else {
             return "Bitte bestätige um das Asset zu übergeben."
         }

@@ -29,13 +29,14 @@ struct EmployeesView: View {
                         }
                     }
                 } header: {
-                    SectionHeader(text: "Mitarbeiter")
+                    SectionHeader(text: "Asset-Nutzer")
                 }
             }
-            .modifier(ListStyle(title: ""))
-            .toolbar {
-                EmployeesToolbar(isPresented: $addEmployeeSheetIsPresent)
-            }
+            .modifier(ListStyle())
+            .standardToolbar(
+                trailingAction: { addEmployeeSheetIsPresent.toggle() },
+                trailingIcon: "person.crop.circle.badge.plus"
+            )
         }
         .sheet(isPresented: $addEmployeeSheetIsPresent) {
             AddEmployeeSheet()

@@ -18,10 +18,10 @@ struct HistoryAssigneeRow: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
                 
                 Text(periodText)
-                    .modifier(ListRowSubtitle())
+                    .modifier(SubtitleModi())
             }
         }
         .padding(.vertical, 4)

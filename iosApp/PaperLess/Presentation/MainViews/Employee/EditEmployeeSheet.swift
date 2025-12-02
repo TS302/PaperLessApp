@@ -42,13 +42,14 @@ struct EditEmployeeSheet: View {
                 )
             }
             .modifier(ListStyle())
-            .toolbar {
-                AddEmployeeToolbar(
-                    submit: { editEmployeeVM.save() },
-                    canSave: canSave
-                    
-                )
-            }
+            .standardToolbar(
+                title: editEmployeeVM.uiState.name,
+                leadingAction: { dismiss() },
+                leadingIcon: "xmark.circle",
+                leadingIconColor: Color.error,
+                trailingAction: { editEmployeeVM.save() },
+                trailingIcon: "checkmark.circle"
+            )
             .onChange(of: editEmployeeVM.uiState.isSaving) { _, did in
                 if did {
                     dismiss()

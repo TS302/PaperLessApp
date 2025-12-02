@@ -22,6 +22,6 @@ object KoinStarter {
 
     private fun getKoin(): Koin =
         requireNotNull(koinRef) { "Koin wurde noch nicht gestartet. Rufe zuerst KoinStarter.start(application) auf." }
-    fun companyViewModel(): CompanyViewModel =
-        getKoin().get(clazz = CompanyViewModel::class)
+    fun companyViewModel(): AssetsViewModel =
+        getKoin().get(clazz = AssetsViewModel::class)
 }

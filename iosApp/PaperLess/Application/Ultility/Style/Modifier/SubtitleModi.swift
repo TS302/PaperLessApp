@@ -7,13 +7,11 @@
 
 import SwiftUI
 
-struct ListRowSubtitle: ViewModifier {
-    let linelimit: Int? = 1
+struct SubtitleModi: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(.footnote)
-            .lineLimit(linelimit)
             .foregroundStyle(Color.primary)
-            .truncationMode(.tail)
+//            .truncationMode(.tail)
     }
 }

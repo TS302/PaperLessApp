@@ -17,7 +17,7 @@ struct CustomStandardButton: View {
             action()
         } label: {
             Text(Label)
-                .modifier(ListRowTitle())
+                .modifier(TitleModi())
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 14)
         }

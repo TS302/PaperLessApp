@@ -24,9 +24,4 @@ data class AssignAssetUiState(
         CONFIRM_ASSIGN,
         CONFIRM_REASSIGN
     }
-
-//    enum class PendingAction {
-//        ASSIGN,
-//        REASSIGN
-//    }
 }

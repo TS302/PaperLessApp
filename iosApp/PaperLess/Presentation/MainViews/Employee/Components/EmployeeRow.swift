@@ -19,10 +19,10 @@ struct EmployeeRow: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(employee.name)
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
                 
                 Text(employee.phoneNumber)
-                    .modifier(ListRowSubtitle())
+                    .modifier(SubtitleModi())
                 
             }
         }

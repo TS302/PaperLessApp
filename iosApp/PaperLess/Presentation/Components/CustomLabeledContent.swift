@@ -12,14 +12,15 @@ struct CustomLabeledContent: View {
     let content: String
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 4) {
             Text(label)
-                .modifier(ListRowSubtitle())
-                .padding(.bottom, 1)
-            Text(content)
-                .modifier(ListRowTitle())
+                .modifier(SubtitleModi())
+            HStack {
+                Text(content)
+                    .modifier(TitleModi())
+            }
+           
         }
-        .padding(.vertical, 1)
 
     }
 }

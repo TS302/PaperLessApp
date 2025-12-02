@@ -15,9 +15,9 @@ struct NoAssignmentsRow: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text("Keine bisherigen Zuweisungen")
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
                 Text("Hier siehst du später die letzten Mitarbeiter.")
-                    .modifier(ListRowSubtitle())
+                    .modifier(SubtitleModi())
             }
             
             Spacer()

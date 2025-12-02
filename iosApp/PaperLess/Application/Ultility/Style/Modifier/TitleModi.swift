@@ -7,18 +7,12 @@
 
 import SwiftUI
 
-struct ListRowTitle: ViewModifier {
-//    let size: CGFloat?
-
-//    init(size: CGFloat? = nil) {
-//        self.size = size
-//    }
+struct TitleModi: ViewModifier {
 
     func body(content: Content) -> some View {
         content
             .font(.system(size: 15))
             .font(.subheadline)
-            .lineLimit(1)
             .truncationMode(.tail)
     }
 }

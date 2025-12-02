@@ -16,23 +16,23 @@ struct ConfirmAssignDetailsSection: View {
         Section {
             VStack(alignment: .leading, spacing: 4) {
                 Text("Asset")
-                    .modifier(ListRowSubtitle())
+                    .modifier(SubtitleModi())
                 Text(assetName)
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
             }
             .padding(.vertical, 4)
             VStack(alignment: .leading, spacing: 4) {
                 Text("Von Name")
-                    .modifier(ListRowSubtitle())
+                    .modifier(SubtitleModi())
                 Text(fromName)
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
             }
             .padding(.vertical, 4)
             VStack(alignment: .leading, spacing: 4) {
                 Text("An Name")
-                    .modifier(ListRowSubtitle())
+                    .modifier(SubtitleModi())
                 Text(toName)
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
             }
             .padding(.vertical, 4)
         }

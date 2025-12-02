@@ -17,17 +17,17 @@ struct EmployeeIDCardView: View {
         VStack(alignment: .leading, spacing: 18) {
                 
                 HStack(spacing: 14) {
-                    RowIcon(icon: "person.and.background.dotted")
+//                    RowIcon(icon: "person.and.background.dotted")
                     CustomLabeledContent(label: "Name", content: name)
                 }
                 
                 HStack(spacing: 14) {
-                    RowIcon(icon: "phone.fill")
+//                    RowIcon(icon: "phone.fill")
                     CustomLabeledContent(label: "Telefonnummer", content: phoneNumber)
                 }
                 
                 HStack(spacing: 14) {
-                    RowIcon(icon: "envelope.fill")
+//                    RowIcon(icon: "envelope.fill")
                     CustomLabeledContent(label: "Email", content: email)
                 }
         }

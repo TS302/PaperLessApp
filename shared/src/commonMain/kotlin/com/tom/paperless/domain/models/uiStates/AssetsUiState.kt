@@ -3,7 +3,7 @@ package com.tom.paperless.domain.models.uiStates
 import com.tom.paperless.domain.models.NfcTaggable
 import com.tom.paperless.domain.models.enums.TargetType
 
-data class NfcTaggablesUiState(
+data class AssetsUiState(
     val items: List<NfcTaggable> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
@@ -12,7 +12,7 @@ data class NfcTaggablesUiState(
     val activeTypeFilter: TargetType? = null,
     val searchQueryText: String = ""
 ) {
-    companion object {
-        fun empty() = NfcTaggablesUiState()
+    companion object Companion {
+        fun empty() = AssetsUiState()
     }
 }

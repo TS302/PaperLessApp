@@ -16,7 +16,7 @@ struct EditToolSection: View {
         
         VStack(alignment: .leading) {
             Text("Bezeichnung")
-                .modifier(ListRowSubtitle())
+                .modifier(SubtitleModi())
             TextField(
                 "Bezeichnung",
                 text: Binding(
@@ -24,12 +24,12 @@ struct EditToolSection: View {
                     set: { editAssetVM.setNameinState(newName: $0) }
                 )
             )
-            .modifier(ListRowTitle())
+            .modifier(TitleModi())
         }
         
         VStack(alignment: .leading) {
             Text("Marke")
-                .modifier(ListRowSubtitle())
+                .modifier(SubtitleModi())
             TextField(
                 "Marke",
                 text: Binding(
@@ -37,12 +37,12 @@ struct EditToolSection: View {
                     set: { editAssetVM.setBrandInState(newBrand: $0) }
                 )
             )
-            .modifier(ListRowTitle())
+            .modifier(TitleModi())
         }
         
         VStack(alignment: .leading) {
             Text("Seriennummer")
-                .modifier(ListRowSubtitle())
+                .modifier(SubtitleModi())
             TextField(
                 "Seriennummer",
                 text: Binding(
@@ -50,7 +50,7 @@ struct EditToolSection: View {
                     set: { editAssetVM.setSerialNumberInState(newSerial: $0) }
                 )
             )
-            .modifier(ListRowTitle())
+            .modifier(TitleModi())
         }
         
         Picker("Status", selection: Binding(

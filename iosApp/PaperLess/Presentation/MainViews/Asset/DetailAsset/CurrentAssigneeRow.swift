@@ -17,14 +17,14 @@ struct CurrentAssigneeRow: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(name)
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
                 
                 if let note, !note.isEmpty {
                     Text(note)
-                        .modifier(ListRowSubtitle())
+                        .modifier(SubtitleModi())
                 } else {
                     Text("Aktuell zugewiesen")
-                        .modifier(ListRowSubtitle())
+                        .modifier(SubtitleModi())
                 }
             }
         }

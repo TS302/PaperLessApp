@@ -31,11 +31,11 @@ struct EmployeeAssignedItemRow: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .modifier(ListRowTitle())
+                        .modifier(TitleModi())
                     
                     if let code = subTitle, !code.isEmpty {
                         Text(code)
-                            .modifier(ListRowSubtitle())
+                            .modifier(SubtitleModi())
                     }
                 }
             }

@@ -39,12 +39,20 @@ struct AddEmployeeSheet: View {
                 )
             }
             .modifier(ListStyle())
-            .toolbar {
-                AddEmployeeToolbar(
-                    submit: { addEmployeeVM.submit() },
-                    canSave: canSave
-                )
-            }
+            .standardToolbar(
+                title: "Asset-Nutzer hinzufügen",
+                leadingAction: { dismiss() },
+                leadingIcon: "xmark.circle",
+                leadingIconColor: Color.error,
+                trailingAction: { addEmployeeVM.submit() },
+                trailingIcon: "checkmark.circle"
+            )
+//            .toolbar {
+//                AddEmployeeToolbar(
+//                    submit: { addEmployeeVM.submit() },
+//                    canSave: canSave
+//                )
+//            }
             .onChange(of: addEmployeeVM.uiState.didSave) { _, did in
                 if did {
                     dismiss()

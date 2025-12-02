@@ -28,14 +28,14 @@ struct ItemRow: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)
-                        .modifier(ListRowTitle())
+                        .modifier(TitleModi())
                     
                     HStack {
                         Image(systemName: "ellipsis.rectangle.fill")
                             .foregroundStyle(item.tagStatus.color)
                         
                         Text(item.tagStatus.displayName)
-                            .modifier(ListRowSubtitle())
+                            .modifier(SubtitleModi())
                     }
                 }
                 .padding(.leading, 2)

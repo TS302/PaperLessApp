@@ -24,7 +24,7 @@ struct DetailItemStringRow: View {
                     .foregroundStyle(Color.primary)
             }
             Text(text)
-                .modifier(ListRowTitle())
+                .modifier(TitleModi())
             
         }
     }

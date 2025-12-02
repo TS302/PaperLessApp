@@ -21,7 +21,7 @@ struct AssignActionRow: View {
                         .font(.system(size: 17))
                         .fontWeight(.semibold)
                     Text(subtitle)
-                        .modifier(ListRowSubtitle())
+                        .modifier(SubtitleModi())
                 }
             }
             .padding(.vertical, 4)

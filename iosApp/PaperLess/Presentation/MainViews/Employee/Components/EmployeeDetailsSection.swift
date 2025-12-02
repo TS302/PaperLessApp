@@ -22,7 +22,7 @@ struct EmployeeDetailsSection: View {
             CustomLabeledContent(label: "Telefonnummer", content: phone)
         } else {
             Text("Keine Telefonnummer hinterlegt")
-                .modifier(ListRowSubtitle())
+                .modifier(SubtitleModi())
         }
         
         let email = employee.email
@@ -30,7 +30,7 @@ struct EmployeeDetailsSection: View {
             CustomLabeledContent(label: "Email", content: email)
         } else {
             Text("Keine E-Mail hinterlegt")
-                .modifier(ListRowSubtitle())
+                .modifier(SubtitleModi())
         }
     }
 }

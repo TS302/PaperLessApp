@@ -16,14 +16,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.tom.paperless.domain.models.*
-import com.tom.paperless.domain.models.uiStates.NfcTaggablesUiState
+import com.tom.paperless.domain.models.uiStates.AssetsUiState
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.uuid.ExperimentalUuidApi
 
 @OptIn(ExperimentalUuidApi::class)
 @Composable
 fun ItemsView(
-    uiStateFlow: StateFlow<NfcTaggablesUiState>,
+    uiStateFlow: StateFlow<AssetsUiState>,
     modifier: Modifier = Modifier,
     onItemClick: (NfcTaggable) -> Unit = {},
     onItemMenuClick: (NfcTaggable) -> Unit = {}

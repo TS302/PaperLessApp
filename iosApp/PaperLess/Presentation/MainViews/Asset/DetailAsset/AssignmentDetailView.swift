@@ -19,25 +19,25 @@ struct AssignmentDetailView: View {
             Section("Mitarbeiter") {
                 VStack {
                     Text("Name")
-                        .modifier(ListRowSubtitle())
+                        .modifier(SubtitleModi())
                     Text(employeeName)
-                        .modifier(ListRowTitle())
+                        .modifier(TitleModi())
                 }
             }
             
             Section("Zeitraum") {
                 VStack {
                     Text("Von")
-                        .modifier(ListRowSubtitle())
+                        .modifier(SubtitleModi())
                     Text(from)
-                        .modifier(ListRowTitle())
+                        .modifier(TitleModi())
                 }
                 Divider()
                 VStack {
                     Text("Bis")
-                        .modifier(ListRowSubtitle())
+                        .modifier(SubtitleModi())
                     Text(until ?? "Aktuell")
-                        .modifier(ListRowTitle())
+                        .modifier(TitleModi())
                 }
             }
             
@@ -45,9 +45,9 @@ struct AssignmentDetailView: View {
                 Section("Details") {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Bemerkung")
-                            .modifier(ListRowSubtitle())
+                            .modifier(SubtitleModi())
                         Text(note)
-                            .modifier(ListRowTitle())
+                            .modifier(TitleModi())
                     }
                 }
             }

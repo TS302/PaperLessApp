@@ -35,7 +35,7 @@ import com.tom.paperless.ui.viewModels.AddKeyViewModel
 import com.tom.paperless.ui.viewModels.AddToolViewModel
 import com.tom.paperless.ui.viewModels.AddVehicleViewModel
 import com.tom.paperless.ui.viewModels.AssignAssetViewModel
-import com.tom.paperless.ui.viewModels.CompanyViewModel
+import com.tom.paperless.ui.viewModels.AssetsViewModel
 import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
 import com.tom.paperless.ui.viewModels.EmployeesViewModel
 import com.tom.paperless.ui.viewModels.AssetDetailViewModel
@@ -85,7 +85,7 @@ val appModule = module {
     single { GetAssetsOfEmployeeUseCase() }
 
     // ViewModels
-    factory { CompanyViewModel() }
+    factory { AssetsViewModel() }
     factory { EmployeesViewModel() }
     factory { EmployeeDetailViewModel() }
     factory { AddEmployeeViewModel() }

@@ -6,7 +6,7 @@ import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.NfcTaggable
 import com.tom.paperless.domain.models.enums.TargetType
-import com.tom.paperless.domain.models.uiStates.NfcTaggablesUiState
+import com.tom.paperless.domain.models.uiStates.AssetsUiState
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.FilterNfcTaggablesUseCase
@@ -19,7 +19,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
-class CompanyViewModel() : ViewModel(), KoinComponent {
+class AssetsViewModel() : ViewModel(), KoinComponent {
 
     private val getAllNfcTaggables: GetAllNfcTaggablesFlowUseCase by inject()
     private val addNfcTaggable: AddNfcTaggableUseCase by inject()
@@ -27,10 +27,10 @@ class CompanyViewModel() : ViewModel(), KoinComponent {
     private val deleteNfcTaggable: DeleteNfcTaggableUseCase by inject()
     private val filterNfcTaggables: FilterNfcTaggablesUseCase by inject()
 
-    private val _uiState = MutableStateFlow(viewModelScope, NfcTaggablesUiState.empty())
+    private val _uiState = MutableStateFlow(viewModelScope, AssetsUiState.empty())
 
     @NativeCoroutinesState
-    val uiState: StateFlow<NfcTaggablesUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<AssetsUiState> = _uiState.asStateFlow()
 
     private var lastAllItems: List<NfcTaggable> = emptyList()
 

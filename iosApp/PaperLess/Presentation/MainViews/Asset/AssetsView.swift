@@ -1,5 +1,5 @@
 //
-//  HomeView.swift
+//  AssetsView.swift
 //  PaperLess
 //
 //  Created by Tom Salih on 22.09.25.
@@ -11,7 +11,7 @@ import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
 struct AssetsView: View {
-    @StateViewModel var companyVM = CompanyViewModel()
+    @StateViewModel var employeeVM = AssetsViewModel()
     
     @State private var addVehicle = false
     @State private var addTool = false
@@ -21,11 +21,11 @@ struct AssetsView: View {
     private var filterBinding: Binding<FilterOption> {
         Binding(
             get: {
-                if let f = companyVM.uiState.activeTypeFilter { return f.asFilterOption }
+                if let filter = employeeVM.uiState.activeTypeFilter { return filter.asFilterOption }
                 return .all
             },
             set: { newValue in
-                companyVM.setTypeFilterForIos(typeFilter: newValue.toTargetTypeOrNil)
+                employeeVM.setTypeFilterForIos(typeFilter: newValue.toTargetTypeOrNil)
             }
         )
     }
@@ -35,25 +35,25 @@ struct AssetsView: View {
             get: { searchText },
             set: { newValue in
                 searchText = newValue
-                companyVM.setSearchQueryForIos(queryText: newValue)
+                employeeVM.setSearchQueryForIos(queryText: newValue)
             }
         )
     }
     
     private func reloadList() {
-        companyVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
-        companyVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
+        employeeVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
+        employeeVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
     }
 
     private func delete(_ item: NfcTaggable) {
-        companyVM.deleteItem(id: item.id)
+        employeeVM.deleteItem(id: item.id)
     }
 
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(companyVM.uiState.items, id: \.idString) { item in
+                    ForEach(employeeVM.uiState.items, id: \.idString) { item in
                         NavigationLink {
                             AssetDetailView(asset: item)
                         } label: {
@@ -86,7 +86,7 @@ struct AssetsView: View {
         }
         .searchable(text: $searchText, prompt: "Suchen")
         .onChange(of: searchText) { _, newValue in
-            companyVM.setSearchQueryForIos(queryText: newValue)
+            employeeVM.setSearchQueryForIos(queryText: newValue)
         }
         .sheet(isPresented: $addVehicle) {
             AddVehicleSheet()

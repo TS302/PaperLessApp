@@ -17,13 +17,10 @@ struct AssetDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
     @State private var isEditSheetPresented = false
-//    @State private var isAssignSheetPresented = false
     
     private func reload() {
         itemDetailVM.load(assetId: asset.id)
     }
-    
-    // MARK: - Körper
     
     var body: some View {
         NavigationStack {
@@ -37,37 +34,13 @@ struct AssetDetailView: View {
             .sheet(isPresented: $isEditSheetPresented, onDismiss: reload) {
                 EditAssetSheet(asset: asset)
             }
-            
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image(systemName: "arrow.left.circle")
-                                .fontWeight(.bold)
-                                .scaledToFit()
-                                .frame(width: 28, height: 28)
-                        }
-                    }
-                    
-                }
-                ToolbarItem(placement: .principal) {
-                    Text(itemDetailVM.uiState.asset?.name ?? "")
-                        .opacity(0.6)
-                        .font(.callout)
-                        .fontWeight(.black)
-                        .foregroundStyle(Color.primary)
-                        .multilineTextAlignment(.center)
-                }
-                ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    Button {
-                        isEditSheetPresented.toggle()
-                    } label: {
-                        Image(systemName: "slider.horizontal.3")
-                    }
-                }
-            }
+            .standardToolbar(
+                title: itemDetailVM.uiState.asset?.name ?? "",
+                leadingAction: { dismiss() },
+                leadingIcon: "arrow.left.circle",
+                trailingAction: { isEditSheetPresented.toggle() },
+                trailingIcon: "slider.horizontal.3"
+            )
             .onAppear {
                 itemDetailVM.load(assetId: asset.id)
             }
@@ -108,7 +81,7 @@ struct AssetDetailView: View {
                 let currentName = itemDetailVM.uiState.currentAssigneeName,
                 !currentName.isEmpty
             {
-                // Aktueller Mitarbeiter mit Detail-View
+                
                 if let currentEmployeeId = itemDetailVM.uiState.currentAssigneeId {
                     NavigationLink {
                         EmployeeDetailView(employeeId: currentEmployeeId)
@@ -120,7 +93,6 @@ struct AssetDetailView: View {
                     }
                 }
                 
-                // Neue Zuweisung an jemand anderen
                 NavigationLink {
                     AssignAssetView(itemIdString: asset.id.description())
                 } label: {

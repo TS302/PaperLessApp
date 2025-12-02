@@ -15,7 +15,7 @@ struct EditKeySection: View {
     var body: some View {
         VStack(alignment: .leading) {
             Text("Bezeichnung")
-                .modifier(ListRowSubtitle())
+                .modifier(SubtitleModi())
             TextField(
                 "Bezeichnung",
                 text: Binding(
@@ -23,7 +23,7 @@ struct EditKeySection: View {
                     set: { editAssetVM.setNameinState(newName: $0) }
                 )
             )
-            .modifier(ListRowTitle())
+            .modifier(TitleModi())
         }
         
         Picker("Status", selection: Binding(

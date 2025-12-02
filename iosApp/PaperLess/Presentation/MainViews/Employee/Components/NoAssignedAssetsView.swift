@@ -15,14 +15,14 @@ struct NoAssignedAssetsView: View {
         ContentUnavailableView {
             Label {
                 Text(title)
-                    .modifier(ListRowTitle())
+                    .modifier(TitleModi())
             } icon: {
                 Image(systemName: icon)
                     .foregroundStyle(Color.primary)
             }
         } description: {
             Text(description)
-                .modifier(ListRowSubtitle())
+                .modifier(SubtitleModi())
         }
     }
 }

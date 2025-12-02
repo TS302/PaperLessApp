@@ -11,8 +11,10 @@ import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
 struct EmployeeDetailView: View {
-    let employeeId: String
+    @Environment(\.dismiss) private var dismiss
     @StateViewModel private var employeeDetailVM = EmployeeDetailViewModel()
+    
+    let employeeId: String
     
     @State var isEditSheetPresented = false
     
@@ -27,8 +29,6 @@ struct EmployeeDetailView: View {
                         id: employeeId
                     )
                 }
-            } header: {
-                SectionHeader(text: "Mitarbeiter Details")
             }
             
             Section {
@@ -50,14 +50,16 @@ struct EmployeeDetailView: View {
                         )
                     }
                 }
-            } header: {
-                SectionHeader(text: "Zugewiesene Assets")
             }
         }
         .modifier(ListStyle())
-        .toolbar {
-            EmployeeDetailToolbar(isPresented: $isEditSheetPresented)
-        }
+        .standardToolbar(
+            title: employeeDetailVM.uiState.employee?.name ?? "Mitarbeiter Details",
+            leadingAction: { dismiss() },
+            leadingIcon: "arrow.left.circle",
+            trailingAction: { isEditSheetPresented.toggle() },
+            trailingIcon: "slider.horizontal.3"
+        )
         .sheet(isPresented: $isEditSheetPresented) {
             if let employee = employeeDetailVM.uiState.employee {
                 EditEmployeeSheet(employee: employee)

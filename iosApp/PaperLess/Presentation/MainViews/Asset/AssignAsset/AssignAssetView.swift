@@ -11,26 +11,21 @@ import KMPObservableViewModelSwiftUI
 
 struct AssignAssetView: View {
     
-    let itemIdString: String
-    
     @Environment(\.dismiss) private var dismiss
-    @StateViewModel private var vm = AssignAssetViewModel()
+    @StateViewModel private var assignAssetVM = AssignAssetViewModel()
     
+    let itemIdString: String
     @State private var searchText: String = ""
     @State private var selectedEmployeeForDialog: Employee?
-    @State private var isSearchPresented: Bool = true
-    
     @FocusState private var isSearchFocused: Bool
-    
-    @State private var isNoteOn: Bool = false
     
     private var filteredEmployees: [Employee] {
         let trimmed = searchText.trimmingCharacters(in:.whitespacesAndNewlines)
         guard !trimmed.isEmpty else {
-            return vm.uiState.employees
+            return assignAssetVM.uiState.employees
         }
         let q = trimmed.lowercased()
-        return vm.uiState.employees.filter {
+        return assignAssetVM.uiState.employees.filter {
             $0.name.lowercased().contains(q)
             || $0.email.lowercased().contains(q)
         }
@@ -38,39 +33,18 @@ struct AssignAssetView: View {
     
     var body: some View {
         List {
-            if !isSearchFocused {
-                AssignAssetHeaderSection(assetName: vm.uiState.assetDisplayName)
-
+            Section {
+                if !isSearchFocused {
+                    AssignAssetHeaderSection(assetName: assignAssetVM.uiState.assetDisplayName)
+                }
             }
             
-            AssignAssetContentSection(employeeList: filteredEmployees, onEmployeeTap: {
-                
-            })
-            
-            if vm.uiState.isLoading {
-                ProgressView("Mitarbeiter werden geladen...")
-            } else if let error = vm.uiState.errorMessage, !error.isEmpty {
-                VStack {
-                    Text("Fehler")
-                        .font(.headline)
-                    Text(error)
-                        .multilineTextAlignment(.center)
-                        .foregroundStyle(.secondary)
-                }
-                .padding()
-            } else if filteredEmployees.isEmpty {
-                ContentUnavailableView(
-                    "Keine Mitarbeiter gefunden",
-                    systemImage: "person.2.slash"
-                )
-            } else {
-                ForEach(filteredEmployees, id: \.id) { employee in
-                    Button {
-                        vm.onEmployeeTapped(employee: employee)
-                        selectedEmployeeForDialog = employee
-                    } label: {
-                        EmployeeRow(employee: employee)
-                    }
+            Section {
+                AssignAssetEmployeeListSection(
+                    employeeList: filteredEmployees
+                ) { employee in
+                    assignAssetVM.onEmployeeTapped(employee: employee)
+                    selectedEmployeeForDialog = employee
                 }
             }
         }
@@ -91,7 +65,7 @@ struct AssignAssetView: View {
             }
             
             ToolbarItem(placement: .principal) {
-                Text(vm.uiState.assetDisplayName ?? "")
+                Text(assignAssetVM.uiState.assetDisplayName ?? "")
                     .opacity(0.6)
                     .font(.callout)
                     .fontWeight(.black)
@@ -99,24 +73,19 @@ struct AssignAssetView: View {
                     .multilineTextAlignment(.center)
             }
         }
-        .searchable(
-            text: $searchText,
-            placement: .navigationBarDrawer(displayMode: .automatic),
-            prompt: ""
-        )
+        .searchable(text: $searchText, prompt: "Suchen")
         .searchFocused($isSearchFocused)
         .onAppear {
-            vm.attach(itemIdString: itemIdString)
-            isSearchPresented = true
+            assignAssetVM.attach(itemIdString: itemIdString)
         }
-        .onChange(of: vm.uiState.didAssignSuccessfully) { _, success in
+        .onChange(of: assignAssetVM.uiState.didAssignSuccessfully) { _, success in
             if success {
                 dismiss()
-                vm.resetSuccessFlag()
+                assignAssetVM.resetSuccessFlag()
             }
         }
         .sheet(item: $selectedEmployeeForDialog) { employee in
-//            ConfirmAssignDialogSheet(assignAssetVM: assignAssetVM, employee: employee)
+            ConfirmAssignDialogSheet(assignAssetVM: assignAssetVM, employee: employee)
         }
     }
 }
