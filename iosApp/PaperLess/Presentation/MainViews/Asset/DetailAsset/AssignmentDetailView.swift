@@ -9,6 +9,7 @@ import SwiftUI
 import Shared
 
 struct AssignmentDetailView: View {
+    @Environment(\.dismiss) private var dismiss
     let assignment: Assignment
     let employeeName: String
     let from: String
@@ -16,33 +17,53 @@ struct AssignmentDetailView: View {
     
     var body: some View {
         Form {
-            Section("Mitarbeiter") {
-                VStack {
-                    Text("Name")
-                        .modifier(SubtitleModi())
-                    Text(employeeName)
-                        .modifier(TitleModi())
+            Section {
+                HStack {
+                    RowIcon(icon: "person.fill")
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Name")
+                            .modifier(SubtitleModi())
+                        Text(employeeName)
+                            .modifier(TitleModi())
+                    }
                 }
+                .padding(.vertical, 6)
             }
             
-            Section("Zeitraum") {
-                VStack {
-                    Text("Von")
-                        .modifier(SubtitleModi())
-                    Text(from)
-                        .modifier(TitleModi())
+            Section {
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Von")
+                            .modifier(SubtitleModi())
+                        Text(from)
+                            .modifier(TitleModi())
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.forward.dotted.chevron.forward")
+                        .foregroundStyle(Color.primary)
+                        .fontWeight(.bold)
                 }
-                Divider()
-                VStack {
-                    Text("Bis")
-                        .modifier(SubtitleModi())
-                    Text(until ?? "Aktuell")
-                        .modifier(TitleModi())
+                .padding(.vertical, 6)
+                
+                
+                HStack {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Bis")
+                            .modifier(SubtitleModi())
+                        
+                        Text(until ?? "Aktuell")
+                            .modifier(TitleModi())
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.backward.chevron.backward.dotted")
+                        .foregroundStyle(Color.primary)
+                        .fontWeight(.bold)
                 }
+                .padding(.vertical, 6)
             }
             
             if let note = assignment.note, !note.isEmpty {
-                Section("Details") {
+                Section {
                     VStack(alignment: .leading, spacing: 4) {
                         Text("Bemerkung")
                             .modifier(SubtitleModi())
@@ -53,5 +74,10 @@ struct AssignmentDetailView: View {
             }
         }
         .modifier(ListStyle())
+        .standardToolbar(
+            title: employeeName,
+            leadingAction: { dismiss() },
+            leadingIcon: "arrow.left.circle"
+        )
     }
 }

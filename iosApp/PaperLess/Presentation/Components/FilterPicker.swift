@@ -13,7 +13,7 @@ struct FilterPicker: View {
     var body: some View {
         HStack {
             Text(filter.title)
-                .opacity(0.4)
+                .foregroundColor(filter == .all ? .primary.opacity(0.4) : .primary)
                 .font(.callout)
                 .fontWeight(.black)
                 .foregroundStyle(Color.primary)

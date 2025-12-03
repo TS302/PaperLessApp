@@ -23,7 +23,7 @@ struct CurrentAssigneeRow: View {
                     Text(note)
                         .modifier(SubtitleModi())
                 } else {
-                    Text("Aktuell zugewiesen")
+                    Text("Aktuell zugeordnet")
                         .modifier(SubtitleModi())
                 }
             }

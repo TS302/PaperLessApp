@@ -19,7 +19,7 @@ struct RowIcon: View {
             Image(systemName: icon)
                 .resizable()
                 .scaledToFit()
-                .frame(width: 24, height: 24)
+                .frame(width: 16, height: 16)
                 .foregroundStyle(Color.primary)
         }
     }

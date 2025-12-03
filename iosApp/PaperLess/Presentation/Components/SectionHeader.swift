@@ -13,10 +13,6 @@ struct SectionHeader: View {
         HStack {
             Text(text)
                 .modifier(HeadlineModi())
-//                .opacity(0.6)
-//                .font(.callout)
-//                .fontWeight(.black)
-//                .foregroundStyle(Color.primary)
             Spacer()
             
         }

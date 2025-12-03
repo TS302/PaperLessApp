@@ -11,7 +11,7 @@ import Shared
 import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
-struct AddEmployeeSheet: View {
+struct AddAssetUserSheet: View {
     @Environment(\.dismiss) private var dismiss
     @StateViewModel private var addEmployeeVM = AddEmployeeViewModel()
     

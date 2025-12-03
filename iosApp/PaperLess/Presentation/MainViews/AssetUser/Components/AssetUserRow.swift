@@ -9,23 +9,20 @@ import SwiftUI
 import Shared
 
 
-struct EmployeeRow: View {
+struct AssetUserRow: View {
     var employee: Employee
     
     var body: some View {
         
         HStack(spacing: 12) {
-            RowIcon(icon: "person.and.background.dotted")
+            RowIcon(icon: "person")
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(employee.name)
                     .modifier(TitleModi())
-                
-                Text(employee.phoneNumber)
-                    .modifier(SubtitleModi())
-                
+                    .fontWeight(.medium)
+                    .foregroundStyle(Color.primary)
             }
         }
-        .padding(.vertical, 4)
     }
 }

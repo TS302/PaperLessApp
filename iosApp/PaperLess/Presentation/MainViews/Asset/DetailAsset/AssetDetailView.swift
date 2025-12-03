@@ -30,10 +30,6 @@ struct AssetDetailView: View {
                 historySection
             }
             .modifier(ListStyle())
-            .navigationBarBackButtonHidden(true)
-            .sheet(isPresented: $isEditSheetPresented, onDismiss: reload) {
-                EditAssetSheet(asset: asset)
-            }
             .standardToolbar(
                 title: itemDetailVM.uiState.asset?.name ?? "",
                 leadingAction: { dismiss() },
@@ -41,6 +37,9 @@ struct AssetDetailView: View {
                 trailingAction: { isEditSheetPresented.toggle() },
                 trailingIcon: "slider.horizontal.3"
             )
+            .sheet(isPresented: $isEditSheetPresented, onDismiss: reload) {
+                EditAssetSheet(asset: asset)
+            }
             .onAppear {
                 itemDetailVM.load(assetId: asset.id)
             }
@@ -55,6 +54,7 @@ struct AssetDetailView: View {
     }
     
     // MARK: - Unter-Views / Sections
+    // TODO: Unterviewa auslagern
     
     private var displayedAsset: NfcTaggable {
         itemDetailVM.uiState.asset ?? asset
@@ -73,6 +73,7 @@ struct AssetDetailView: View {
     }
     
     private var currentAssignmentSection: some View {
+        
         Section {
             if itemDetailVM.uiState.isLoading {
                 ProgressView("Zuweisung wird geladen…")
@@ -84,7 +85,7 @@ struct AssetDetailView: View {
                 
                 if let currentEmployeeId = itemDetailVM.uiState.currentAssigneeId {
                     NavigationLink {
-                        EmployeeDetailView(employeeId: currentEmployeeId)
+                        AssetUserDetailView(employeeId: currentEmployeeId)
                     } label: {
                         CurrentAssigneeRow(
                             name: currentName,
@@ -93,23 +94,23 @@ struct AssetDetailView: View {
                     }
                 }
                 
+                
                 NavigationLink {
                     AssignAssetView(itemIdString: asset.id.description())
                 } label: {
                     AssignActionRow(
-                        title: "Neue Zuweisung",
-                        subtitle: "Anderer Person zuordnen"
+                        title: "Asset neu verknüpfen",
+                        subtitle: "Einem anderen Asset-User zuordnen"
                     )
                 }
                 
             } else {
-                // Noch gar kein Mitarbeiter → direkt zu Auswahl
                 NavigationLink {
                     AssignAssetView(itemIdString: asset.id.description())
                 } label: {
                     AssignActionRow(
-                        title: "Mitarbeiter zuweisen",
-                        subtitle: "Keinem Mitarbeiter zugeordnet"
+                        title: "Asset verknüpfen",
+                        subtitle: "Keinem bestehende Verknüpfung"
                     )
                 }
             }

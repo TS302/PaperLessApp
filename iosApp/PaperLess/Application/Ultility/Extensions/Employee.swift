@@ -12,3 +12,14 @@ extension Employee: Identifiable {
         String(describing: id)
     }
 }
+
+extension Employee {
+    func matches(query: String) -> Bool {
+        let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return true }
+
+        let q = trimmed.lowercased()
+        return name.lowercased().contains(q)
+            || email.lowercased().contains(q)
+    }
+}

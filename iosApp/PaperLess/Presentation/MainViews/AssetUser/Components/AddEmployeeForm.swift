@@ -14,7 +14,7 @@ struct AddEmployeeSections: View {
     let error: String?
 
     var body: some View {
-        Section("Neuer Mitarbeiter") {
+        Section {
             TextField("Name *", text: $name)
                 .textInputAutocapitalization(.words)
 

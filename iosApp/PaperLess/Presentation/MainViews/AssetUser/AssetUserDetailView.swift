@@ -1,5 +1,5 @@
 //
-//  EmployeeDetailView.swift
+//  AssetUserDetailView.swift
 //  PaperLess
 //
 //  Created by Tom Salih on 09.10.25.
@@ -10,9 +10,9 @@ import Shared
 import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
-struct EmployeeDetailView: View {
+struct AssetUserDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateViewModel private var employeeDetailVM = EmployeeDetailViewModel()
+    @StateViewModel private var assetUserDetailVM = EmployeeDetailViewModel()
     
     let employeeId: String
     
@@ -21,7 +21,7 @@ struct EmployeeDetailView: View {
     var body: some View {
         List {
             Section {
-                if let employee = employeeDetailVM.uiState.employee {
+                if let employee = assetUserDetailVM.uiState.employee {
                     EmployeeIDCardView(
                         name: employee.name,
                         phoneNumber: employee.phoneNumber,
@@ -30,9 +30,8 @@ struct EmployeeDetailView: View {
                     )
                 }
             }
-            
             Section {
-                let items = employeeDetailVM.uiState.assignedItems
+                let items = assetUserDetailVM.uiState.assignedItems
                 if items.isEmpty {
                     NoAssignedAssetsView(
                         title: "Keine Items zugewiesen",
@@ -54,24 +53,24 @@ struct EmployeeDetailView: View {
         }
         .modifier(ListStyle())
         .standardToolbar(
-            title: employeeDetailVM.uiState.employee?.name ?? "Mitarbeiter Details",
+            title: assetUserDetailVM.uiState.employee?.name ?? "Mitarbeiter Details",
             leadingAction: { dismiss() },
             leadingIcon: "arrow.left.circle",
             trailingAction: { isEditSheetPresented.toggle() },
             trailingIcon: "slider.horizontal.3"
         )
         .sheet(isPresented: $isEditSheetPresented) {
-            if let employee = employeeDetailVM.uiState.employee {
+            if let employee = assetUserDetailVM.uiState.employee {
                 EditEmployeeSheet(employee: employee)
             }
         }
         .onChange(of: isEditSheetPresented) { _, isPresented in
             if !isPresented {
-                employeeDetailVM.load(idString: employeeId)
+                assetUserDetailVM.load(idString: employeeId)
             }
         }
         .task {
-            employeeDetailVM.load(idString: employeeId)
+            assetUserDetailVM.load(idString: employeeId)
         }
     }
 }

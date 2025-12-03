@@ -14,4 +14,14 @@ data class Employee(
     override val currentAssigneeId: Uuid? = null,
     override val lastAssigneeIds: List<Uuid> = emptyList(),
     override val note: String? = null
-) : NfcTaggable
+) : NfcTaggable {
+
+    fun searchQuery(query: String): Boolean {
+        val trimmed = query.trim()
+        if (trimmed.isEmpty()) return true
+
+        val query = trimmed.lowercase()
+        return name.lowercase().contains(query) ||
+                email.lowercase().contains(query)
+    }
+}

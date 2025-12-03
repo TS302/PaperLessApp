@@ -20,15 +20,11 @@ struct AssignAssetView: View {
     @FocusState private var isSearchFocused: Bool
     
     private var filteredEmployees: [Employee] {
-        let trimmed = searchText.trimmingCharacters(in:.whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
-            return assignAssetVM.uiState.employees
-        }
-        let q = trimmed.lowercased()
-        return assignAssetVM.uiState.employees.filter {
-            $0.name.lowercased().contains(q)
-            || $0.email.lowercased().contains(q)
-        }
+        let employees = assignAssetVM.uiState.employees
+        let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return employees }
+
+        return employees.filter { $0.searchQuery(query: trimmed) }
     }
     
     var body: some View {
@@ -49,30 +45,11 @@ struct AssignAssetView: View {
             }
         }
         .modifier(ListStyle())
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    Button {
-                        dismiss()
-                    } label: {
-                        Image(systemName: "arrow.left.circle")
-                            .fontWeight(.bold)
-                            .scaledToFit()
-                            .frame(width: 28, height: 28)
-                    }
-                }
-            }
-            
-            ToolbarItem(placement: .principal) {
-                Text(assignAssetVM.uiState.assetDisplayName ?? "")
-                    .opacity(0.6)
-                    .font(.callout)
-                    .fontWeight(.black)
-                    .foregroundStyle(Color.primary)
-                    .multilineTextAlignment(.center)
-            }
-        }
+        .standardToolbar(
+            title: assignAssetVM.uiState.assetDisplayName ?? "",
+            leadingAction: { dismiss() },
+            leadingIcon: "arrow.left.circle"
+        )
         .searchable(text: $searchText, prompt: "Suchen")
         .searchFocused($isSearchFocused)
         .onAppear {

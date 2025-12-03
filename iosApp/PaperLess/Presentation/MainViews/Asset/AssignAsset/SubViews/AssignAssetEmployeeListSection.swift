@@ -23,7 +23,7 @@ struct AssignAssetEmployeeListSection: View {
                 Button {
                     onEmployeeTap(employee)
                 } label: {
-                    EmployeeRow(employee: employee)
+                    AssetUserRow(employee: employee)
                 }
             }
         }

@@ -13,6 +13,7 @@ struct TitleModi: ViewModifier {
         content
             .font(.system(size: 15))
             .font(.subheadline)
-            .truncationMode(.tail)
+//            .truncationMode(.tail)
+            .foregroundStyle(Color.primary)
     }
 }

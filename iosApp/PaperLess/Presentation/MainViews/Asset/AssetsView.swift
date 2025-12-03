@@ -57,7 +57,7 @@ struct AssetsView: View {
                         NavigationLink {
                             AssetDetailView(asset: item)
                         } label: {
-                            ItemRow(item: item)
+                            AssetRow(item: item)
                         }
                         .id(item.id)
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
@@ -75,7 +75,7 @@ struct AssetsView: View {
             .modifier(ListStyle())
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
-                    AddObjectMenu(
+                    AddAssetMenu(
                         showAddVehicle: $addVehicle,
                         showAddTool: $addTool,
                         showAddKey: $addKey

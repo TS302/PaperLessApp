@@ -22,7 +22,7 @@ extension DateFormatter {
     /// Gemeinsamer Formatter für "01.01.25/12:00 Uhr"
     static let assignment: DateFormatter = {
         let df = DateFormatter()
-        df.dateFormat = "dd.MM.yy/HH:mm 'Uhr'"
+        df.dateFormat = "dd.MM.yy - HH:mm 'Uhr'"
         df.locale = Locale(identifier: "de_DE")
         return df
     }()

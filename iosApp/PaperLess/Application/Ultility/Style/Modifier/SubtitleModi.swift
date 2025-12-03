@@ -12,6 +12,6 @@ struct SubtitleModi: ViewModifier {
         content
             .font(.footnote)
             .foregroundStyle(Color.primary)
-//            .truncationMode(.tail)
+            .opacity(0.6)
     }
 }

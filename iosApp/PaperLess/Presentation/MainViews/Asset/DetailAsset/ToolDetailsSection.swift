@@ -12,18 +12,19 @@ struct ToolDetailsSection: View {
     let asset: Tool
     
     var body: some View {
-        CustomLabeledContent(label: "Bezeichnung", content: asset.name)
-        CustomLabeledContent(label: "Marke", content: asset.brand ?? "Nicht verfügbar")
-        CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "Nicht verfügbar")
-        
-        HStack {
-            CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+        VStack(alignment: .leading, spacing: 18) {
+            CustomLabeledContent(label: "Bezeichnung", content: asset.name)
+            CustomLabeledContent(label: "Marke", content: asset.brand ?? "Nicht verfügbar")
+            CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "Nicht verfügbar")
             
-            Spacer()
-            
-            Image(systemName: "ellipsis.rectangle.fill")
-                .foregroundStyle(asset.tagStatus.color)
+            HStack {
+                CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+                Spacer()
+                Image(systemName: "ellipsis.rectangle.fill")
+                    .foregroundStyle(asset.tagStatus.color)
+            }
         }
+        
         
     }
 }

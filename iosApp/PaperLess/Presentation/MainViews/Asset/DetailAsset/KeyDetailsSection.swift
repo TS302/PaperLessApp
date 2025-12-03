@@ -12,16 +12,18 @@ struct KeyDetailsSection: View {
     let asset: KeyRing
     
     var body: some View {
-        CustomLabeledContent(label: "Bezeichnung", content: asset.name)
-        CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "001-001-1001")
-        
-        HStack {
-            CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+        VStack(alignment: .leading, spacing: 18) {
+            CustomLabeledContent(label: "Bezeichnung", content: asset.name)
+            CustomLabeledContent(label: "Seriennummer", content: asset.serialNumber ?? "001-001-1001")
             
-            Spacer()
-            
-            Image(systemName: "ellipsis.rectangle.fill")
-                .foregroundStyle(asset.tagStatus.color)
+            HStack {
+                CustomLabeledContent(label: "Status", content: asset.tagStatus.displayName)
+                
+                Spacer()
+                
+                Image(systemName: "ellipsis.rectangle.fill")
+                    .foregroundStyle(asset.tagStatus.color)
+            }
         }
     }
 }

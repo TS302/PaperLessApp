@@ -8,23 +8,13 @@
 import SwiftUI
 import Shared
 
-struct ItemRow: View {
+struct AssetRow: View {
     var item: NfcTaggable
     
     var body: some View {
         HStack {
             HStack {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 8)
-                        .frame(width: 40, height: 40)
-                        .foregroundColor(.primary.opacity(0.2))
-                        
-                    item.targetType.icon
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 15, height: 15)
-                        .foregroundStyle(Color.primary)
-                }
+                RowIcon(icon: item.targetType.systemImageName)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(item.name)
@@ -41,6 +31,6 @@ struct ItemRow: View {
                 .padding(.leading, 2)
             }
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, 2)
     }
 }

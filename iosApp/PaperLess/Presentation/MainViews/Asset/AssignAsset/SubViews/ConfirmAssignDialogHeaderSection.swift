@@ -17,23 +17,25 @@ struct ConfirmAssignDialogHeaderSection: View {
     
     var body: some View {
         Section {
-            VStack(alignment: .center, spacing: 6) {
+            VStack(alignment: .center, spacing: 8) {
                 Text(assetName)
                     .modifier(HeadlineModi())
                 
                 Text(titleText)
-                    .modifier(TitleModi())
+
+                    .font(.footnote)
+                    .foregroundStyle(Color.primary)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 15)
+                    .frame(maxWidth: .infinity, alignment: .center)
                 
                 Text(subtitleText)
-                    .modifier(TitleModi())
+                    .font(.footnote)
+                    .foregroundStyle(Color.primary)
                     .multilineTextAlignment(.center)
-                    .padding(.horizontal, 15)
+                    .frame(maxWidth: .infinity, alignment: .center)
             }
             .frame(maxWidth: .infinity, alignment: .center)
-            
-            .padding(20)
+            .padding(.vertical, 12)
         }
     }
     
@@ -51,15 +53,15 @@ struct ConfirmAssignDialogHeaderSection: View {
     
     private var titleText: String {
         if isReassign {
-            return "Dieses Asset ist bereits \(fromName) zugewiesen."
+            return "Dieses Asset ist bereits \"\(fromName)\" zugeordnet."
         } else {
-            return "Dieses Asset wird jetzt \(toName) zugewiesen."
+            return "Dieses Asset wird jetzt \"\(toName)\" zugeordnet."
         }
     }
     
     private var subtitleText: String {
         if isReassign {
-            return "Bitte bestätige um es nun an \(toName) übergeben."
+            return "Bitte bestätige um es nun an \"\(toName)\" zu übergeben."
         } else {
             return "Bitte bestätige um das Asset zu übergeben."
         }

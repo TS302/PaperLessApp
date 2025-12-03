@@ -47,7 +47,10 @@ struct EditEmployeeSheet: View {
                 leadingAction: { dismiss() },
                 leadingIcon: "xmark.circle",
                 leadingIconColor: Color.error,
-                trailingAction: { editEmployeeVM.save() },
+                trailingAction: {
+                    editEmployeeVM.save()
+                    dismiss()
+                },
                 trailingIcon: "checkmark.circle"
             )
             .onChange(of: editEmployeeVM.uiState.isSaving) { _, did in

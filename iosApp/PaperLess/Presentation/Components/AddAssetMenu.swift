@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AddObjectMenu: View {
+struct AddAssetMenu: View {
     @Binding var showAddVehicle: Bool
     @Binding var showAddTool: Bool
     @Binding var showAddKey: Bool

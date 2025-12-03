@@ -1,5 +1,5 @@
 //
-//  StaffView.swift
+//  AssetUserView.swift
 //  PaperLess
 //
 //  Created by Tom Salih on 15.09.25.
@@ -11,7 +11,7 @@ import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
 
-struct EmployeesView: View {
+struct AssetUserView: View {
     @StateViewModel var employeesVM = EmployeesViewModel()
     
     @State private var searchText: String = ""
@@ -23,9 +23,9 @@ struct EmployeesView: View {
                 Section {
                     ForEach(employeesVM.uiState.items, id: \.idString) { employee in
                         NavigationLink {
-                            EmployeeDetailView(employeeId: employee.idString)
+                            AssetUserDetailView(employeeId: employee.idString)
                         } label: {
-                            EmployeeRow(employee: employee)
+                            AssetUserRow(employee: employee)
                         }
                     }
                 } header: {
@@ -39,7 +39,7 @@ struct EmployeesView: View {
             )
         }
         .sheet(isPresented: $addEmployeeSheetIsPresent) {
-            AddEmployeeSheet()
+            AddAssetUserSheet()
                 .presentationDetents([.medium])
         }
         .searchable(text: $searchText, prompt: Text("Suchen"))

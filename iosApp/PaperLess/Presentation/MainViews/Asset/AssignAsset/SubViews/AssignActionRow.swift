@@ -17,9 +17,10 @@ struct AssignActionRow: View {
                 
                 VStack(alignment: .leading, spacing: 2) {
                     Text(title)
-                        .foregroundStyle(Color.primary)
-                        .font(.system(size: 17))
-                        .fontWeight(.semibold)
+                        .modifier(TitleModi())
+//                        .foregroundStyle(Color.primary)
+//                        .font(.system(size: 17))
+                        .fontWeight(.bold)
                     Text(subtitle)
                         .modifier(SubtitleModi())
                 }
