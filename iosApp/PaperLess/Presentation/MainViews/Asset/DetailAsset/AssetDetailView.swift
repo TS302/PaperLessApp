@@ -10,24 +10,36 @@ import Shared
 import KMPObservableViewModelSwiftUI
 
 struct AssetDetailView: View {
+    @Environment(\.dismiss) private var dismiss
+    @StateViewModel var itemDetailVM = AssetDetailViewModel()
+    
     let asset: NfcTaggable
     var onSaved: ((NfcTaggable) -> Void)? = nil
-    
-    @StateViewModel var itemDetailVM = AssetDetailViewModel()
-    @Environment(\.dismiss) private var dismiss
-    
     @State private var isEditSheetPresented = false
     
     private func reload() {
         itemDetailVM.load(assetId: asset.id)
     }
     
+    private var displayedAsset: NfcTaggable {
+        itemDetailVM.uiState.asset ?? asset
+    }
+    
     var body: some View {
         NavigationStack {
             List {
-                generalInfoSection
-                currentAssignmentSection
-                historySection
+                AssetGeneralInfoSection(asset: displayedAsset)
+                AssetCurrentAssignmentSection(
+                    isLoading: itemDetailVM.uiState.isLoading,
+                    currentAssigneeName: itemDetailVM.uiState.currentAssigneeName,
+                    currentAssigneeId: itemDetailVM.uiState.currentAssigneeId,
+                    currentAssignmentNote: itemDetailVM.uiState.currentAssignmentNote,
+                    assetIdString: itemDetailVM.uiState.asset?.idString ?? ""
+                )
+                AssetHistorySection(
+                    lastAssignments: itemDetailVM.uiState.lastAssignments,
+                    lastAssignees: itemDetailVM.uiState.lastAssignees
+                )
             }
             .modifier(ListStyle())
             .standardToolbar(
@@ -48,131 +60,6 @@ struct AssetDetailView: View {
                     let updated = itemDetailVM.uiState.asset ?? asset
                     onSaved?(updated)
                     dismiss()
-                }
-            }
-        }
-    }
-    
-    // MARK: - Unter-Views / Sections
-    // TODO: Unterviewa auslagern
-    
-    private var displayedAsset: NfcTaggable {
-        itemDetailVM.uiState.asset ?? asset
-    }
-    
-    private var generalInfoSection: some View {
-        Section {
-            if let tool = displayedAsset as? Tool {
-                ToolDetailsSection(asset: tool)
-            } else if let key = displayedAsset as? KeyRing {
-                KeyDetailsSection(asset: key)
-            } else if let vehicle = displayedAsset as? Vehicle {
-                VehicleDetailsSection(asset: vehicle)
-            }
-        }
-    }
-    
-    private var currentAssignmentSection: some View {
-        
-        Section {
-            if itemDetailVM.uiState.isLoading {
-                ProgressView("Zuweisung wird geladen…")
-                
-            } else if
-                let currentName = itemDetailVM.uiState.currentAssigneeName,
-                !currentName.isEmpty
-            {
-                
-                if let currentEmployeeId = itemDetailVM.uiState.currentAssigneeId {
-                    NavigationLink {
-                        AssetUserDetailView(employeeId: currentEmployeeId)
-                    } label: {
-                        CurrentAssigneeRow(
-                            name: currentName,
-                            note: itemDetailVM.uiState.currentAssignmentNote
-                        )
-                    }
-                }
-                
-                
-                NavigationLink {
-                    AssignAssetView(itemIdString: asset.id.description())
-                } label: {
-                    AssignActionRow(
-                        title: "Asset neu verknüpfen",
-                        subtitle: "Einem anderen Asset-User zuordnen"
-                    )
-                }
-                
-            } else {
-                NavigationLink {
-                    AssignAssetView(itemIdString: asset.id.description())
-                } label: {
-                    AssignActionRow(
-                        title: "Asset verknüpfen",
-                        subtitle: "Keinem bestehende Verknüpfung"
-                    )
-                }
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var historySection: some View {
-        if itemDetailVM.uiState.lastAssignments.isEmpty {
-            Section {
-                NoAssignedAssetsView(
-                    title: "Keine bisherigen Zuweisungen",
-                    description: "Hier siehst du später die letzten Mitarbeiter.",
-                    icon: "clock.arrow.circlepath"
-                )
-            }
-        } else {
-            Section {
-                ForEach(itemDetailVM.uiState.lastAssignments, id: \.id) { assignment in
-                    
-                    // passenden Mitarbeiter zu dieser Zuweisung suchen
-                    let employee = itemDetailVM.uiState.lastAssignees.first { emp in
-                        emp.id == assignment.employeeId
-                    }
-                    
-                    // Fallback, falls kein Name gefunden wird
-                    let name = employee?.name ?? "Unbekannter Mitarbeiter"
-                    
-                    // Instant -> Date → Date
-                    let fromDate = assignment.from.toDate()
-                    let untilDate = assignment.until?.toDate()
-                    
-                    // einzelne Strings für Von / Bis nur Datum
-                    let fromDateText = fromDate.formattedAssignmentDateOnly()
-                    let untilDateText = untilDate?.formattedAssignmentDateOnly()
-                    
-                    // einzelne Strings für Von / Bis nur Datum
-                    let fromDateTimeText = fromDate.formattedAsAssignment()
-                    let untilDateTimeText = untilDate?.formattedAsAssignment()
-                    
-                    // Text für die Liste
-                    let periodText: String = {
-                        if let untilDateText {
-                            return "\(fromDateText) - \(untilDateText)"
-                        } else {
-                            return "\(fromDateText) - aktuell"
-                        }
-                    }()
-                    
-                    NavigationLink {
-                        AssignmentDetailView(
-                            assignment: assignment,
-                            employeeName: name,
-                            from: fromDateTimeText,
-                            until: untilDateTimeText
-                        )
-                    } label: {
-                        HistoryAssigneeRow(
-                            title: name,
-                            periodText: periodText
-                        )
-                    }
                 }
             }
         }

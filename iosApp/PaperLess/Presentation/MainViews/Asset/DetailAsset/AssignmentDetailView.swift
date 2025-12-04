@@ -39,7 +39,7 @@ struct AssignmentDetailView: View {
                             .modifier(TitleModi())
                     }
                     Spacer()
-                    Image(systemName: "chevron.forward.dotted.chevron.forward")
+                    Image(systemName: "chevron.backward.chevron.backward.dotted")
                         .foregroundStyle(Color.primary)
                         .fontWeight(.bold)
                 }
@@ -55,7 +55,7 @@ struct AssignmentDetailView: View {
                             .modifier(TitleModi())
                     }
                     Spacer()
-                    Image(systemName: "chevron.backward.chevron.backward.dotted")
+                    Image(systemName: "chevron.forward.dotted.chevron.forward")
                         .foregroundStyle(Color.primary)
                         .fontWeight(.bold)
                 }
