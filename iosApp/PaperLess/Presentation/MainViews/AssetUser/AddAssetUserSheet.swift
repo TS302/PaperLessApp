@@ -47,12 +47,6 @@ struct AddAssetUserSheet: View {
                 trailingAction: { addEmployeeVM.submit() },
                 trailingIcon: "checkmark.circle"
             )
-//            .toolbar {
-//                AddEmployeeToolbar(
-//                    submit: { addEmployeeVM.submit() },
-//                    canSave: canSave
-//                )
-//            }
             .onChange(of: addEmployeeVM.uiState.didSave) { _, did in
                 if did {
                     dismiss()

@@ -51,6 +51,7 @@ struct AssetDetailView: View {
             )
             .sheet(isPresented: $isEditSheetPresented, onDismiss: reload) {
                 EditAssetSheet(asset: asset)
+                    .presentationDetents([.medium])
             }
             .onAppear {
                 itemDetailVM.load(assetId: asset.id)

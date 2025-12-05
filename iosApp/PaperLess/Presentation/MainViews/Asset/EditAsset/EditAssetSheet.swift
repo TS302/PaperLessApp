@@ -20,7 +20,7 @@ struct EditAssetSheet: View {
         NavigationStack {
             
             Form {
-                Section("Allgemeine Informationen") {
+                Section {
                     let displayedAsset = editAssetVM.uiState.asset ?? asset
                     
                     if displayedAsset is Tool {
@@ -32,20 +32,17 @@ struct EditAssetSheet: View {
                     }
                 }
             }
-            .navigationTitle("Bearbeiten")
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") {
-                        editAssetVM.reload(assetId: asset.id)
-                        dismiss()
-                    }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Speichern") {
-                        editAssetVM.saveCurrentItem()
-                    }
-                }
-            }
+            .modifier(ListStyle())
+            .standardToolbar(
+                title: asset.name,
+                leadingAction: {
+                    editAssetVM.reload(assetId: asset.id)
+                    dismiss()
+                },
+                leadingIcon: "xmark.circle",
+                trailingAction: { editAssetVM.saveCurrentItem() },
+                trailingIcon: "checkmark.circle"
+            )
             .onChange(of: editAssetVM.uiState.operationSucceeded) { _, ok in
                 if ok {
                     dismiss()
