@@ -1,11 +1,11 @@
 package com.tom.paperless.domain.models.uiStates
 
-import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.ui.AssignedItemUi
 
-data class EmployeeDetailUiState(
+data class AssetUserDetailUiState(
     val isLoading: Boolean = false,
-    val employee: Employee? = null,
+    val assetUser: AssetUser? = null,
 
     val draftName: String = "",
     val draftEmail: String = "",
@@ -22,7 +22,7 @@ data class EmployeeDetailUiState(
     val assignedItems: List<AssignedItemUi> = emptyList()
 
 ) {
-    companion object {
-        fun empty() = EmployeeDetailUiState()
+    companion object Companion {
+        fun empty() = AssetUserDetailUiState()
     }
 }

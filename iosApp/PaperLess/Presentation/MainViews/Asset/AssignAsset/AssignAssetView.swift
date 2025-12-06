@@ -16,15 +16,15 @@ struct AssignAssetView: View {
     
     let itemIdString: String
     @State private var searchText: String = ""
-    @State private var selectedEmployeeForDialog: Employee?
+    @State private var selectedEmployeeForDialog: AssetUser?
     @FocusState private var isSearchFocused: Bool
     
-    private var filteredEmployees: [Employee] {
-        let employees = assignAssetVM.uiState.employees
+    private var filteredEmployees: [AssetUser] {
+        let assetUsers: [AssetUser] = assignAssetVM.uiState.assetUsers
         let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else { return employees }
+        guard !trimmed.isEmpty else { return assetUsers }
 
-        return employees.filter { $0.searchQuery(query: trimmed) }
+        return assetUsers.filter { $0.searchQuery(query: trimmed) }
     }
     
     var body: some View {
@@ -37,10 +37,10 @@ struct AssignAssetView: View {
             
             Section {
                 AssignAssetEmployeeListSection(
-                    employeeList: filteredEmployees
-                ) { employee in
-                    assignAssetVM.onEmployeeTapped(employee: employee)
-                    selectedEmployeeForDialog = employee
+                    assetUserList: filteredEmployees
+                ) { assetUser in
+                    assignAssetVM.onEmployeeTapped(assetUser: assetUser)
+                    selectedEmployeeForDialog = assetUser
                 }
             }
         }
@@ -61,8 +61,8 @@ struct AssignAssetView: View {
                 assignAssetVM.resetSuccessFlag()
             }
         }
-        .sheet(item: $selectedEmployeeForDialog) { employee in
-            ConfirmAssignDialogSheet(assignAssetVM: assignAssetVM, employee: employee)
+        .sheet(item: $selectedEmployeeForDialog) { assetUser in
+            ConfirmAssignDialogSheet(assignAssetVM: assignAssetVM, assetUser: assetUser)
         }
     }
 }

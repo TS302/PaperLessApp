@@ -10,7 +10,7 @@ import Shared
 
 
 struct AssetUserRow: View {
-    var employee: Employee
+    var assetUser: AssetUser
     
     var body: some View {
         
@@ -18,7 +18,7 @@ struct AssetUserRow: View {
             RowIcon(icon: "person")
             
             VStack(alignment: .leading, spacing: 2) {
-                Text(employee.name)
+                Text(assetUser.name)
                     .modifier(TitleModi())
                     .fontWeight(.medium)
                     .foregroundStyle(Color.primary)

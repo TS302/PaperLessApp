@@ -4,11 +4,11 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
-import com.tom.paperless.domain.models.uiStates.EmployeeDetailUiState
+import com.tom.paperless.domain.models.uiStates.AssetUserDetailUiState
 import com.tom.paperless.domain.useCases.assetsUseCases.GetAssetsOfEmployeeUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.DeleteEmployeeUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetEmployeeByIdUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.DeleteAssetUserUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.GetAssetUserByIdUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.UpdateAssetUserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,32 +21,32 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.time.ExperimentalTime
 
-class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
+class AssetUserDetailViewModel() : ViewModel(), KoinComponent {
 
-    private val getEmployeeById: GetEmployeeByIdUseCase by inject()
-    private val updateEmployee: UpdateEmployeeUseCase by inject()
-    private val deleteEmployee: DeleteEmployeeUseCase by inject()
-    private val getAssetsOfEmployee: GetAssetsOfEmployeeUseCase by inject()
+    private val getAssetUserById: GetAssetUserByIdUseCase by inject()
+    private val updateAssetUser: UpdateAssetUserUseCase by inject()
+    private val deleteAssetUser: DeleteAssetUserUseCase by inject()
+    private val getAssetsOfAssetUser: GetAssetsOfEmployeeUseCase by inject()
 
-    private val _uiState = MutableStateFlow(viewModelScope, EmployeeDetailUiState())
+    private val _uiState = MutableStateFlow(viewModelScope, AssetUserDetailUiState())
 
     @NativeCoroutinesState
-    val uiState: StateFlow<EmployeeDetailUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<AssetUserDetailUiState> = _uiState.asStateFlow()
 
 
-    fun load(employeeId: Uuid) {
+    fun load(AssetUserId: Uuid) {
         _uiState.update { state -> state.copy(isLoading = true, errorMessage = null) }
 
         viewModelScope.launch {
-            runCatching { getEmployeeById(employeeId) }
+            runCatching { getAssetUserById(AssetUserId) }
                 .onSuccess { loadedEmployee ->
                     if (loadedEmployee == null) {
-                        _uiState.update { state -> state.copy(isLoading = false, employee = null) }
+                        _uiState.update { state -> state.copy(isLoading = false, assetUser = null) }
                     } else {
                         _uiState.update { state ->
                             state.copy(
                                 isLoading = false,
-                                employee = loadedEmployee,
+                                assetUser = loadedEmployee,
                                 draftName = loadedEmployee.name,
                                 draftEmail = loadedEmployee.email,
                                 draftPhone = loadedEmployee.phoneNumber,
@@ -65,7 +65,7 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
     }
 
     fun beginEdit() {
-        val currentEmployee = _uiState.value.employee ?: return
+        val currentEmployee = _uiState.value.assetUser ?: return
         _uiState.update { state ->
             state.copy(
                 isEditing = true,
@@ -79,7 +79,7 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
     }
 
     fun discardChanges() {
-        val currentEmployee = _uiState.value.employee ?: return
+        val currentEmployee = _uiState.value.assetUser ?: return
         _uiState.update { state ->
             state.copy(
                 isEditing = false,
@@ -106,7 +106,7 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
             val draftEmail = newDraftEmail ?: previousState.draftEmail
             val draftPhone = newDraftPhone ?: previousState.draftPhone
 
-            val originalEmployee = previousState.employee
+            val originalEmployee = previousState.assetUser
             val hasAnyFieldChanged = originalEmployee?.let {
                 it.name != draftName || it.email != draftEmail || it.phoneNumber != draftPhone
             } ?: false
@@ -134,7 +134,7 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
 
     fun save() {
         val currentState = _uiState.value
-        val currentEmployee = currentState.employee ?: return
+        val currentEmployee = currentState.assetUser ?: return
         if (!currentState.isValid || !currentState.hasChanges) return
 
         val employeeToSave = currentEmployee.copy(
@@ -146,11 +146,11 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
         _uiState.update { it.copy(isSaving = true, errorMessage = null) }
 
         viewModelScope.launch {
-            runCatching { updateEmployee(employeeToSave) }
+            runCatching { updateAssetUser(employeeToSave) }
                 .onSuccess { savedEmployee ->
                     _uiState.update {
                         it.copy(
-                            employee = savedEmployee,
+                            assetUser = savedEmployee,
                             isSaving = false,
                             isEditing = false,
                             draftName = savedEmployee.name,
@@ -168,13 +168,13 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
     }
 
     fun delete() {
-        val currentEmployee = _uiState.value.employee ?: return
+        val currentEmployee = _uiState.value.assetUser ?: return
         _uiState.update { it.copy(isSaving = true, errorMessage = null) }
 
         viewModelScope.launch {
-            runCatching { deleteEmployee(currentEmployee.id) }
+            runCatching { deleteAssetUser(currentEmployee.id) }
                 .onSuccess {
-                    _uiState.value = EmployeeDetailUiState.empty() // zurücksetzen
+                    _uiState.value = AssetUserDetailUiState.empty() // zurücksetzen
                 }
                 .onFailure { throwable ->
                     _uiState.update { it.copy(isSaving = false, errorMessage = throwable.message) }
@@ -184,9 +184,9 @@ class EmployeeDetailViewModel() : ViewModel(), KoinComponent {
 
     @OptIn(ExperimentalTime::class)
     fun refreshAssignedItems() {
-        val employee = _uiState.value.employee ?: return
+        val employee = _uiState.value.assetUser ?: return
         viewModelScope.launch {
-            val assets = runCatching { getAssetsOfEmployee(employee.id) }.getOrElse { emptyList() }
+            val assets = runCatching { getAssetsOfAssetUser(employee.id) }.getOrElse { emptyList() }
 
             val itemsUi = assets.map { nfcTag ->
                 when (nfcTag) {

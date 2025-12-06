@@ -11,13 +11,13 @@ import KMPObservableViewModelSwiftUI
 
 struct EditAssetUserSheet: View {
     @Environment(\.dismiss) private var dismiss
-    @StateViewModel private var editEmployeeVM = EditEmployeeViewModel()
+    @StateViewModel private var editAssetUserVM = EditAssetUserViewModel()
     
     @State private var didSetup = false
-    let employee: Employee
+    let assetUser: AssetUser
     
     private var canSave: Bool {
-        !editEmployeeVM.uiState.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !editEmployeeVM.uiState.isSaving
+        !editAssetUserVM.uiState.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !editAssetUserVM.uiState.isSaving
     }
     
     var body: some View {
@@ -25,38 +25,38 @@ struct EditAssetUserSheet: View {
             VStack {
                 AddAssetUserForm(
                     name: Binding(
-                        get: { editEmployeeVM.uiState.name },
-                        set: { editEmployeeVM.onNameChange(newName: $0) }
+                        get: { editAssetUserVM.uiState.name },
+                        set: { editAssetUserVM.onNameChange(newName: $0) }
                     ),
                     email: Binding(
-                        get: { editEmployeeVM.uiState.email },
-                        set: { editEmployeeVM.onEmailChange(newEmail: $0) }
+                        get: { editAssetUserVM.uiState.email },
+                        set: { editAssetUserVM.onEmailChange(newEmail: $0) }
                     ),
                     phoneNumber: Binding(
-                        get: { editEmployeeVM.uiState.phoneNumber },
-                        set: { editEmployeeVM.onPhoneChange(newPhone: $0) }
+                        get: { editAssetUserVM.uiState.phoneNumber },
+                        set: { editAssetUserVM.onPhoneChange(newPhone: $0) }
                     ),
-                    error: editEmployeeVM.uiState.errorMessage
+                    error: editAssetUserVM.uiState.errorMessage
                 )
                 .padding(.top, 32)
                 
                 SaveAndCancelButtonRow(
                     cancelAction: { dismiss() },
                     saveAction: {
-                        editEmployeeVM.save()
+                        editAssetUserVM.save()
                         dismiss()
                     }
                 )
             }
             .background(Color.secondary)
-            .onChange(of: editEmployeeVM.uiState.isSaving) { _, did in
+            .onChange(of: editAssetUserVM.uiState.isSaving) { _, did in
                 if did {
                     dismiss()
                 }
             }
             .onAppear {
                 if !didSetup {
-                    editEmployeeVM.setEmployee(employee: employee)
+                    editAssetUserVM.setEmployee(assetUser: assetUser)
                     didSetup = true
                 }
             }

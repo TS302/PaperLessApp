@@ -7,13 +7,13 @@
 
 import Shared
 
-extension Employee: Identifiable {
+extension AssetUser: @retroactive Identifiable {
     var idString: String {
         String(describing: id)
     }
 }
 
-extension Employee {
+extension AssetUser {
     func matches(query: String) -> Bool {
         let trimmed = query.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return true }

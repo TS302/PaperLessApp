@@ -1,7 +1,7 @@
 package com.tom.paperless.data.repositories
 
 import com.tom.paperless.domain.models.Assignment
-import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.NfcTaggable
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.uuid.Uuid
@@ -11,10 +11,10 @@ interface AssignmentRepository {
     fun observeForEmployee(employeeId: Uuid): StateFlow<List<Assignment>>
     fun observeForAsset(taggableId: Uuid): StateFlow<List<Assignment>>
 
-    suspend fun currentAssigneeOf(taggableId: Uuid): Employee?
+    suspend fun currentAssigneeOf(taggableId: Uuid): AssetUser?
     suspend fun lastAssignmentsOf(taggableId: Uuid, limit: Int = 3 ): List<Assignment>
 
-    suspend fun lastAssigneesOf(taggableId: Uuid, limit: Int = 3): List<Employee>
+    suspend fun lastAssigneesOf(taggableId: Uuid, limit: Int = 3): List<AssetUser>
     suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable>
 
     suspend fun assign(taggableId: Uuid, toEmployeeId: Uuid, note: String?): Assignment

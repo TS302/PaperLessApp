@@ -5,9 +5,9 @@ import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.data.repositories.AssignmentRepository
-import com.tom.paperless.data.repositories.EmployeeRepository
+import com.tom.paperless.data.repositories.AssetUserRepository
 import com.tom.paperless.data.repositories.NfcTaggableRepository
-import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.KeyRing
 import com.tom.paperless.domain.models.Tool
 import com.tom.paperless.domain.models.Vehicle
@@ -22,7 +22,7 @@ import kotlin.uuid.Uuid
 
 class AssignAssetViewModel : ViewModel(), KoinComponent {
 
-    private val employeeRepository: EmployeeRepository by inject()
+    private val assetUserRepository: AssetUserRepository by inject()
     private val nfcTaggableRepository: NfcTaggableRepository by inject()
     private val assignmentRepository: AssignmentRepository by inject()
     private val assignAssetToEmployeeUseCase: AssignAssetToEmployeeUseCase by inject()
@@ -45,10 +45,10 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
         viewModelScope.launch {
             _uiState.value = _uiState.value.copy(isLoading = true, errorMessage = null)
             try {
-                val employees = employeeRepository.getAll()
+                val AssetUsers = assetUserRepository.getAll()
                 val asset = nfcTaggableRepository.getById(parsed)
-                val currentAssignee: Employee? = assignmentRepository.currentAssigneeOf(parsed)
-                val lastAssignees: List<Employee> =
+                val currentAssignee: AssetUser? = assignmentRepository.currentAssigneeOf(parsed)
+                val lastAssignees: List<AssetUser> =
                     assignmentRepository.lastAssigneesOf(parsed, limit = 3)
                 val iconName = when (asset) {
                     is Tool -> "wrench.and.screwdriver"
@@ -59,7 +59,7 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
-                    employees = employees,
+                    assetUsers = AssetUsers,
                     currentAssigneeId = currentAssignee?.id,
                     currentAssigneeName = currentAssignee?.name,
                     assetDisplayName = asset?.name ?: "Asset",
@@ -75,7 +75,6 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    // 🔹 Zuweisung mit optionalem Kommentar
     fun assignToEmployee(employeeId: Uuid, note: String? = null) {
         val assetId = itemId ?: run {
             _uiState.value = _uiState.value.copy(errorMessage = "Kein Asset ausgewählt.")
@@ -93,7 +92,7 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
                     assetId = assetId,
                     note = note
                 )
-                val employee = employeeRepository.getById(employeeId)
+                val employee = assetUserRepository.getById(employeeId)
                 val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
 
                 _uiState.value = _uiState.value.copy(
@@ -131,7 +130,7 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
                     assetId = assetId,
                     note = note
                 )
-                val employee = employeeRepository.getById(employeeId)
+                val employee = assetUserRepository.getById(employeeId)
                 val lastAssignees = assignmentRepository.lastAssigneesOf(assetId, limit = 3)
 
                 _uiState.value = _uiState.value.copy(
@@ -155,23 +154,23 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
         _uiState.value = _uiState.value.copy(didAssignSuccessfully = false)
     }
 
-    fun onEmployeeTapped(employee: Employee) {
+    fun onEmployeeTapped(assetUser: AssetUser) {
         val state = _uiState.value
         val currentId = state.currentAssigneeId
 
         if (currentId == null) {
             _uiState.value = state.copy(
-                selectedEmployeeId = employee.id,
+                selectedEmployeeId = assetUser.id,
                 dialogType = AssignAssetUiState.DialogType.CONFIRM_ASSIGN
             )
-        } else if (currentId == employee.id) {
+        } else if (currentId == assetUser.id) {
             _uiState.value = state.copy(
                 selectedEmployeeId = null,
                 dialogType = null
             )
         } else {
             _uiState.value = state.copy(
-                selectedEmployeeId = employee.id,
+                selectedEmployeeId = assetUser.id,
                 dialogType = AssignAssetUiState.DialogType.CONFIRM_REASSIGN
             )
         }

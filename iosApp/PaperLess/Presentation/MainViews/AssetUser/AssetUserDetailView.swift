@@ -12,7 +12,7 @@ import KMPNativeCoroutinesAsync
 
 struct AssetUserDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateViewModel private var assetUserDetailVM = EmployeeDetailViewModel()
+    @StateViewModel private var assetUserDetailVM = AssetUserDetailViewModel()
     
     let employeeId: String
     
@@ -21,11 +21,12 @@ struct AssetUserDetailView: View {
     var body: some View {
         List {
             Section {
-                if let employee = assetUserDetailVM.uiState.employee {
+                if let assetUser = assetUserDetailVM.uiState.assetUser {
                     AssetUserDetailSection(
-                        name: employee.name,
-                        phoneNumber: employee.phoneNumber,
-                        email: employee.email,
+                        name: assetUser.name,
+                        phoneNumber: assetUser.phoneNumber,
+                        email: assetUser.email,
+                        //TODO: employeeId zu assetUserID machen
                         id: employeeId
                     )
                 }
@@ -36,7 +37,7 @@ struct AssetUserDetailView: View {
                 if assets.isEmpty {
                     NoAssignedAssetsView(
                         title: "Keine Items zugewiesen",
-                        description: "Diesem Mitarbeiter sind aktuell keine Assets zugewiesen.",
+                        description: "Diesem Asset-Nutzer sind aktuell keine Assets zugewiesen.",
                         icon: "shippingbox"
                         
                     )
@@ -54,15 +55,15 @@ struct AssetUserDetailView: View {
         }
         .modifier(ListStyle())
         .standardToolbar(
-            title: assetUserDetailVM.uiState.employee?.name ?? "Mitarbeiter Details",
+            title: assetUserDetailVM.uiState.assetUser?.name ?? "Asset-User Details",
             leadingAction: { dismiss() },
             leadingIcon: "arrow.left.circle",
             trailingAction: { isEditSheetPresented.toggle() },
             trailingIcon: "slider.horizontal.3"
         )
         .sheet(isPresented: $isEditSheetPresented) {
-            if let employee = assetUserDetailVM.uiState.employee {
-                EditAssetUserSheet(employee: employee)
+            if let assetUser = assetUserDetailVM.uiState.assetUser {
+                EditAssetUserSheet(assetUser: assetUser)
                     .presentationDetents([.medium])
             }
         }

@@ -1,7 +1,7 @@
 package com.tom.paperless.domain.models.uiStates
 
 import com.tom.paperless.domain.models.Assignment
-import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.NfcTaggable
 import com.tom.paperless.domain.models.enums.TagStatus
 
@@ -10,11 +10,11 @@ data class AssetDetailUiState(
     val isLoading: Boolean = false,
     val name: String = "",
     val status: TagStatus? = null,
-    val currentAssignedEmployee: Employee? = null,
+    val currentAssignedAssetUser: AssetUser? = null,
     val currentAssigneeId: String? = null,
     val currentAssigneeName: String? = null,
     val currentAssignmentNote: String? = null,
-    val lastAssignees: List<Employee> = emptyList(),
+    val lastAssignees: List<AssetUser> = emptyList(),
     val isSaving: Boolean = false,
     val isDeleting: Boolean = false,
     val errorMessage: String? = null,

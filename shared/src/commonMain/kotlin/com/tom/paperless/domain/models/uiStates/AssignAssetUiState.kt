@@ -1,20 +1,19 @@
 package com.tom.paperless.domain.models.uiStates
 
 import com.tom.paperless.domain.models.Assignment
-import com.tom.paperless.domain.models.Employee
-import com.tom.paperless.domain.models.NfcTaggable
+import com.tom.paperless.domain.models.AssetUser
 import kotlin.uuid.Uuid
 
 data class AssignAssetUiState(
     val isLoading: Boolean = false,
-    val employees: List<Employee> = emptyList(),
+    val assetUsers: List<AssetUser> = emptyList(),
     val selectedEmployeeId: Uuid? = null,
     val errorMessage: String? = null,
     val didAssignSuccessfully: Boolean = false,
     val assetIconSystemName: String = "questionmark.circle",
     val currentAssigneeId: Uuid? = null,
     val currentAssigneeName: String? = null,
-    val lastAssignees: List<Employee> = emptyList(),
+    val lastAssignees: List<AssetUser> = emptyList(),
     val assetDisplayName: String? = null,
     val dialogType: DialogType? = null,
     val lastAssignments: List<Assignment> = emptyList(),

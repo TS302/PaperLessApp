@@ -4,9 +4,9 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
-import com.tom.paperless.domain.models.Employee
-import com.tom.paperless.domain.models.uiStates.EditEmployeeUiState
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
+import com.tom.paperless.domain.models.AssetUser
+import com.tom.paperless.domain.models.uiStates.EditAssetUserUiState
+import com.tom.paperless.domain.useCases.employeesUseCases.UpdateAssetUserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -14,18 +14,18 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 
-class EditEmployeeViewModel : ViewModel(), KoinComponent {
+class EditAssetUserViewModel : ViewModel(), KoinComponent {
 
-    private lateinit var originalEmployee: Employee
-    private val updateEmployee: UpdateEmployeeUseCase by inject()
-    private val _uiState = MutableStateFlow(viewModelScope, EditEmployeeUiState())
+    private lateinit var originalAssetUser: AssetUser
+    private val updateEmployee: UpdateAssetUserUseCase by inject()
+    private val _uiState = MutableStateFlow(viewModelScope, EditAssetUserUiState())
 
     @NativeCoroutinesState
-    val uiState: StateFlow<EditEmployeeUiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<EditAssetUserUiState> = _uiState.asStateFlow()
 
-    fun setEmployee(employee: Employee) {
-        originalEmployee = employee
-        _uiState.value = buildInitialState(employee)
+    fun setEmployee(assetUser: AssetUser) {
+        originalAssetUser = assetUser
+        _uiState.value = buildInitialState(assetUser)
     }
 
     fun onNameChange(newName: String) = updateDraft(name = newName)
@@ -35,18 +35,18 @@ class EditEmployeeViewModel : ViewModel(), KoinComponent {
     fun onPhoneChange(newPhone: String) = updateDraft(phoneNumber = newPhone)
 
     fun reset() {
-        if (!::originalEmployee.isInitialized) return
-        _uiState.value = buildInitialState(originalEmployee)
+        if (!::originalAssetUser.isInitialized) return
+        _uiState.value = buildInitialState(originalAssetUser)
     }
 
     fun save() {
-        if (!::originalEmployee.isInitialized) return
+        if (!::originalAssetUser.isInitialized) return
 
         val currentState = _uiState.value
 
         if (!currentState.isValid || currentState.isSaving) return
 
-        val employeeToSave = originalEmployee.copy(
+        val employeeToSave = originalAssetUser.copy(
             name = currentState.name.trim(),
             email = currentState.email.trim(),
             phoneNumber = currentState.phoneNumber.trim()
@@ -70,14 +70,14 @@ class EditEmployeeViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private fun buildInitialState(employee: Employee): EditEmployeeUiState {
-        return EditEmployeeUiState(
-            id = employee.id,
-            name = employee.name,
-            email = employee.email,
-            phoneNumber = employee.phoneNumber,
+    private fun buildInitialState(assetUser: AssetUser): EditAssetUserUiState {
+        return EditAssetUserUiState(
+            id = assetUser.id,
+            name = assetUser.name,
+            email = assetUser.email,
+            phoneNumber = assetUser.phoneNumber,
             isSaving = false,
-            isValid = validateInputs(employee.name, employee.email),
+            isValid = validateInputs(assetUser.name, assetUser.email),
             hasChanges = false,
             errorMessage = null
         )
@@ -93,10 +93,10 @@ class EditEmployeeViewModel : ViewModel(), KoinComponent {
             val newEmail = email ?: previous.email
             val newPhone = phoneNumber ?: previous.phoneNumber
 
-            val hasChanges = if (::originalEmployee.isInitialized) {
-                newName != originalEmployee.name ||
-                        newEmail != originalEmployee.email ||
-                        newPhone != originalEmployee.phoneNumber
+            val hasChanges = if (::originalAssetUser.isInitialized) {
+                newName != originalAssetUser.name ||
+                        newEmail != originalAssetUser.email ||
+                        newPhone != originalAssetUser.phoneNumber
             } else {
                 true
             }

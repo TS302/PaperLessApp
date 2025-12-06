@@ -9,21 +9,21 @@ import SwiftUI
 import Shared
 
 struct AssignAssetEmployeeListSection: View {
-    let employeeList: [Employee]
-    let onEmployeeTap: (Employee) -> Void
+    let assetUserList: [AssetUser]
+    let onAssetUserTap: (AssetUser) -> Void
     
     var body: some View {
-        if employeeList.isEmpty {
+        if assetUserList.isEmpty {
             ContentUnavailableView(
                 "Keine Mitarbeiter gefunden",
                 systemImage: "person.2.slash"
             )
         } else {
-            ForEach(employeeList, id: \.id) { employee in
+            ForEach(assetUserList, id: \.id) { assetUser in
                 Button {
-                    onEmployeeTap(employee)
+                    onAssetUserTap(assetUser)
                 } label: {
-                    AssetUserRow(employee: employee)
+                    AssetUserRow(assetUser: assetUser)
                 }
             }
         }

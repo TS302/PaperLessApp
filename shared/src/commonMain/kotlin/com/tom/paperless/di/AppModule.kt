@@ -3,8 +3,8 @@ package com.tom.paperless.di
 
 import com.tom.paperless.data.repositories.AssignmentRepository
 import com.tom.paperless.data.repositories.AssignmentRepositoryImpl
-import com.tom.paperless.data.repositories.EmployeeRepository
-import com.tom.paperless.data.repositories.EmployeeRepositoryImpl
+import com.tom.paperless.data.repositories.AssetUserRepository
+import com.tom.paperless.data.repositories.AssetUserRepositoryImpl
 import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.data.repositories.NfcTaggableRepositoryImpl
 import com.tom.paperless.data.repositories.UserRepository
@@ -24,23 +24,23 @@ import com.tom.paperless.domain.useCases.UpdateNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetToEmployeeUseCase
 import com.tom.paperless.domain.useCases.assetsUseCases.GetAssetsOfEmployeeUseCase
 import com.tom.paperless.domain.useCases.assetsUseCases.ReturnAssetUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.AddEmployeeUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.DeleteEmployeeUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.FilterEmployeesUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetAllEmployeesFlowUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetEmployeeByIdUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateEmployeeUseCase
-import com.tom.paperless.ui.viewModels.AddEmployeeViewModel
+import com.tom.paperless.domain.useCases.employeesUseCases.AddAssetUserUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.DeleteAssetUserUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.FilterAssetUsersUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.GetAllAssetUsersUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.GetAssetUserByIdUseCase
+import com.tom.paperless.domain.useCases.employeesUseCases.UpdateAssetUserUseCase
+import com.tom.paperless.ui.viewModels.AddAssetUserViewModel
 import com.tom.paperless.ui.viewModels.AddKeyViewModel
 import com.tom.paperless.ui.viewModels.AddToolViewModel
 import com.tom.paperless.ui.viewModels.AddVehicleViewModel
 import com.tom.paperless.ui.viewModels.AssignAssetViewModel
 import com.tom.paperless.ui.viewModels.AssetsViewModel
-import com.tom.paperless.ui.viewModels.EmployeeDetailViewModel
-import com.tom.paperless.ui.viewModels.EmployeesViewModel
+import com.tom.paperless.ui.viewModels.AssetUserDetailViewModel
+import com.tom.paperless.ui.viewModels.AssetUsersViewModel
 import com.tom.paperless.ui.viewModels.AssetDetailViewModel
 import com.tom.paperless.ui.viewModels.EditAssetSheetViewModel
-import com.tom.paperless.ui.viewModels.EditEmployeeViewModel
+import com.tom.paperless.ui.viewModels.EditAssetUserViewModel
 import com.tom.paperless.ui.viewModels.LoginViewModel
 import com.tom.paperless.ui.viewModels.RegistrationViewModel
 import com.tom.paperless.ui.viewModels.SettingsViewModel
@@ -51,7 +51,7 @@ val appModule = module {
     // Repositories
     single<UserRepository> { UserRepository }
     single<NfcTaggableRepository> { NfcTaggableRepositoryImpl() }
-    single<EmployeeRepository> { EmployeeRepositoryImpl }
+    single<AssetUserRepository> { AssetUserRepositoryImpl }
     single<AssignmentRepository> { AssignmentRepositoryImpl(get(), get()) }
 
     // Auth UseCases
@@ -72,12 +72,12 @@ val appModule = module {
     single { UpdateNfcTaggableUseCase() }
 
     // Employees UseCases
-    single { GetAllEmployeesFlowUseCase() }
-    single { GetEmployeeByIdUseCase() }
-    single { AddEmployeeUseCase() }
-    single { UpdateEmployeeUseCase() }
-    single { DeleteEmployeeUseCase() }
-    single { FilterEmployeesUseCase() }
+    single { GetAllAssetUsersUseCase() }
+    single { GetAssetUserByIdUseCase() }
+    single { AddAssetUserUseCase() }
+    single { UpdateAssetUserUseCase() }
+    single { DeleteAssetUserUseCase() }
+    single { FilterAssetUsersUseCase() }
 
     // Assignment UseCases
     single { AssignAssetToEmployeeUseCase() }
@@ -86,9 +86,9 @@ val appModule = module {
 
     // ViewModels
     factory { AssetsViewModel() }
-    factory { EmployeesViewModel() }
-    factory { EmployeeDetailViewModel() }
-    factory { AddEmployeeViewModel() }
+    factory { AssetUsersViewModel() }
+    factory { AssetUserDetailViewModel() }
+    factory { AddAssetUserViewModel() }
     factory { AddToolViewModel() }
     factory { AddVehicleViewModel() }
     factory { AddKeyViewModel() }
@@ -98,5 +98,5 @@ val appModule = module {
     factory { AssetDetailViewModel() }
     factory { AssignAssetViewModel() }
     factory { EditAssetSheetViewModel() }
-    factory { EditEmployeeViewModel() }
+    factory { EditAssetUserViewModel() }
 }

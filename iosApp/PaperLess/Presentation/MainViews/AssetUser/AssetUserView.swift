@@ -12,7 +12,7 @@ import KMPNativeCoroutinesAsync
 
 
 struct AssetUserView: View {
-    @StateViewModel var employeesVM = EmployeesViewModel()
+    @StateViewModel var assetUserVM = AssetUsersViewModel()
     
     @State private var searchText: String = ""
     @State private var addEmployeeSheetIsPresent: Bool = false
@@ -21,11 +21,11 @@ struct AssetUserView: View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(employeesVM.uiState.items, id: \.idString) { employee in
+                    ForEach(assetUserVM.uiState.items, id: \.idString) { assetUser in
                         NavigationLink {
-                            AssetUserDetailView(employeeId: employee.idString)
+                            AssetUserDetailView(employeeId: assetUser.idString)
                         } label: {
-                            AssetUserRow(employee: employee)
+                            AssetUserRow(assetUser: assetUser)
                         }
                     }
                 } header: {
@@ -44,7 +44,7 @@ struct AssetUserView: View {
         }
         .searchable(text: $searchText, prompt: Text("Suchen"))
         .onChange(of: searchText) { _, newValue in
-            employeesVM.setSearchQueryForIos(searchText: newValue)
+            assetUserVM.setSearchQueryForIos(searchText: newValue)
         }
     }
 }

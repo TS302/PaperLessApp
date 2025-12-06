@@ -1,12 +1,12 @@
 package com.tom.paperless.domain.useCases.employeesUseCases
 
-import com.tom.paperless.domain.models.Employee
+import com.tom.paperless.domain.models.AssetUser
 
-class FilterEmployeesUseCase {
+class FilterAssetUsersUseCase {
     operator fun invoke(
-        all: List<Employee>,
+        all: List<AssetUser>,
         searchQueryText: String
-    ): List<Employee> {
+    ): List<AssetUser> {
         val querry = searchQueryText.trim().lowercase()
         if (querry.isBlank()) {
             return all.sortedBy { it.name.lowercase() }

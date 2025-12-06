@@ -9,15 +9,15 @@ import SwiftUI
 import Shared
 
 struct AssetUserDetailsSection: View {
-    let employee: Employee
+    let assetUser: AssetUser
     
     var body: some View {
         
         
-        let name = employee.name
+        let name = assetUser.name
         CustomLabeledContent(label: "Name", content: name)
         
-        let phone = employee.phoneNumber
+        let phone = assetUser.phoneNumber
         if !phone.isEmpty {
             CustomLabeledContent(label: "Telefonnummer", content: phone)
         } else {
@@ -25,7 +25,7 @@ struct AssetUserDetailsSection: View {
                 .modifier(SubtitleModi())
         }
         
-        let email = employee.email
+        let email = assetUser.email
         if !email.isEmpty {
             CustomLabeledContent(label: "Email", content: email)
         } else {

@@ -2,7 +2,7 @@ package com.tom.paperless.domain.models.uiStates
 
 import kotlin.uuid.Uuid
 
-data class EditEmployeeUiState(
+data class EditAssetUserUiState(
     val id: Uuid = Uuid.random(),
     val name: String = "",
     val email: String = "",

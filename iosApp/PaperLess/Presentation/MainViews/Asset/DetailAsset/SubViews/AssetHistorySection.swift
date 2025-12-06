@@ -10,14 +10,14 @@ import Shared
 
 struct AssetHistorySection: View {
     let lastAssignments: [Assignment]
-    let lastAssignees: [Employee]
+    let lastAssignees: [AssetUser]
     
     var body: some View {
         if lastAssignments.isEmpty {
             Section {
                 NoAssignedAssetsView(
                     title: "Keine bisherigen Zuweisungen",
-                    description: "Hier siehst du später die letzten Mitarbeiter.",
+                    description: "Hier siehst du später die letzten Assetnutzer.",
                     icon: "clock.arrow.circlepath"
                 )
             }

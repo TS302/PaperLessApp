@@ -4,7 +4,7 @@ import com.tom.paperless.domain.models.enums.TagStatus
 import com.tom.paperless.domain.models.enums.TargetType
 import kotlin.uuid.Uuid
 
-data class Employee(
+data class AssetUser(
     override val id: Uuid,
     override val name: String,
     val email: String,

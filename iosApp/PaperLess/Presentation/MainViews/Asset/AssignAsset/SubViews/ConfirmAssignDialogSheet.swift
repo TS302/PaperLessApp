@@ -12,7 +12,7 @@ import KMPObservableViewModelSwiftUI
 struct ConfirmAssignDialogSheet: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedViewModel var assignAssetVM: AssignAssetViewModel
-    let employee: Employee
+    let assetUser: AssetUser
     @State private var isNoteOn: Bool = false
     
     var body: some View {
@@ -27,7 +27,7 @@ struct ConfirmAssignDialogSheet: View {
             }
         }()
         
-        let toName = employee.name
+        let toName = assetUser.name
         
         let noteBinding = Binding<String>(
             get: { assignAssetVM.uiState.noteText },
