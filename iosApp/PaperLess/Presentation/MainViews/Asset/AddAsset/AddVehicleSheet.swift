@@ -14,9 +14,7 @@ struct AddVehicleSheet: View {
     @Environment(\.dismiss) private var dismiss
     
     @StateViewModel private var addVehicleVM = AddVehicleViewModel()
-    
-//    private enum Field { case name, plate }
-    
+        
     private var canSave: Bool {
         let nameOK = !addVehicleVM.uiState.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
         return nameOK && !addVehicleVM.uiState.isSaving
@@ -46,12 +44,6 @@ struct AddVehicleSheet: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("NEUES FAHRZEUG ANLEGEN")
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color.primary)
-                    .fontWeight(.black)
-                    .padding(.top, 38)
-                
                 
                 AddVehicleFormSection(
                     name: nameBinding,
@@ -61,28 +53,11 @@ struct AddVehicleSheet: View {
                     isSaving: addVehicleVM.uiState.isSaving
                 )
                 
-                HStack(spacing: 12) {
-                    
-                    CustomStandardButton(
-                        action: {
-                            dismiss()
-                        },
-                        Label: "Abbrechen",
-                        color: Color.error
-                    )
-                    
-                    CustomStandardButton(
-                        action: {
-                            addVehicleVM.submit()
-                        },
-                        Label: "Speichern",
-                        color: Color.primary
-                    )
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 32)
+                SaveAndCancelButtonRow(
+                    cancelAction: { dismiss() },
+                    saveAction: { addVehicleVM.submit() }
+                )
             }
-            .background(Color.secondary)
             .onChange(of: addVehicleVM.uiState.didSave) { _, didSave in
                 if didSave {
                     addVehicleVM.resetDidSave()

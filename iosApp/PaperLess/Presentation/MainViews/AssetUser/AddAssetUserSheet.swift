@@ -21,8 +21,13 @@ struct AddAssetUserSheet: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                AddEmployeeSections(
+            VStack {
+                Text("ASSET-USER HINZUFÜGEN")
+                    .font(.system(size: 20))
+                    .foregroundStyle(Color.primary)
+                    .fontWeight(.black)
+                    .padding(.top, 38)
+                AddAssetUserForm(
                     name: Binding(
                         get: { addEmployeeVM.uiState.name },
                         set: { addEmployeeVM.setName(value: $0) }
@@ -37,16 +42,14 @@ struct AddAssetUserSheet: View {
                     ),
                     error: addEmployeeVM.uiState.errorMessage
                 )
+                
+                SaveAndCancelButtonRow(
+                    cancelAction: { dismiss() },
+                    saveAction: { addEmployeeVM.submit() }
+                )
             }
-            .modifier(ListStyle())
-            .standardToolbar(
-                title: "Asset-Nutzer hinzufügen",
-                leadingAction: { dismiss() },
-                leadingIcon: "xmark.circle",
-                leadingIconColor: Color.error,
-                trailingAction: { addEmployeeVM.submit() },
-                trailingIcon: "checkmark.circle"
-            )
+            .background(Color.secondary)
+            
             .onChange(of: addEmployeeVM.uiState.didSave) { _, did in
                 if did {
                     dismiss()
@@ -54,5 +57,6 @@ struct AddAssetUserSheet: View {
                 }
             }
         }
+        .presentationDetents([.medium, .large])
     }
 }

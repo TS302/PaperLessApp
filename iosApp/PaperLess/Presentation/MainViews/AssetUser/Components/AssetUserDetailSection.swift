@@ -1,5 +1,5 @@
 //
-//  EmployeeIDCardView.swift
+//  AssetUserDetailSection.swift
 //  PaperLess
 //
 //  Created by Tom Salih on 24.11.25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct EmployeeIDCardView: View {
+struct AssetUserDetailSection: View {
     let name: String
     let phoneNumber: String
     let email: String

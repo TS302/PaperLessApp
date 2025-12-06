@@ -42,12 +42,6 @@ struct AddToolSheet: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("NEUES WERKZEUG ANLEGEN")
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color.primary)
-                    .fontWeight(.black)
-                    .padding(.top, 38)
-                
                 AddToolFormSection(
                     name: nameBinding,
                     serialNumber: serialNumberBinding,
@@ -56,28 +50,11 @@ struct AddToolSheet: View {
                     isSaving: addToolVM.uiState.isSaving
                 )
                 
-                HStack(spacing: 12) {
-                    
-                    CustomStandardButton(
-                        action: {
-                            dismiss()
-                        },
-                        Label: "Abbrechen",
-                        color: Color.error
-                    )
-                    
-                    CustomStandardButton(
-                        action: {
-                            addToolVM.submit()
-                        },
-                        Label: "Speichern",
-                        color: Color.primary
-                    )
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 32)
+                SaveAndCancelButtonRow(
+                    cancelAction: { dismiss() },
+                    saveAction: { addToolVM.submit() }
+                )
             }
-            .background(Color.secondary)
             .onChange(of: addToolVM.uiState.didSave) { _, didSave in
                 if didSave {
                     addToolVM.resetDidSave()

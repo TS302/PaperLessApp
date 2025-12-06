@@ -1,5 +1,5 @@
 //
-//  EmployeeAssignedItemRow.swift
+//  AssetUserAssignedItemRow.swift
 //  PaperLess
 //
 //  Created by Tom Salih on 19.11.25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Shared
 
-struct EmployeeAssignedItemRow: View {
+struct AssetUserAssignedItemRow: View {
     let title: String
     let subTitle: String?
     let iconType: String?

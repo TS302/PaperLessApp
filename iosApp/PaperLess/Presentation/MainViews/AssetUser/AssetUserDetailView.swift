@@ -22,7 +22,7 @@ struct AssetUserDetailView: View {
         List {
             Section {
                 if let employee = assetUserDetailVM.uiState.employee {
-                    EmployeeIDCardView(
+                    AssetUserDetailSection(
                         name: employee.name,
                         phoneNumber: employee.phoneNumber,
                         email: employee.email,
@@ -30,9 +30,10 @@ struct AssetUserDetailView: View {
                     )
                 }
             }
+            
             Section {
-                let items = assetUserDetailVM.uiState.assignedItems
-                if items.isEmpty {
+                let assets = assetUserDetailVM.uiState.assignedItems
+                if assets.isEmpty {
                     NoAssignedAssetsView(
                         title: "Keine Items zugewiesen",
                         description: "Diesem Mitarbeiter sind aktuell keine Assets zugewiesen.",
@@ -40,12 +41,12 @@ struct AssetUserDetailView: View {
                         
                     )
                 } else {
-                    ForEach(items, id: \.id) { item in
-                        EmployeeAssignedItemRow(
-                            title: item.displayName,
-                            subTitle: item.code,
-                            iconType: item.type,
-                            statusColor: item.status?.color ?? .gray
+                    ForEach(assets, id: \.id) { asset in
+                        AssetUserAssignedItemRow(
+                            title: asset.displayName,
+                            subTitle: asset.code,
+                            iconType: asset.type,
+                            statusColor: asset.status?.color ?? .gray
                         )
                     }
                 }
@@ -61,7 +62,8 @@ struct AssetUserDetailView: View {
         )
         .sheet(isPresented: $isEditSheetPresented) {
             if let employee = assetUserDetailVM.uiState.employee {
-                EditEmployeeSheet(employee: employee)
+                EditAssetUserSheet(employee: employee)
+                    .presentationDetents([.medium])
             }
         }
         .onChange(of: isEditSheetPresented) { _, isPresented in

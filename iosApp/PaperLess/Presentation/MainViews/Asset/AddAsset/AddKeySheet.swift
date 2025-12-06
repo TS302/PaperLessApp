@@ -35,12 +35,6 @@ struct AddKeySheet: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("NEUEN SCHLÜSSEL ANLEGEN")
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color.primary)
-                    .fontWeight(.black)
-                    .padding(.top, 38)
-                
                 AddKeyFormSection(
                     name: nameBinding,
                     serialNumber: serialNumberBinding,
@@ -48,28 +42,11 @@ struct AddKeySheet: View {
                     isSaving: addKeyVM.uiState.isSaving
                 )
                 
-                HStack(spacing: 12) {
-                    
-                    CustomStandardButton(
-                        action: {
-                            dismiss()
-                        },
-                        Label: "Abbrechen",
-                        color: Color.error
-                    )
-                    
-                    CustomStandardButton(
-                        action: {
-                            addKeyVM.submit()
-                        },
-                        Label: "Speichern",
-                        color: Color.primary
-                    )
-                }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 32)
+                SaveAndCancelButtonRow(
+                    cancelAction: { dismiss() },
+                    saveAction: { addKeyVM.submit() }
+                )
             }
-            .background(Color.secondary)
             .onChange(of: addKeyVM.uiState.didSave) { _, didSave in
                 if didSave {
                     addKeyVM.resetDidSave()

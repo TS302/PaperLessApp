@@ -1,5 +1,5 @@
 //
-//  EmployeeDetailsSection.swift
+//  AssetUserDetailsSection.swift
 //  PaperLess
 //
 //  Created by Tom Salih on 19.11.25.
@@ -8,7 +8,7 @@
 import SwiftUI
 import Shared
 
-struct EmployeeDetailsSection: View {
+struct AssetUserDetailsSection: View {
     let employee: Employee
     
     var body: some View {

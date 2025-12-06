@@ -9,14 +9,12 @@ import SwiftUI
 import Shared
 import KMPObservableViewModelSwiftUI
 
-struct EditEmployeeSheet: View {
-    let employee: Employee
-    
+struct EditAssetUserSheet: View {
     @Environment(\.dismiss) private var dismiss
-
     @StateViewModel private var editEmployeeVM = EditEmployeeViewModel()
     
     @State private var didSetup = false
+    let employee: Employee
     
     private var canSave: Bool {
         !editEmployeeVM.uiState.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !editEmployeeVM.uiState.isSaving
@@ -24,8 +22,8 @@ struct EditEmployeeSheet: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                AddEmployeeSections(
+            VStack {
+                AddAssetUserForm(
                     name: Binding(
                         get: { editEmployeeVM.uiState.name },
                         set: { editEmployeeVM.onNameChange(newName: $0) }
@@ -40,19 +38,17 @@ struct EditEmployeeSheet: View {
                     ),
                     error: editEmployeeVM.uiState.errorMessage
                 )
+                .padding(.top, 32)
+                
+                SaveAndCancelButtonRow(
+                    cancelAction: { dismiss() },
+                    saveAction: {
+                        editEmployeeVM.save()
+                        dismiss()
+                    }
+                )
             }
-            .modifier(ListStyle())
-            .standardToolbar(
-                title: editEmployeeVM.uiState.name,
-                leadingAction: { dismiss() },
-                leadingIcon: "xmark.circle",
-                leadingIconColor: Color.error,
-                trailingAction: {
-                    editEmployeeVM.save()
-                    dismiss()
-                },
-                trailingIcon: "checkmark.circle"
-            )
+            .background(Color.secondary)
             .onChange(of: editEmployeeVM.uiState.isSaving) { _, did in
                 if did {
                     dismiss()

@@ -17,13 +17,14 @@ struct CustomStandardButton: View {
             action()
         } label: {
             Text(Label)
-                .modifier(TitleModi())
-                .frame(maxWidth: .infinity)
+                .font(.system(size: 15))
+                .font(.subheadline)
+                .foregroundStyle(Color.secondary)
+                .padding(.horizontal, 40)
                 .padding(.vertical, 14)
         }
         .background(color)
         .foregroundStyle(Color.secondary)
         .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
-        .padding(.leading, 10)
     }
 }
