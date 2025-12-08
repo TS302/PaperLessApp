@@ -25,24 +25,29 @@ struct SettingsView: View {
     var body: some View {
         NavigationStack {
             List {
-                Section("Konto") {
+                Section {
                     HStack {
-                        Image(systemName: "person.crop.circle.fill")
+                        RowIcon(icon: "person.crop.circle.fill")
                         VStack(alignment: .leading) {
                             Text(currentEmail.isEmpty ? "Unbekannter Nutzer" : currentEmail)
-                                .font(.subheadline)
+                                .modifier(TitleModi())
                             Text("angemeldet").font(.caption)
+                                .modifier(SubtitleModi())
                         }
-                    }
-                    Button("Abmelden", role: .destructive) { showConfirm = true
                     }
                 }
                 if let err = errorText, !err.isEmpty {
                     Section { Text(err).foregroundColor(.red).font(.caption) }
                 }
             }
-            .navigationTitle("Einstellungen")
+            .modifier(ListStyle())
+            .standardToolbar(
+                title: "Einstellungen",
+                trailingAction: { showConfirm = true },
+                trailingIcon: "power"
+            )
         }
+        
         .confirmationDialog("Wirklich abmelden?", isPresented: $showConfirm, titleVisibility: .visible) {
             Button("Abmelden", role: .destructive) {
                 viewModel.logout()
@@ -63,57 +68,3 @@ struct SettingsView: View {
         }
     }
 }
-
-//import SwiftUI
-//import Shared
-//import KMPObservableViewModelSwiftUI
-//import KMPNativeCoroutinesAsync
-//
-//struct SettingsView: View {
-//    @EnvironmentObject private var auth: IOSAuthService
-//    @State private var showLogoutConfirm = false
-//
-//    var body: some View {
-//        NavigationStack {
-//            List {
-//                Section(header: Text("Konto")) {
-//                    HStack {
-//                        Image(systemName: "person.crop.fill")
-//                        VStack(alignment: .leading) {
-//                            Text(auth.user?.email ?? "Unbekannter Nutzer")
-//                                .font(.subheadline)
-//                                .foregroundStyle(Color.primary)
-//                            Text("angemeldet")
-//                                .font(.caption)
-//                                .foregroundStyle(Color.primary)
-//                        }
-//                    }
-//                    
-//                    Button(role: .destructive) {
-//                        showLogoutConfirm = true
-//                    } label: {
-//                        HStack {
-//                            Image(systemName: "power.circle.fill")
-//                                .foregroundStyle(Color.error)
-//                            Text("Abmelden")
-//                                .font(.subheadline)
-//                                .foregroundStyle(Color.primary)
-//                        }
-//                    }
-//                }
-//            }
-//            .modifier(ListStyle(title: "Einstellungen"))
-//        }
-//        .confirmationDialog(
-//            "Wirklich abmelden?",
-//            isPresented: $showLogoutConfirm,
-//            titleVisibility: .visible
-//        ) {
-//            Button("Abmelden", role: .destructive) {
-//                auth.signOut()
-//            }
-//            
-//            Button("Abbrechen", role: .cancel) { }
-//        }
-//    }
-//}
