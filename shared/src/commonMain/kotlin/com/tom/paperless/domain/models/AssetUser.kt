@@ -1,7 +1,7 @@
 package com.tom.paperless.domain.models
 
 import com.tom.paperless.domain.models.enums.TagStatus
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 import kotlin.uuid.Uuid
 
 data class AssetUser(
@@ -9,7 +9,7 @@ data class AssetUser(
     override val name: String,
     val email: String,
     val phoneNumber: String,
-    override val targetType: TargetType = TargetType.Employee,
+    override val tagType: TagType = TagType.AssetUser,
     override val tagStatus: TagStatus = TagStatus.available,
     override val currentAssigneeId: Uuid? = null,
     override val lastAssigneeIds: List<Uuid> = emptyList(),

@@ -5,7 +5,7 @@ import com.tom.paperless.domain.models.NfcTaggable
 import com.tom.paperless.domain.models.Tool
 import com.tom.paperless.domain.models.Vehicle
 import com.tom.paperless.domain.models.enums.TagStatus
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -32,7 +32,7 @@ class NfcTaggableRepositoryImpl(
             plate = "RT-BC 4567",
             brand = "Volkswagen",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Vehicle,
+            tagType = TagType.Vehicle,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -42,7 +42,7 @@ class NfcTaggableRepositoryImpl(
             plate = "BL-DK 9876",
             brand = "Mercedes-Benz",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Vehicle,
+            tagType = TagType.Vehicle,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -52,7 +52,7 @@ class NfcTaggableRepositoryImpl(
             plate = "TÜ-EF 1122",
             brand = "Opel",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Vehicle,
+            tagType = TagType.Vehicle,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -62,7 +62,7 @@ class NfcTaggableRepositoryImpl(
             plate = "S-XY 4455",
             brand = "Ford",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Vehicle,
+            tagType = TagType.Vehicle,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -71,7 +71,7 @@ class NfcTaggableRepositoryImpl(
             name = "Peugeot Boxer",
             plate = "BB-ZZ 3344",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Vehicle,
+            tagType = TagType.Vehicle,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -82,7 +82,7 @@ class NfcTaggableRepositoryImpl(
             name = "Bosch GSR 18V",
             serialNumber = "B-GSR18V-3344",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Tool,
+            tagType = TagType.Tool,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList(),
             brand = "Bosch",
@@ -92,7 +92,7 @@ class NfcTaggableRepositoryImpl(
             name = "Makita DHP482",
             serialNumber = "M-DHP482-5566",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Tool,
+            tagType = TagType.Tool,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList(),
             brand = "Makita"
@@ -102,7 +102,7 @@ class NfcTaggableRepositoryImpl(
             name = "Stihl Kettensäge MS 261",
             serialNumber = "S-MS261-7788",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Tool,
+            tagType = TagType.Tool,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList(),
             brand = "Stihl"
@@ -112,7 +112,7 @@ class NfcTaggableRepositoryImpl(
             name = "Hilti TE 60",
             serialNumber = "H-TE60-9900",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Tool,
+            tagType = TagType.Tool,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList(),
             brand = "Hilti"
@@ -122,7 +122,7 @@ class NfcTaggableRepositoryImpl(
             name = "Festool Absaugmobil CTL MIDI",
             serialNumber = "F-CTL-MIDI-1122",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Tool,
+            tagType = TagType.Tool,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList(),
             brand = "Festool"
@@ -132,7 +132,7 @@ class NfcTaggableRepositoryImpl(
             name = "DeWalt Bohrmaschine ",
             serialNumber = "D-DWD024-2233",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Tool,
+            tagType = TagType.Tool,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList(),
             brand = "DeWalt"
@@ -143,7 +143,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Nebeneingang Lagerhalle",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -151,7 +151,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Serverraum Schlüssel",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -159,7 +159,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Büro 1.OG",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -167,7 +167,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Werkstatt Schlüsselbund",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -175,7 +175,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Kellerschlüssel Verwaltung",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -183,7 +183,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Ersatzschlüssel Fuhrpark",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -191,7 +191,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Zentralschlüssel Hauptgebäude",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -199,7 +199,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Schlüsselbund Hausmeister",
             tagStatus = TagStatus.available,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -207,7 +207,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Garagenschlüssel Büro",
             tagStatus = TagStatus.inUse,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         ),
@@ -215,7 +215,7 @@ class NfcTaggableRepositoryImpl(
             id = Uuid.random(),
             name = "Tresorschlüssel Verwaltung",
             tagStatus = TagStatus.passive,
-            targetType = TargetType.Key,
+            tagType = TagType.Key,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
         )
@@ -236,7 +236,7 @@ class NfcTaggableRepositoryImpl(
     override suspend fun update(itemToUpdate: NfcTaggable): NfcTaggable? {
         var savedItem: NfcTaggable? = null
         _items.update { current ->
-            val index = current.indexOfFirst { it.id == itemToUpdate.id && it.targetType == itemToUpdate.targetType }
+            val index = current.indexOfFirst { it.id == itemToUpdate.id && it.tagType == itemToUpdate.tagType }
             if (index >= 0) {
                 val newList = current.toMutableList()
                 newList[index] = itemToUpdate
@@ -270,11 +270,11 @@ class NfcTaggableRepositoryImpl(
         return removed
     }
 
-    override fun observeByType(type: TargetType): StateFlow<List<NfcTaggable>> =
-        _items.map { list -> list.filter { it.targetType == type } }
+    override fun observeByType(type: TagType): StateFlow<List<NfcTaggable>> =
+        _items.map { list -> list.filter { it.tagType == type } }
             .stateIn(scope, SharingStarted.Eagerly, emptyList())
 
-    override suspend fun getAllByType(type: TargetType): List<NfcTaggable> =
-        _items.value.filter { it.targetType == type }
+    override suspend fun getAllByType(type: TagType): List<NfcTaggable> =
+        _items.value.filter { it.tagType == type }
 
 }

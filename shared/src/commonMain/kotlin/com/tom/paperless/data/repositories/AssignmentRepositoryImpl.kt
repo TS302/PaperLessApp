@@ -28,11 +28,11 @@ class AssignmentRepositoryImpl(
     override fun observeAll(): StateFlow<List<Assignment>> =
         assignmentsState.asStateFlow()
 
-    override fun observeForEmployee(employeeId: Uuid): StateFlow<List<Assignment>> =
+    override fun observeForEmployee(assetUserId: Uuid): StateFlow<List<Assignment>> =
         assignmentsState
             .map { allAssignments: List<Assignment> ->
                 allAssignments.filter { assignment: Assignment ->
-                    assignment.employeeId == employeeId && assignment.until == null
+                    assignment.assetUserId == assetUserId && assignment.until == null
                 }
             }
             .stateIn(repoScope, SharingStarted.Eagerly, emptyList())
@@ -41,7 +41,7 @@ class AssignmentRepositoryImpl(
         assignmentsState
             .map { allAssignments: List<Assignment> ->
                 allAssignments.filter { assignment: Assignment ->
-                    assignment.taggableId == taggableId && assignment.until == null
+                    assignment.tagId == taggableId && assignment.until == null
                 }
             }
             .stateIn(repoScope, SharingStarted.Eagerly, emptyList())
@@ -56,7 +56,7 @@ class AssignmentRepositoryImpl(
         assignmentsState.update { current: List<Assignment> ->
             val now = Clock.System.now()
             current.map { assignment: Assignment ->
-                if (assignment.taggableId == taggableId && assignment.until == null) {
+                if (assignment.tagId == taggableId && assignment.until == null) {
                     assignment.copy(until = now)
                 } else {
                     assignment
@@ -67,8 +67,8 @@ class AssignmentRepositoryImpl(
         val now = Clock.System.now()
         val newAssignment = Assignment(
             id = Uuid.random(),
-            employeeId = toEmployeeId,
-            taggableId = taggableId,
+            assetUserId = toEmployeeId,
+            tagId = taggableId,
             from = now,
             until = null,
             note = note
@@ -82,7 +82,7 @@ class AssignmentRepositoryImpl(
         assignmentsState.update { current: List<Assignment> ->
             val now = Clock.System.now()
             current.map { assignment: Assignment ->
-                if (assignment.taggableId == taggableId && assignment.until == null) {
+                if (assignment.tagId == taggableId && assignment.until == null) {
                     changed = true
                     assignment.copy(until = now)
                 } else {
@@ -111,10 +111,10 @@ class AssignmentRepositoryImpl(
 
     override suspend fun currentAssigneeOf(taggableId: Uuid): AssetUser? {
         val openAssignment: Assignment = assignmentsState.value
-            .lastOrNull { a -> a.taggableId == taggableId && a.until == null }
+            .lastOrNull { a -> a.tagId == taggableId && a.until == null }
             ?: return null
 
-        return assetUserRepository.getById(openAssignment.employeeId)
+        return assetUserRepository.getById(openAssignment.assetUserId)
     }
 
     override suspend fun lastAssigneesOf(
@@ -122,7 +122,7 @@ class AssignmentRepositoryImpl(
         limit: Int
     ): List<AssetUser> {
         val assignmentsForAsset: List<Assignment> = assignmentsState.value
-            .filter { it.taggableId == taggableId }
+            .filter { it.tagId == taggableId }
             .sortedByDescending { it.from }
 
         val previousAssignments: List<Assignment> = assignmentsForAsset
@@ -133,9 +133,9 @@ class AssignmentRepositoryImpl(
 
         for (assignment in previousAssignments) {
             if (result.size >= limit) break
-            if (!seenEmployeeIds.add(assignment.employeeId)) continue
+            if (!seenEmployeeIds.add(assignment.assetUserId)) continue
 
-            val employee = assetUserRepository.getById(assignment.employeeId)
+            val employee = assetUserRepository.getById(assignment.assetUserId)
             if (employee != null) {
                 result.add(employee)
             }
@@ -148,18 +148,18 @@ class AssignmentRepositoryImpl(
         limit: Int
     ): List<Assignment> {
         return assignmentsState.value
-            .filter { it.taggableId == taggableId && it.until != null }
+            .filter { it.tagId == taggableId && it.until != null }
             .sortedByDescending { it.from }
             .take(limit)
     }
 
-    override suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable> {
+    override suspend fun assetsOf(assetUserId: Uuid): List<NfcTaggable> {
         val openAssignments: List<Assignment> = assignmentsState.value
-            .filter { a -> a.employeeId == employeeId && a.until == null }
+            .filter { a -> a.assetUserId == assetUserId && a.until == null }
 
         if (openAssignments.isEmpty()) return emptyList()
 
-        val taggableIds: Set<Uuid> = openAssignments.map { it.taggableId }.toSet()
+        val taggableIds: Set<Uuid> = openAssignments.map { it.tagId }.toSet()
         val allTaggables: List<NfcTaggable> = nfcTaggableRepository.getAll()
         return allTaggables.filter { t -> t.id in taggableIds }
     }

@@ -3,7 +3,7 @@ package com.tom.paperless.domain.models.enums
 enum class TagStatus(
     val displayName: String,
     val caseName: String,
-    val caseColor: String // Hex-Farbcode, z. B. "#RRGGBB"
+    val caseColor: String
 ) {
     available(
         displayName = "Verfügbar",

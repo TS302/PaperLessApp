@@ -7,7 +7,9 @@ import com.tom.paperless.di.KoinStarter
 class PaperLessAndroidApp : Application() {
     override fun onCreate() {
         super.onCreate()
-        KoinStarter.start(this)
+
         FirebaseApp.initializeApp(this)
+        KoinStarter.start(this)
+
     }
 }

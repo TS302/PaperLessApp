@@ -7,6 +7,8 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.google.services)
+//    id("com.google.gms.google-services")
+
 }
 
 kotlin {
@@ -20,10 +22,12 @@ kotlin {
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
-            implementation(project.dependencies.platform(libs.firebase.bom))
-
-            implementation(libs.firebase.auth.ktx)
             implementation(compose.materialIconsExtended)
+
+            implementation(project.dependencies.platform(libs.firebase.bom))
+            implementation(libs.firebase.auth.ktx)
+            implementation(libs.firebase.firestore)
+
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -71,10 +75,8 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-    // Koin Android – auch im App-Modul einbinden (u.a. für AndroidX-Integration)
     implementation("io.insert-koin:koin-android:3.5.6")
 
-    // (optional) wenn du Koin für Compose nutzt:
      implementation("io.insert-koin:koin-androidx-compose:3.5.6")
 }
 

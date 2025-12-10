@@ -52,6 +52,9 @@ kotlin {
         androidMain.dependencies {
             implementation(project.dependencies.platform(libs.firebase.bom))
             implementation(libs.firebase.auth.ktx)
+            implementation(libs.firebase.firestore)
+//            implementation("com.google.firebase:firebase-firestore-ktx")
+//            implementation("com.google.firebase:firebase-firestore-ktx:24.10.0")
             implementation("io.insert-koin:koin-android:3.5.6")
         }
 

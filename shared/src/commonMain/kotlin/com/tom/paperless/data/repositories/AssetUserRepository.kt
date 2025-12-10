@@ -6,7 +6,7 @@ import kotlin.uuid.Uuid
 
 interface AssetUserRepository {
 
-    fun getAllFlow(): Flow<List<AssetUser>>
+    fun observeAll(): Flow<List<AssetUser>>
 
     suspend fun getAll(): List<AssetUser>
     suspend fun getById(id: Uuid): AssetUser?

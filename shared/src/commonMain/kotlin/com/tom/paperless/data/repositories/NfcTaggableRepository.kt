@@ -3,7 +3,7 @@ package com.tom.paperless.data.repositories
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.tom.paperless.domain.models.NfcTaggable
 import com.tom.paperless.domain.models.enums.TagStatus
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.uuid.Uuid
 
@@ -31,13 +31,13 @@ interface NfcTaggableRepository {
     suspend fun delete(id: Uuid): Boolean
 
     @NativeCoroutines
-    suspend fun getByType(type: TargetType): List<NfcTaggable> =
-        getAll().filter { it.targetType == type }
+    suspend fun getByType(type: TagType): List<NfcTaggable> =
+        getAll().filter { it.tagType == type }
 
     @NativeCoroutines
-    suspend fun getAllByType(type: TargetType): List<NfcTaggable>
+    suspend fun getAllByType(type: TagType): List<NfcTaggable>
 
-    fun observeByType(type: TargetType): StateFlow<List<NfcTaggable>>
+    fun observeByType(type: TagType): StateFlow<List<NfcTaggable>>
 
 
 

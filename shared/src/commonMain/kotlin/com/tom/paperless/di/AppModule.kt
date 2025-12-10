@@ -50,9 +50,9 @@ val appModule = module {
 
     // Repositories
     single<UserRepository> { UserRepository }
-    single<NfcTaggableRepository> { NfcTaggableRepositoryImpl() }
-    single<AssetUserRepository> { AssetUserRepositoryImpl }
-    single<AssignmentRepository> { AssignmentRepositoryImpl(get(), get()) }
+//    single<NfcTaggableRepository> { NfcTaggableRepositoryImpl() }
+//    single<AssetUserRepository> { AssetUserRepositoryImpl }
+//    single<AssignmentRepository> { AssignmentRepositoryImpl(get(), get()) }
 
     // Auth UseCases
     single { RegisterUserUseCase() }

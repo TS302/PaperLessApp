@@ -55,12 +55,12 @@ fun ItemsTopBar(
                 ) {
                     DropdownMenuItem(
                         text = {
-                            Text(
-                                "Fahrzeug hinzufügen",
-                                color = MaterialTheme.colorScheme.primary
-                            )
+                            Text("Fahrzeug hinzufügen", color = MaterialTheme.colorScheme.primary)
                         },
-                        onClick = { isAddMenuExpanded = false; onAddVehicleClick() }
+                        onClick = {
+                            isAddMenuExpanded = false
+                            onAddVehicleClick()
+                        }
                     )
                     DropdownMenuItem(
                         text = {
@@ -69,7 +69,10 @@ fun ItemsTopBar(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         },
-                        onClick = { isAddMenuExpanded = false; onAddToolClick() }
+                        onClick = {
+                            isAddMenuExpanded = false
+                            onAddToolClick()
+                        }
                     )
                     DropdownMenuItem(
                         text = {
@@ -78,7 +81,10 @@ fun ItemsTopBar(
                                 color = MaterialTheme.colorScheme.primary
                             )
                         },
-                        onClick = { isAddMenuExpanded = false; onAddKeyClick() }
+                        onClick = {
+                            isAddMenuExpanded = false
+                            onAddKeyClick()
+                        }
                     )
                 }
             }

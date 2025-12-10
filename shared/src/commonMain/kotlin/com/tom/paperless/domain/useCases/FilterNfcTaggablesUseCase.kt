@@ -1,16 +1,16 @@
 package com.tom.paperless.domain.useCases
 
 import com.tom.paperless.domain.models.NfcTaggable
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 
 class FilterNfcTaggablesUseCase {
     operator fun invoke(
         allItems: List<NfcTaggable>,
-        typeFilter: TargetType?,
+        typeFilter: TagType?,
         searchQueryText: String
     ): List<NfcTaggable> {
         val byType = typeFilter?.let { selectedType ->
-            allItems.filter { it.targetType == selectedType }
+            allItems.filter { it.tagType == selectedType }
         } ?: allItems
 
         if (searchQueryText.isBlank()) {

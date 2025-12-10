@@ -8,14 +8,14 @@ import kotlin.uuid.Uuid
 
 interface AssignmentRepository {
     fun observeAll(): StateFlow<List<Assignment>>
-    fun observeForEmployee(employeeId: Uuid): StateFlow<List<Assignment>>
+    fun observeForEmployee(assetUserId: Uuid): StateFlow<List<Assignment>>
     fun observeForAsset(taggableId: Uuid): StateFlow<List<Assignment>>
 
     suspend fun currentAssigneeOf(taggableId: Uuid): AssetUser?
     suspend fun lastAssignmentsOf(taggableId: Uuid, limit: Int = 3 ): List<Assignment>
 
     suspend fun lastAssigneesOf(taggableId: Uuid, limit: Int = 3): List<AssetUser>
-    suspend fun assetsOf(employeeId: Uuid): List<NfcTaggable>
+    suspend fun assetsOf(assetUserId: Uuid): List<NfcTaggable>
 
     suspend fun assign(taggableId: Uuid, toEmployeeId: Uuid, note: String?): Assignment
     suspend fun unassign(taggableId: Uuid): Boolean

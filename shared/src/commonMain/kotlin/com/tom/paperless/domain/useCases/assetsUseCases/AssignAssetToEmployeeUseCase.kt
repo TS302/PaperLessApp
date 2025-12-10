@@ -3,7 +3,7 @@ package com.tom.paperless.domain.useCases.assetsUseCases
 import com.tom.paperless.data.repositories.AssignmentRepository
 import com.tom.paperless.data.repositories.NfcTaggableRepository
 import com.tom.paperless.domain.models.enums.TagStatus
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.uuid.Uuid
@@ -21,13 +21,13 @@ class AssignAssetToEmployeeUseCase : KoinComponent {
         val asset = nfcTaggableRepository.getById(assetId)
             ?: error("Asset $assetId nicht gefunden.")
 
-        when (asset.targetType) {
-            TargetType.Tool,
-            TargetType.Vehicle,
-            TargetType.Key -> {
+        when (asset.tagType) {
+            TagType.Tool,
+            TagType.Vehicle,
+            TagType.Key -> {
                 // erlaubt
             }
-            else -> error("Asset vom Typ ${asset.targetType} kann nicht zugewiesen werden.")
+            else -> error("Asset vom Typ ${asset.tagType} kann nicht zugewiesen werden.")
         }
 
         assignmentRepository.assign(

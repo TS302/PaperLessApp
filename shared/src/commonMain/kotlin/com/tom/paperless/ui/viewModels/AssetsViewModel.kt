@@ -5,7 +5,7 @@ import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.NfcTaggable
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 import com.tom.paperless.domain.models.uiStates.AssetsUiState
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
@@ -54,7 +54,7 @@ init {
     }
 }
 
-    fun setTypeFilter(newTypeFilter: TargetType?) {
+    fun setTypeFilter(newTypeFilter: TagType?) {
         _uiState.value = _uiState.value.copy(activeTypeFilter = newTypeFilter)
         recomputeVisibleItems()
     }
@@ -90,7 +90,7 @@ init {
     }
 
     // ---------- iOS Helper ----------
-    fun setTypeFilterForIos(typeFilter: TargetType?) = setTypeFilter(typeFilter)
+    fun setTypeFilterForIos(typeFilter: TagType?) = setTypeFilter(typeFilter)
     fun setSearchQueryForIos(queryText: String) = setSearchQuery(queryText)
 
 }

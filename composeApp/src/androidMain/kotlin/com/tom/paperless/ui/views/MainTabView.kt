@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -36,11 +37,13 @@ fun MainTabView(
     onAddKeyClick: () -> Unit = {}
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
+    var showAddVehicleSheet by remember { mutableStateOf(false) }
+
     val companyViewModel = remember { KoinStarter.companyViewModel() }
     val tabs = remember {
         listOf(
             TabItem("Items", Icons.Filled.Inventory2),
-            TabItem("Mitarbeiter", Icons.Filled.Group),
+            TabItem("Asset-User", Icons.Filled.Group),
             TabItem("Einstellungen", Icons.Filled.Settings),
         )
     }
@@ -50,12 +53,12 @@ fun MainTabView(
             when (selectedTabIndex) {
                 0 -> ItemsTopBar(
                     titleText = "Items",
-                    onAddVehicleClick = onAddVehicleClick,
+                    onAddVehicleClick = { showAddVehicleSheet = true },
                     onAddToolClick = onAddToolClick,
                     onAddKeyClick = onAddKeyClick
                 )
                 1 -> EmployeesTopBar(
-                    titleText = "Mitarbeiter",
+                    titleText = "Asset-User",
                     onAddEmployeeClick = onAddKeyClick
                 )
                 2 -> ItemsTopBar(

@@ -8,5 +8,5 @@ import org.koin.core.component.inject
 
 class GetAllAssetUsersUseCase() : KoinComponent {
     private val repository: AssetUserRepository by inject()
-    operator fun invoke(): Flow<List<AssetUser>> = repository.getAllFlow()
+    operator fun invoke(): Flow<List<AssetUser>> = repository.observeAll()
 }

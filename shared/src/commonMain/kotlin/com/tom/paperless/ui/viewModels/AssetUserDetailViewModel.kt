@@ -223,7 +223,7 @@ class AssetUserDetailViewModel() : ViewModel(), KoinComponent {
                     else -> AssignedItemUi(
                         id = nfcTag.id.toString(),
                         displayName = nfcTag.name,
-                        type = nfcTag.targetType.name.lowercase(),
+                        type = nfcTag.tagType.name.lowercase(),
                         subtype = null,
                         code = null,
                         statusText = nfcTag.tagStatus.name,

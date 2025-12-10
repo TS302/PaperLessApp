@@ -2,7 +2,7 @@ package com.tom.paperless.data.repositories
 
 import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.enums.TagStatus
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
 
     private val state = MutableStateFlow(initialAssetUsers())
 
-    override fun getAllFlow(): Flow<List<AssetUser>> = state.asStateFlow()
+    override fun observeAll(): Flow<List<AssetUser>> = state.asStateFlow()
 
     override suspend fun getAll(): List<AssetUser> = state.value
 
@@ -53,7 +53,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "Clara Becker",
             "clara.becker@example.com",
             "+49 151 0000003",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
@@ -63,7 +63,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "David Wagner",
             "david.wagner@example.com",
             "+49 151 0000004",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
@@ -73,7 +73,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "Elena Schulz",
             "elena.schulz@example.com",
             "+49 151 0000005",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
@@ -83,7 +83,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "Felix Hoffmann",
             "felix.hoffmann@example.com",
             "+49 151 0000006",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
@@ -93,7 +93,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "Greta Klein",
             "greta.klein@example.com",
             "+49 151 0000007",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
@@ -103,7 +103,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "Hannah Vogel",
             "hannah.vogel@example.com",
             "+49 151 0000008",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
@@ -113,7 +113,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "Jonas Krause",
             "jonas.krause@example.com",
             "+49 151 0000009",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()
@@ -123,7 +123,7 @@ object AssetUserRepositoryImpl : AssetUserRepository {
             "Laura Neumann",
             "laura.neumann@example.com",
             "+49 151 0000010",
-            TargetType.Employee,
+            TagType.AssetUser,
             TagStatus.available,
             currentAssigneeId = null,
             lastAssigneeIds = emptyList()

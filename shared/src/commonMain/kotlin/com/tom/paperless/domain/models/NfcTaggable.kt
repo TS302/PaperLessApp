@@ -1,13 +1,13 @@
 package com.tom.paperless.domain.models
 
 import com.tom.paperless.domain.models.enums.TagStatus
-import com.tom.paperless.domain.models.enums.TargetType
+import com.tom.paperless.domain.models.enums.TagType
 import kotlin.uuid.Uuid
 
-interface NfcTaggable {
+sealed interface NfcTaggable {
     val id: Uuid
     val name: String
-    val targetType: TargetType
+    val tagType: TagType
     val tagStatus: TagStatus
     val currentAssigneeId: Uuid?
     val lastAssigneeIds: List<Uuid>
