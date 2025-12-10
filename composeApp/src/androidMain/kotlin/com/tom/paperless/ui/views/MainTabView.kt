@@ -52,7 +52,7 @@ fun MainTabView(
         topBar = {
             when (selectedTabIndex) {
                 0 -> ItemsTopBar(
-                    titleText = "Items",
+                    titleText = "Assets",
                     onAddVehicleClick = { showAddVehicleSheet = true },
                     onAddToolClick = onAddToolClick,
                     onAddKeyClick = onAddKeyClick
@@ -112,6 +112,13 @@ fun MainTabView(
                     .consumeWindowInsets(innerPadding)
             )
         }
+    }
+    if (showAddVehicleSheet) {
+        AddVehicleSheet(
+            onDismiss = {
+                showAddVehicleSheet = false
+            }
+        )
     }
 }
 
