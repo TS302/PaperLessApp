@@ -11,7 +11,7 @@ import KMPObservableViewModelSwiftUI
 import KMPNativeCoroutinesAsync
 
 struct AssetsView: View {
-    @StateViewModel var employeeVM = AssetsViewModel()
+    @StateViewModel var assetsVM = AssetsViewModel()
     
     @State private var addVehicle = false
     @State private var addTool = false
@@ -21,11 +21,11 @@ struct AssetsView: View {
     private var filterBinding: Binding<FilterOption> {
         Binding(
             get: {
-                if let filter = employeeVM.uiState.activeTypeFilter { return filter.asFilterOption }
+                if let filter = assetsVM.uiState.activeTypeFilter { return filter.asFilterOption }
                 return .all
             },
             set: { newValue in
-                employeeVM.setTypeFilterForIos(typeFilter: newValue.toTargetTypeOrNil)
+                assetsVM.setTypeFilterForIos(typeFilter: newValue.toTargetTypeOrNil)
             }
         )
     }
@@ -35,38 +35,38 @@ struct AssetsView: View {
             get: { searchText },
             set: { newValue in
                 searchText = newValue
-                employeeVM.setSearchQueryForIos(queryText: newValue)
+                assetsVM.setSearchQueryForIos(queryText: newValue)
             }
         )
     }
     
     private func reloadList() {
-        employeeVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
-        employeeVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
+        assetsVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
+        assetsVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
     }
 
     private func delete(_ item: NfcTaggable) {
-        employeeVM.deleteItem(id: item.id)
+        assetsVM.deleteItem(id: item.id)
     }
 
     var body: some View {
         NavigationStack {
             List {
                 Section {
-                    ForEach(employeeVM.uiState.items, id: \.idString) { item in
+                    ForEach(assetsVM.uiState.assets, id: \.idString) { asset in
                         NavigationLink {
-                            AssetDetailView(asset: item)
+                            AssetDetailView(asset: asset)
                         } label: {
-                            AssetRow(item: item)
+                            AssetRow(asset: asset)
                         }
-                        .id(item.id)
-                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-                            Button(role: .destructive) {
-                                delete(item)
-                            } label: {
-                                Label("Löschen", systemImage: "trash")
-                            }
-                        }
+//                        .id(asset.id)
+//                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+//                            Button(role: .destructive) {
+//                                delete(asset)
+//                            } label: {
+//                                Label("Löschen", systemImage: "trash")
+//                            }
+//                        }
                     }
                 } header: {
                     FilterPicker(filter: filterBinding)
@@ -84,10 +84,10 @@ struct AssetsView: View {
             }
             .refreshable { reloadList() }
         }
-        .searchable(text: $searchText, prompt: "Suchen")
-        .onChange(of: searchText) { _, newValue in
-            employeeVM.setSearchQueryForIos(queryText: newValue)
-        }
+        .searchable(text: searchBinding, prompt: "Suchen")
+//        .onChange(of: searchText) { _, newValue in
+//            assetsVM.setSearchQueryForIos(queryText: newValue)
+//        }
         .sheet(isPresented: $addVehicle) {
             AddVehicleSheet()
         }

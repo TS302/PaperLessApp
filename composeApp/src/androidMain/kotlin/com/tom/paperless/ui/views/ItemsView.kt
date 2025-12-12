@@ -70,7 +70,7 @@ fun ItemsView(
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        items(uiState.items, key = { it.id.toString() }) { item ->
+        items(uiState.assets, key = { it.id.toString() }) { item ->
             val subtitle = when (item) {
                 is Vehicle -> item.plate
                 is Tool    -> item.serialNumber

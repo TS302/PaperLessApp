@@ -6,7 +6,7 @@ import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.uiStates.AssetUserUiState
-import com.tom.paperless.domain.useCases.employeesUseCases.AddAssetUserUseCase
+import com.tom.paperless.domain.useCases.AddAssetUserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

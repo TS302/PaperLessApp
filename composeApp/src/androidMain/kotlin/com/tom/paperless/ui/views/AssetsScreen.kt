@@ -16,11 +16,10 @@ import org.koin.compose.koinInject
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ItemsScreen(
-    assetsViewModel: AssetsViewModel = koinInject()  // falls du Koin nutzt
+    assetsViewModel: AssetsViewModel = koinInject()
 ) {
     val uiStateFlow = assetsViewModel.uiState
 
-    // 1️⃣ State: Sheet offen/geschlossen
     var showAddVehicleSheet by rememberSaveable { mutableStateOf(false) }
 
     Scaffold(
@@ -33,7 +32,6 @@ fun ItemsScreen(
             )
         }
     ) { paddingValues ->
-        // 2️⃣ Inhalt: deine Items-Liste
         ItemsView(
             uiStateFlow = uiStateFlow,
             modifier = Modifier.padding(paddingValues),
@@ -41,12 +39,13 @@ fun ItemsScreen(
             onItemMenuClick = { /* TODO */ }
         )
     }
-
-    // 3️⃣ Sheet anzeigen, wenn gewünscht
     if (showAddVehicleSheet) {
         AddVehicleSheet(
             onDismiss = {
                 showAddVehicleSheet = false
+            },
+            onSaved = {
+                assetsViewModel.reloadAssets()
             }
         )
     }

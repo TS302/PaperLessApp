@@ -31,31 +31,6 @@ class FirebaseNfcTaggableRepository(
 
     private val collection = db.collection("nfcItems")
 
-    override fun observeAll(): StateFlow<List<NfcTaggable>> =
-        callbackFlow {
-            val listener = collection.addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    close(error)
-                    return@addSnapshotListener
-                }
-
-                val items = snapshot?.documents?.mapNotNull { doc ->
-
-                    val dto = doc.toObject(NfcTaggableDto::class.java) ?: return@mapNotNull null
-
-                    when (TagType.valueOf(dto.tagType)) {
-                        TagType.Tool -> dto.toToolDomain()
-                        TagType.Vehicle -> dto.toVehicleDomain()
-                        TagType.Key -> dto.toKeyRingDomain()
-                        TagType.AssetUser -> dto.toAssetUserDomain()
-                    }
-                } ?: emptyList()
-
-                trySend(items)
-            }
-            awaitClose { listener.remove() }
-        }.stateIn(CoroutineScope(Dispatchers.Default), SharingStarted.Eagerly, emptyList())
-
     override suspend fun getAll(): List<NfcTaggable> {
         val snap = collection.get().await()
         return snap.documents.mapNotNull { doc ->
@@ -96,18 +71,6 @@ class FirebaseNfcTaggableRepository(
         return itemToUpdate
     }
 
-    override suspend fun updateStatus(id: Uuid, status: TagStatus): NfcTaggable {
-        val existing = getById(id) ?: error("not found")
-        val updated = when (existing) {
-            is Tool -> existing.copy(tagStatus = status)
-            is Vehicle -> existing.copy(tagStatus = status)
-            is KeyRing -> existing.copy(tagStatus = status)
-            is AssetUser -> existing.copy(tagStatus = status)
-        }
-        update(updated)
-        return updated
-    }
-
     override suspend fun delete(id: Uuid): Boolean {
         return try {
             collection.document(id.toString()).delete().await()
@@ -134,39 +97,4 @@ class FirebaseNfcTaggableRepository(
             }
         }
     }
-
-
-    override fun observeByType(type: TagType): StateFlow<List<NfcTaggable>> =
-        callbackFlow {
-            val listener = collection
-                .whereEqualTo("tagType", type.name)
-                .addSnapshotListener { snapshot, error ->
-                    if (error != null) {
-                        close(error)
-                        return@addSnapshotListener
-                    }
-
-                    val items = snapshot?.documents?.mapNotNull { doc ->
-
-                        val dto = doc.toObject(NfcTaggableDto::class.java)
-                            ?: return@mapNotNull null
-
-                        when (TagType.valueOf(dto.tagType)) {
-                            TagType.Tool -> dto.toToolDomain()
-                            TagType.Vehicle -> dto.toVehicleDomain()
-                            TagType.Key -> dto.toKeyRingDomain()
-                            TagType.AssetUser -> dto.toAssetUserDomain()
-                        }
-                    } ?: emptyList()
-
-                    trySend(items)
-                }
-
-            awaitClose { listener.remove() }
-        }.stateIn(
-            scope = CoroutineScope(Dispatchers.IO),
-            started = SharingStarted.Eagerly,
-            initialValue = emptyList()
-        )
-
 }

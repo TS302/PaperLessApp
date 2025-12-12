@@ -44,9 +44,6 @@ fun RegistrationSheet(
                 style = MaterialTheme.typography.labelSmall,
                 color = Color.Black.copy(alpha = 0.8f)
             )
-
-//            TextFieldInput("Vorname", firstName) { firstName = it }
-//            TextFieldInput("Nachname", lastName) { lastName = it }
             TextFieldInput("E-Mail", emailAddress) { emailAddress = it }
 
             SecureTextFieldInput(

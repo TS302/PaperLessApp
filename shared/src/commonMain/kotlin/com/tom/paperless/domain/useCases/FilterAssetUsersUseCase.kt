@@ -1,4 +1,4 @@
-package com.tom.paperless.domain.useCases.employeesUseCases
+package com.tom.paperless.domain.useCases
 
 import com.tom.paperless.domain.models.AssetUser
 

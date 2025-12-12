@@ -11,40 +11,31 @@ import kotlin.uuid.Uuid
 
 object AssetUserRepositoryImpl : AssetUserRepository {
 
-    private val state = MutableStateFlow(initialAssetUsers())
-
-    override fun observeAll(): Flow<List<AssetUser>> = state.asStateFlow()
-
-    override suspend fun getAll(): List<AssetUser> = state.value
-
-    override suspend fun getById(id: Uuid): AssetUser? =
-        state.value.firstOrNull { it.id == id }
+    private val users = mutableListOf<AssetUser>()
 
     override suspend fun add(assetUser: AssetUser): AssetUser {
-        state.update { it + assetUser }
+        users.add(assetUser)
         return assetUser
     }
 
-    override suspend fun update(assetUser: AssetUser): AssetUser? {
-        var saved: AssetUser? = null
-        state.update { current ->
-            val index = current.indexOfFirst { it.id == assetUser.id }
-            if (index >= 0) current.toMutableList().apply {
-                this[index] = assetUser
-                saved = assetUser
-            } else current
+    override suspend fun getAll(): List<AssetUser> {
+        return users.toList()
+    }
+
+    override suspend fun getById(id: Uuid): AssetUser? {
+        return users.firstOrNull { it.id == id }
+    }
+
+    override suspend fun update(assetUser: AssetUser): AssetUser {
+        val index = users.indexOfFirst { it.id == assetUser.id }
+        if (index >= 0) {
+            users[index] = assetUser
         }
-        return saved
+        return assetUser
     }
 
     override suspend fun delete(id: Uuid): Boolean {
-        var removed = false
-        state.update { cur ->
-            val next = cur.filterNot { it.id == id }
-            removed = next.size != cur.size
-            next
-        }
-        return removed
+       return users.removeAll { it.id == id }
     }
 
     private fun initialAssetUsers(): List<AssetUser> = listOf(

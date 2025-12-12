@@ -11,18 +11,18 @@ import KMPObservableViewModelSwiftUI
 
 struct AssetDetailView: View {
     @Environment(\.dismiss) private var dismiss
-    @StateViewModel var itemDetailVM = AssetDetailViewModel()
+    @StateViewModel var assetDetailVM = AssetDetailViewModel()
     
     let asset: NfcTaggable
     var onSaved: ((NfcTaggable) -> Void)? = nil
     @State private var isEditSheetPresented = false
     
     private func reload() {
-        itemDetailVM.load(assetId: asset.id)
+        assetDetailVM.load(assetId: asset.id)
     }
     
     private var displayedAsset: NfcTaggable {
-        itemDetailVM.uiState.asset ?? asset
+        assetDetailVM.uiState.asset ?? asset
     }
     
     var body: some View {
@@ -30,20 +30,20 @@ struct AssetDetailView: View {
             List {
                 AssetGeneralInfoSection(asset: displayedAsset)
                 AssetCurrentAssignmentSection(
-                    isLoading: itemDetailVM.uiState.isLoading,
-                    currentAssigneeName: itemDetailVM.uiState.currentAssigneeName,
-                    currentAssigneeId: itemDetailVM.uiState.currentAssigneeId,
-                    currentAssignmentNote: itemDetailVM.uiState.currentAssignmentNote,
-                    assetIdString: itemDetailVM.uiState.asset?.idString ?? ""
+                    isLoading: assetDetailVM.uiState.isLoading,
+                    currentAssigneeName: assetDetailVM.uiState.currentAssigneeName,
+                    currentAssigneeId: assetDetailVM.uiState.currentAssigneeId,
+                    currentAssignmentNote: assetDetailVM.uiState.currentAssignmentNote,
+                    assetIdString: assetDetailVM.uiState.asset?.idString ?? ""
                 )
                 AssetHistorySection(
-                    lastAssignments: itemDetailVM.uiState.lastAssignments,
-                    lastAssignees: itemDetailVM.uiState.lastAssignees
+                    lastAssignments: assetDetailVM.uiState.lastAssignments,
+                    lastAssignees: assetDetailVM.uiState.lastAssignees
                 )
             }
             .modifier(ListStyle())
             .standardToolbar(
-                title: itemDetailVM.uiState.asset?.name ?? "",
+                title: assetDetailVM.uiState.asset?.name ?? "",
                 leadingAction: { dismiss() },
                 leadingIcon: "arrow.left.circle",
                 trailingAction: { isEditSheetPresented.toggle() },
@@ -54,11 +54,11 @@ struct AssetDetailView: View {
                     .presentationDetents([.medium])
             }
             .onAppear {
-                itemDetailVM.load(assetId: asset.id)
+                assetDetailVM.load(assetId: asset.id)
             }
-            .onChange(of: itemDetailVM.uiState.operationSucceeded) { _, operationSucceeded in
+            .onChange(of: assetDetailVM.uiState.operationSucceeded) { _, operationSucceeded in
                 if operationSucceeded {
-                    let updated = itemDetailVM.uiState.asset ?? asset
+                    let updated = assetDetailVM.uiState.asset ?? asset
                     onSaved?(updated)
                     dismiss()
                 }

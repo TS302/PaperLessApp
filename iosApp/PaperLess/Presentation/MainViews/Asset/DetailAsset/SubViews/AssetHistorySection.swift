@@ -26,12 +26,12 @@ struct AssetHistorySection: View {
                 ForEach(lastAssignments, id: \.id) { assignment in
                     
                     // passenden Mitarbeiter zu dieser Zuweisung suchen
-                    let employee = lastAssignees.first { employee in
-                        employee.id == assignment.employeeId
+                    let assetUser = lastAssignees.first { assetUser in
+                        assetUser.id == assignment.assetUserId
                     }
                     
                     // Fallback, falls kein Name gefunden wird
-                    let name = employee?.name ?? "Unbekannter Mitarbeiter"
+                    let name = assetUser?.name ?? "Unbekannter Asset-User"
                     
                     // Instant -> Date → Date
                     let fromDate = assignment.from.toDate()

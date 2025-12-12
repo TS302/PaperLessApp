@@ -37,6 +37,7 @@ kotlin {
         commonMain.dependencies {
 
             implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.6.0")
+            implementation("dev.gitlive:firebase-firestore:1.13.0")
 
             api(libs.kmp.observableviewmodel.core)
             implementation(libs.kmp.nativecoroutines.core)

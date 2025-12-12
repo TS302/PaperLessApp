@@ -6,7 +6,7 @@ import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.uiStates.EditAssetUserUiState
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateAssetUserUseCase
+import com.tom.paperless.domain.useCases.UpdateAssetUserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -110,7 +110,6 @@ class EditAssetUserViewModel : ViewModel(), KoinComponent {
             )
         }
     }
-
     private fun validateInputs(name: String, email: String): Boolean {
         if (name.trim().isEmpty()) return false
         if (email.isNotEmpty() && (!email.contains("@") || !email.contains("."))) {

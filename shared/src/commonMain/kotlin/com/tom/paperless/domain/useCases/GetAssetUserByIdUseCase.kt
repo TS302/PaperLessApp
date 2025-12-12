@@ -1,4 +1,4 @@
-package com.tom.paperless.domain.useCases.employeesUseCases
+package com.tom.paperless.domain.useCases
 
 import com.rickclephas.kmp.nativecoroutines.NativeCoroutines
 import com.tom.paperless.data.repositories.AssetUserRepository

@@ -1,4 +1,4 @@
-package com.tom.paperless.domain.useCases.employeesUseCases
+package com.tom.paperless.domain.useCases
 
 import com.tom.paperless.data.repositories.AssetUserRepository
 import com.tom.paperless.domain.models.AssetUser
@@ -8,5 +8,8 @@ import org.koin.core.component.inject
 
 class GetAllAssetUsersUseCase() : KoinComponent {
     private val repository: AssetUserRepository by inject()
-    operator fun invoke(): Flow<List<AssetUser>> = repository.observeAll()
+
+    suspend operator fun invoke(): List<AssetUser> {
+        return repository.getAll()
+    }
 }

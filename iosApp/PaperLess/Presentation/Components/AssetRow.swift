@@ -9,22 +9,22 @@ import SwiftUI
 import Shared
 
 struct AssetRow: View {
-    var item: NfcTaggable
+    var asset: NfcTaggable
     
     var body: some View {
         HStack {
             HStack {
-                RowIcon(icon: item.targetType.systemImageName)
+                RowIcon(icon: asset.tagType.systemImageName)
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    Text(item.name)
+                    Text(asset.name)
                         .modifier(TitleModi())
                     
                     HStack {
                         Image(systemName: "ellipsis.rectangle.fill")
-                            .foregroundStyle(item.tagStatus.color)
+                            .foregroundStyle(asset.tagStatus.color)
                         
-                        Text(item.tagStatus.displayName)
+                        Text(asset.tagStatus.displayName)
                             .modifier(SubtitleModi())
                     }
                 }

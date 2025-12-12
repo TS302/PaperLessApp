@@ -10,7 +10,7 @@ import Shared
 
 enum FilterOption: String, CaseIterable, Identifiable {
     case all = "Alle"
-    case employees = "Mitarbeiter"
+    case assetUser = "Asset-User"
     case vehicles = "Fahrzeuge"
     case tools = "Werkzeuge"
     case keys = "Schlüssel"
@@ -19,7 +19,7 @@ enum FilterOption: String, CaseIterable, Identifiable {
 }
 
 extension FilterOption {
-    var toTargetTypeOrNil: TargetType? {
+    var toTargetTypeOrNil: TagType? {
         switch self {
         case .all:
             return nil
@@ -29,8 +29,8 @@ extension FilterOption {
             return .tool
         case .keys:
             return .key
-        case .employees:
-            return .employee
+        case .assetUser:
+            return .assetuser
         }
     }
     
@@ -44,8 +44,8 @@ extension FilterOption {
             return "Werkzeuge"
         case .keys:      
             return "Schlüssel"
-        case .employees: 
-            return "Mitarbeiter"
+        case .assetUser:
+            return "Asset-User"
         }
     }
     
@@ -59,7 +59,7 @@ extension FilterOption {
             return Image(systemName: "wrench.and.screwdriver.fill")
         case .keys:
             return Image(systemName: "key.2.on.ring.fill")
-        case .employees:
+        case .assetUser:
             return Image(systemName: "person.2.fill")
         }
     }

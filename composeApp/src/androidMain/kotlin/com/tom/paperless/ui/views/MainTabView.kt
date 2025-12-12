@@ -38,8 +38,10 @@ fun MainTabView(
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var showAddVehicleSheet by remember { mutableStateOf(false) }
+    var showAddVehicle by remember { mutableStateOf(false) }
 
-    val companyViewModel = remember { KoinStarter.companyViewModel() }
+
+    val assetsViewModel = remember { KoinStarter.companyViewModel() }
     val tabs = remember {
         listOf(
             TabItem("Items", Icons.Filled.Inventory2),
@@ -95,7 +97,7 @@ fun MainTabView(
     ) { innerPadding ->
         when (selectedTabIndex) {
             0 -> ItemsView(
-                uiStateFlow = companyViewModel.uiState,
+                uiStateFlow = assetsViewModel.uiState,
                 modifier = Modifier
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding)
@@ -115,8 +117,9 @@ fun MainTabView(
     }
     if (showAddVehicleSheet) {
         AddVehicleSheet(
-            onDismiss = {
-                showAddVehicleSheet = false
+            onDismiss = { showAddVehicleSheet = false },
+            onSaved = {
+                assetsViewModel.reloadAssets()
             }
         )
     }

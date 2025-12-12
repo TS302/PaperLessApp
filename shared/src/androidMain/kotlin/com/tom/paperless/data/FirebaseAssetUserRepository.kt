@@ -18,27 +18,11 @@ class FirebaseAssetUserRepository(
 
     private val collection = db.collection("assetUsers")
 
-    override fun observeAll(): Flow<List<AssetUser>> = callbackFlow {
-        val listener = collection.addSnapshotListener { snapshot, error ->
-            if (error != null) {
-                close(error)
-                return@addSnapshotListener
-            }
-
-            val users = snapshot?.documents
-                ?.mapNotNull { it.toObject(AssetUserDto::class.java)?.toDomain() }
-                ?: emptyList()
-
-            trySend(users)
-        }
-
-        // Clean up when flow collector is cancelled
-        awaitClose { listener.remove() }
-    }
-
     override suspend fun getAll(): List<AssetUser> {
         val snap = collection.get().await()
-        return snap.documents.mapNotNull { it.toObject(AssetUserDto::class.java)?.toDomain() }
+        return snap.documents.mapNotNull {
+            it.toObject(AssetUserDto::class.java)?.toDomain()
+        }
     }
 
     override suspend fun getById(id: Uuid): AssetUser? {
@@ -53,7 +37,7 @@ class FirebaseAssetUserRepository(
         return assetUser
     }
 
-    override suspend fun update(assetUser: AssetUser): AssetUser? {
+    override suspend fun update(assetUser: AssetUser): AssetUser {
         collection.document(assetUser.id.toString())
             .set(assetUser.toDto())
             .await()
@@ -61,11 +45,7 @@ class FirebaseAssetUserRepository(
     }
 
     override suspend fun delete(id: Uuid): Boolean {
-        return try {
-            collection.document(id.toString()).delete().await()
-            true
-        } catch (e: Exception) {
-            false
-        }
+        collection.document(id.toString()).delete().await()
+        return true
     }
 }

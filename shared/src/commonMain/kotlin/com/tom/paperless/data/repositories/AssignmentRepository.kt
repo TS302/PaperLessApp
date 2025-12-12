@@ -7,17 +7,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlin.uuid.Uuid
 
 interface AssignmentRepository {
-    fun observeAll(): StateFlow<List<Assignment>>
-    fun observeForEmployee(assetUserId: Uuid): StateFlow<List<Assignment>>
-    fun observeForAsset(taggableId: Uuid): StateFlow<List<Assignment>>
 
-    suspend fun currentAssigneeOf(taggableId: Uuid): AssetUser?
-    suspend fun lastAssignmentsOf(taggableId: Uuid, limit: Int = 3 ): List<Assignment>
-
-    suspend fun lastAssigneesOf(taggableId: Uuid, limit: Int = 3): List<AssetUser>
-    suspend fun assetsOf(assetUserId: Uuid): List<NfcTaggable>
-
-    suspend fun assign(taggableId: Uuid, toEmployeeId: Uuid, note: String?): Assignment
-    suspend fun unassign(taggableId: Uuid): Boolean
-    suspend fun closeAssignment(assignmentId: Uuid): Boolean
+    suspend fun add(assignment: Assignment): Assignment
+    suspend fun getAll(): List<Assignment>
+    suspend fun getById(id: Uuid): Assignment?
+    suspend fun getByAsset(taggableId: Uuid): List<Assignment>
+    suspend fun getByEmployee(assetUserId: Uuid): List<Assignment>
+    suspend fun update(assignment: Assignment): Assignment?
+    suspend fun delete(id: Uuid): Boolean
 }

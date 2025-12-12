@@ -1,18 +1,12 @@
 package com.tom.paperless.di
 
 
-import com.tom.paperless.data.repositories.AssignmentRepository
-import com.tom.paperless.data.repositories.AssignmentRepositoryImpl
-import com.tom.paperless.data.repositories.AssetUserRepository
-import com.tom.paperless.data.repositories.AssetUserRepositoryImpl
-import com.tom.paperless.data.repositories.NfcTaggableRepository
-import com.tom.paperless.data.repositories.NfcTaggableRepositoryImpl
 import com.tom.paperless.data.repositories.UserRepository
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.CheckUserLoggedInUseCase
 import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.FilterNfcTaggablesUseCase
-import com.tom.paperless.domain.useCases.GetAllNfcTaggablesFlowUseCase
+//import com.tom.paperless.domain.useCases.GetAllNfcTaggablesFlowUseCase
 import com.tom.paperless.domain.useCases.GetAllNfcTaggablesUseCase
 import com.tom.paperless.domain.useCases.GetLoggedInUserUseCase
 import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
@@ -21,15 +15,16 @@ import com.tom.paperless.domain.useCases.LogoutUserUseCase
 import com.tom.paperless.domain.useCases.RegisterUserUseCase
 import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.UpdateNfcTaggableUseCase
-import com.tom.paperless.domain.useCases.assetsUseCases.AssignAssetToEmployeeUseCase
-import com.tom.paperless.domain.useCases.assetsUseCases.GetAssetsOfEmployeeUseCase
-import com.tom.paperless.domain.useCases.assetsUseCases.ReturnAssetUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.AddAssetUserUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.DeleteAssetUserUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.FilterAssetUsersUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetAllAssetUsersUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetAssetUserByIdUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateAssetUserUseCase
+import com.tom.paperless.domain.useCases.AssignAssetToEmployeeUseCase
+import com.tom.paperless.domain.useCases.GetAssetsOfEmployeeUseCase
+import com.tom.paperless.domain.useCases.ReturnAssetUseCase
+import com.tom.paperless.domain.useCases.AddAssetUserUseCase
+import com.tom.paperless.domain.useCases.DeleteAssetUserUseCase
+import com.tom.paperless.domain.useCases.FilterAssetUsersUseCase
+import com.tom.paperless.domain.useCases.GetAllAssetUsersUseCase
+import com.tom.paperless.domain.useCases.GetAssetUserByIdUseCase
+import com.tom.paperless.domain.useCases.ObserveAllNfcTagsUseCase
+import com.tom.paperless.domain.useCases.UpdateAssetUserUseCase
 import com.tom.paperless.ui.viewModels.AddAssetUserViewModel
 import com.tom.paperless.ui.viewModels.AddKeyViewModel
 import com.tom.paperless.ui.viewModels.AddToolViewModel
@@ -63,7 +58,8 @@ val appModule = module {
 
     // NfcTaggables UseCases
     single { FilterNfcTaggablesUseCase() }
-    single { GetAllNfcTaggablesFlowUseCase() }
+//    single { GetAllNfcTaggablesFlowUseCase() }
+    single { ObserveAllNfcTagsUseCase() }
     single { AddNfcTaggableUseCase() }
     single { SaveNfcTaggableUseCase() }
     single { DeleteNfcTaggableUseCase() }

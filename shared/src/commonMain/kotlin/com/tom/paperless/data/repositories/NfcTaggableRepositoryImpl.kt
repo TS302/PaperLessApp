@@ -22,7 +22,6 @@ class NfcTaggableRepositoryImpl(
 ): NfcTaggableRepository {
 
     private val _items = MutableStateFlow<List<NfcTaggable>>(initialSample())
-    override fun observeAll(): StateFlow<List<NfcTaggable>> = _items
 
     private fun initialSample(): List<NfcTaggable> = listOf(
         // Vehicles
@@ -249,17 +248,6 @@ class NfcTaggableRepositoryImpl(
         return savedItem
     }
 
-    override suspend fun updateStatus(id: Uuid, status: TagStatus): NfcTaggable {
-        val current = getById(id) ?: error("Taggable $id existiert nicht.")
-        val updated = when (current) {
-            is Tool -> current.copy(tagStatus = status)
-            is Vehicle -> current.copy(tagStatus = status)
-            is KeyRing -> current.copy(tagStatus = status)
-            else -> error("Unbekannter Typ: ${current::class.simpleName}")
-        }
-        return update(updated) ?: error("Update fehlgeschlagen.")
-    }
-
     override suspend fun delete(id: Uuid): Boolean {
         var removed = false
         _items.update { list ->
@@ -269,10 +257,6 @@ class NfcTaggableRepositoryImpl(
         }
         return removed
     }
-
-    override fun observeByType(type: TagType): StateFlow<List<NfcTaggable>> =
-        _items.map { list -> list.filter { it.tagType == type } }
-            .stateIn(scope, SharingStarted.Eagerly, emptyList())
 
     override suspend fun getAllByType(type: TagType): List<NfcTaggable> =
         _items.value.filter { it.tagType == type }

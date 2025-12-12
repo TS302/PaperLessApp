@@ -8,13 +8,13 @@
 import SwiftUI
 import Shared
 
-extension TargetType {
+extension TagType {
     var asFilterOption: FilterOption {
         switch self {
         case .vehicle: return .vehicles
         case .tool: return .tools
         case .key: return .keys
-        case .employee: return .employees
+        case .assetuser: return .assetUser
         default:
             return .vehicles
         }
@@ -25,7 +25,7 @@ extension TargetType {
         case .vehicle: return "car.fill"
         case .tool: return "wrench.and.screwdriver.fill"
         case .key: return "key.2.on.ring.fill"
-        case .employee: return "person.fill"
+        case .assetuser: return "person.fill"
         default:
             return "questionmark.circle"
         }

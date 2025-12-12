@@ -6,11 +6,11 @@ import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.uiStates.AssetUsersUiState
-import com.tom.paperless.domain.useCases.employeesUseCases.AddAssetUserUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.DeleteAssetUserUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.FilterAssetUsersUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetAllAssetUsersUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateAssetUserUseCase
+import com.tom.paperless.domain.useCases.AddAssetUserUseCase
+import com.tom.paperless.domain.useCases.DeleteAssetUserUseCase
+import com.tom.paperless.domain.useCases.FilterAssetUsersUseCase
+import com.tom.paperless.domain.useCases.GetAllAssetUsersUseCase
+import com.tom.paperless.domain.useCases.UpdateAssetUserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -20,7 +20,7 @@ import kotlin.uuid.Uuid
 
 class AssetUsersViewModel() : ViewModel(), KoinComponent {
 
-    private val getAllAssetUsere: GetAllAssetUsersUseCase by inject()
+    private val getAllAssetUsers: GetAllAssetUsersUseCase by inject()
     private val addAssetUser: AddAssetUserUseCase by inject()
     private val updateAssetUser: UpdateAssetUserUseCase by inject()
     private val deleteAssetUser: DeleteAssetUserUseCase by inject()
@@ -34,18 +34,19 @@ class AssetUsersViewModel() : ViewModel(), KoinComponent {
 
     init {
         viewModelScope.launch {
-            getAllAssetUsere().collectLatest { allAssetUsers ->
-                lastAllAssetUsers = allAssetUsers
-                val currentSearchText = _uiState.value.searchQueryText
-                val filteredEmployees =
-                    filterAssetUsers(allAssetUsers, currentSearchText)
+            val allAssetUsers = getAllAssetUsers()
+            lastAllAssetUsers = allAssetUsers
 
-                _uiState.value = _uiState.value.copy(
-                    isLoading = false,
-                    items = filteredEmployees,
-                    errorMessage = null
-                )
-            }
+            val filtered = filterAssetUsers(
+                allAssetUsers,
+                searchQueryText = _uiState.value.searchQueryText
+            )
+
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                items = filtered,
+                errorMessage = null
+            )
         }
     }
 

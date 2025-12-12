@@ -5,10 +5,10 @@ import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
 import com.tom.paperless.domain.models.uiStates.AssetUserDetailUiState
-import com.tom.paperless.domain.useCases.assetsUseCases.GetAssetsOfEmployeeUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.DeleteAssetUserUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.GetAssetUserByIdUseCase
-import com.tom.paperless.domain.useCases.employeesUseCases.UpdateAssetUserUseCase
+import com.tom.paperless.domain.useCases.GetAssetsOfEmployeeUseCase
+import com.tom.paperless.domain.useCases.DeleteAssetUserUseCase
+import com.tom.paperless.domain.useCases.GetAssetUserByIdUseCase
+import com.tom.paperless.domain.useCases.UpdateAssetUserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

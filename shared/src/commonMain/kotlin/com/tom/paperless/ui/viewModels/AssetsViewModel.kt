@@ -10,23 +10,21 @@ import com.tom.paperless.domain.models.uiStates.AssetsUiState
 import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.FilterNfcTaggablesUseCase
-import com.tom.paperless.domain.useCases.GetAllNfcTaggablesFlowUseCase
+import com.tom.paperless.domain.useCases.ObserveAllNfcTagsUseCase
 import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
 class AssetsViewModel() : ViewModel(), KoinComponent {
 
-    private val getAllNfcTaggables: GetAllNfcTaggablesFlowUseCase by inject()
+    private val observeAllNfcTags: ObserveAllNfcTagsUseCase by inject()
     private val addNfcTaggable: AddNfcTaggableUseCase by inject()
     private val saveNfcTaggable: SaveNfcTaggableUseCase by inject()
     private val deleteNfcTaggable: DeleteNfcTaggableUseCase by inject()
     private val filterNfcTaggables: FilterNfcTaggablesUseCase by inject()
-
     private val _uiState = MutableStateFlow(viewModelScope, AssetsUiState.empty())
 
     @NativeCoroutinesState
@@ -35,25 +33,16 @@ class AssetsViewModel() : ViewModel(), KoinComponent {
     private var lastAllItems: List<NfcTaggable> = emptyList()
 
 init {
-    viewModelScope.launch {
-        getAllNfcTaggables().collectLatest { allItems ->
-            lastAllItems = allItems
-
-            val state = _uiState.value
-            val visible = filterNfcTaggables(
-                allItems = allItems,
-                typeFilter = state.activeTypeFilter,
-                searchQueryText = state.searchQueryText
-            )
-            _uiState.value = state.copy(
-                isLoading = false,
-                items = visible,
-                errorMessage = null
-            )
-        }
-    }
+    reloadAssets()
 }
 
+    fun reloadAssets() {
+        viewModelScope.launch {
+            val items = observeAllNfcTags.load()
+            lastAllItems = items
+            _uiState.value = _uiState.value.copy(assets = items)
+        }
+    }
     fun setTypeFilter(newTypeFilter: TagType?) {
         _uiState.value = _uiState.value.copy(activeTypeFilter = newTypeFilter)
         recomputeVisibleItems()
@@ -71,7 +60,7 @@ init {
             typeFilter = state.activeTypeFilter,
             searchQueryText = state.searchQueryText
         )
-        _uiState.value = state.copy(items = visible)
+        _uiState.value = state.copy(assets = visible)
     }
 
     fun addItem(itemToAdd: NfcTaggable) = viewModelScope.launch {
