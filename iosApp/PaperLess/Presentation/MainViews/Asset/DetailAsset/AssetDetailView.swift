@@ -14,11 +14,11 @@ struct AssetDetailView: View {
     @StateViewModel var assetDetailVM = AssetDetailViewModel()
     
     let asset: NfcTaggable
-    var onSaved: ((NfcTaggable) -> Void)? = nil
+    var onSaved: ((NfcTaggable) -> Void)? = nil 
     @State private var isEditSheetPresented = false
     
     private func reload() {
-        assetDetailVM.load(assetId: asset.id)
+        assetDetailVM.start(assetId: asset.id)
     }
     
     private var displayedAsset: NfcTaggable {
@@ -34,7 +34,7 @@ struct AssetDetailView: View {
                     currentAssigneeName: assetDetailVM.uiState.currentAssigneeName,
                     currentAssigneeId: assetDetailVM.uiState.currentAssigneeId,
                     currentAssignmentNote: assetDetailVM.uiState.currentAssignmentNote,
-                    assetIdString: assetDetailVM.uiState.asset?.idString ?? ""
+                    asset: displayedAsset
                 )
                 AssetHistorySection(
                     lastAssignments: assetDetailVM.uiState.lastAssignments,
@@ -54,7 +54,7 @@ struct AssetDetailView: View {
                     .presentationDetents([.medium])
             }
             .onAppear {
-                assetDetailVM.load(assetId: asset.id)
+                assetDetailVM.start(assetId: asset.id)
             }
             .onChange(of: assetDetailVM.uiState.operationSucceeded) { _, operationSucceeded in
                 if operationSucceeded {

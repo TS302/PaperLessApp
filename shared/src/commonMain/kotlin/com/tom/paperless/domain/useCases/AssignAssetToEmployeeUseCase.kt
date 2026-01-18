@@ -31,6 +31,15 @@ class AssignAssetToEmployeeUseCase : KoinComponent {
             else -> error("Asset vom Typ ${asset.tagType} kann nicht zugewiesen werden")
         }
 
+        val now = Clock.System.now()
+
+        val existingAssignments = assignmentRepository.getByAsset(asset.id)
+        val openAssignment = existingAssignments.firstOrNull { it.until == null }
+
+        if (openAssignment != null) {
+            assignmentRepository.update(openAssignment.copy(until = now))
+        }
+
         val assignment = Assignment(
             id = Uuid.random(),
             tagId = asset.id,

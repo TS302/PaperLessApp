@@ -41,6 +41,7 @@ struct AssetsView: View {
     }
     
     private func reloadList() {
+//        assetsVM.reloadAssets()
         assetsVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
         assetsVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
     }
@@ -50,29 +51,32 @@ struct AssetsView: View {
     }
 
     var body: some View {
+        let state = assetsVM.uiState
         NavigationStack {
             List {
                 Section {
-                    ForEach(assetsVM.uiState.assets, id: \.idString) { asset in
+                    ForEach(state.assets, id: \.id) { asset in
                         NavigationLink {
                             AssetDetailView(asset: asset)
                         } label: {
                             AssetRow(asset: asset)
                         }
-//                        .id(asset.id)
-//                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
-//                            Button(role: .destructive) {
-//                                delete(asset)
-//                            } label: {
-//                                Label("Löschen", systemImage: "trash")
-//                            }
-//                        }
+                        .id(asset.id)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                delete(asset)
+                            } label: {
+                                Label("Löschen", systemImage: "trash")
+                            }
+                        }
                     }
                 } header: {
                     FilterPicker(filter: filterBinding)
                 }
             }
             .modifier(ListStyle())
+            .refreshable { reloadList() }
+            .searchable(text: searchBinding, prompt: "Suchen")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     AddAssetMenu(
@@ -82,20 +86,24 @@ struct AssetsView: View {
                     )
                 }
             }
-            .refreshable { reloadList() }
         }
-        .searchable(text: searchBinding, prompt: "Suchen")
-//        .onChange(of: searchText) { _, newValue in
-//            assetsVM.setSearchQueryForIos(queryText: newValue)
-//        }
         .sheet(isPresented: $addVehicle) {
             AddVehicleSheet()
+//                .onDisappear {
+//                    reloadList()
+//                }
         }
         .sheet(isPresented: $addTool) {
             AddToolSheet()
+//                .onAppear {
+//                    reloadList()
+//                }
         }
         .sheet(isPresented: $addKey) {
             AddKeySheet()
+//                .onDisappear {
+//                    reloadList()
+//                }
         }
     }
 }

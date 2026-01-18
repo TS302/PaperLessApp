@@ -13,7 +13,7 @@ struct AssetCurrentAssignmentSection: View {
     let currentAssigneeName: String?
     let currentAssigneeId: String?
     let currentAssignmentNote: String?
-    let assetIdString: String
+    let asset: NfcTaggable
     
     var body: some View {
         
@@ -39,7 +39,7 @@ struct AssetCurrentAssignmentSection: View {
                 
                 
                 NavigationLink {
-                    AssignAssetView(itemIdString: assetIdString)
+                    AssignAssetView(asset: asset)
                 } label: {
                     AssignActionRow(
                         title: "Asset neu verknüpfen",
@@ -49,7 +49,7 @@ struct AssetCurrentAssignmentSection: View {
                 
             } else {
                 NavigationLink {
-                    AssignAssetView(itemIdString: assetIdString)
+                    AssignAssetView(asset: asset)
                 } label: {
                     AssignActionRow(
                         title: "Asset verknüpfen",

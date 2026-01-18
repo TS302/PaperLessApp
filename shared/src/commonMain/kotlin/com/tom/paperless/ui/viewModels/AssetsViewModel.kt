@@ -33,8 +33,32 @@ class AssetsViewModel() : ViewModel(), KoinComponent {
     private var lastAllItems: List<NfcTaggable> = emptyList()
 
 init {
-    reloadAssets()
+    startObservingAssets()
 }
+
+    private fun startObservingAssets() {
+        observeAllNfcTags.observe { items ->
+            lastAllItems = items
+
+            _uiState.value = _uiState.value.copy(
+                activeTypeFilter = null,
+                searchQueryText = ""
+            )
+
+            recomputeVisibleItems()
+        }
+
+        observeAllNfcTags.observe { items ->
+            println("🟢 observe callback, items = ${items.size}")
+            lastAllItems = items
+            recomputeVisibleItems()
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        observeAllNfcTags.stop()
+    }
 
     fun reloadAssets() {
         viewModelScope.launch {

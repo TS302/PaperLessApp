@@ -14,7 +14,7 @@ struct PaperLessApp: App {
 
     init() {
         FirebaseApp.configure()
-        startKoinOnIos()
+        startKoinIos()
     }
     
     var body: some Scene {

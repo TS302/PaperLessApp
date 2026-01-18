@@ -1,23 +1,21 @@
-package com.tom.paperless.data
+package com.tom.paperless.data.repositories
 
 import com.google.firebase.firestore.FirebaseFirestore
-import com.tom.paperless.data.repositories.AssetUserRepository
+import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.QuerySnapshot
 import com.tom.paperless.data.repositories.dto.AssetUserDto
 import com.tom.paperless.data.repositories.mappers.toDomain
 import com.tom.paperless.data.repositories.mappers.toDto
 import com.tom.paperless.domain.models.AssetUser
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import kotlin.uuid.Uuid
 
-class FirebaseAssetUserRepository(
+class AndroidAssetUserRepository(
     private val db: FirebaseFirestore
 ) : AssetUserRepository {
-
+    private var registration: ListenerRegistration? = null
     private val collection = db.collection("assetUsers")
-
+    
     override suspend fun getAll(): List<AssetUser> {
         val snap = collection.get().await()
         return snap.documents.mapNotNull {
@@ -47,5 +45,23 @@ class FirebaseAssetUserRepository(
     override suspend fun delete(id: Uuid): Boolean {
         collection.document(id.toString()).delete().await()
         return true
+    }
+
+    override fun observeAll(onChange: (List<AssetUser>) -> Unit) {
+        registration?.remove()
+
+        registration = collection.addSnapshotListener { snapshot: QuerySnapshot?, error ->
+            if (snapshot == null || error != null) return@addSnapshotListener
+
+            val users = snapshot.documents.mapNotNull { doc ->
+                doc.toObject(AssetUserDto::class.java)?.toDomain()
+            }
+            onChange(users)
+        }
+    }
+
+    override fun stopObserving() {
+        registration?.remove()
+        registration = null
     }
 }

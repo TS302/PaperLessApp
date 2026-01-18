@@ -7,12 +7,11 @@ import kotlin.uuid.Uuid
 interface AssetUserRepository {
 
     suspend fun add(assetUser: AssetUser): AssetUser
-
     suspend fun getAll(): List<AssetUser>
-
     suspend fun getById(id: Uuid): AssetUser?
-
     suspend fun update(assetUser: AssetUser): AssetUser
-
     suspend fun delete(id: Uuid): Boolean
+
+    fun observeAll(onChange: (List<AssetUser>) -> Unit)
+    fun stopObserving()
 }

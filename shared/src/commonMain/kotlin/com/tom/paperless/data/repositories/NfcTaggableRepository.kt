@@ -9,16 +9,12 @@ import kotlin.uuid.Uuid
 
 
 interface NfcTaggableRepository {
-    @NativeCoroutines
     suspend fun add(itemToAdd: NfcTaggable): NfcTaggable
-    @NativeCoroutines
     suspend fun getAll(): List<NfcTaggable>
-    @NativeCoroutines
     suspend fun getById(id: Uuid): NfcTaggable?
-    @NativeCoroutines
-    suspend fun getAllByType(type: TagType): List<NfcTaggable>
-    @NativeCoroutines
     suspend fun update(itemToUpdate: NfcTaggable): NfcTaggable?
-    @NativeCoroutines
     suspend fun delete(id: Uuid): Boolean
+
+    fun observeAll(onChange: (List<NfcTaggable>) -> Unit)
+    fun stopObserving()
 }

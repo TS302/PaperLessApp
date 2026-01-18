@@ -14,6 +14,7 @@ import com.tom.paperless.domain.useCases.GetAssetUserByIdUseCase
 import com.tom.paperless.domain.useCases.GetAssignmentsByAssetUseCase
 import com.tom.paperless.domain.useCases.GetCurrentAssigneeUseCase
 import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
+import com.tom.paperless.domain.useCases.ObserveAssignmentsByAssetUseCase
 import com.tom.paperless.domain.useCases.SaveNfcTaggableUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,16 +30,22 @@ class AssetDetailViewModel : ViewModel(), KoinComponent {
     private val getAssignmentsByAsset: GetAssignmentsByAssetUseCase by inject()
     private val getCurrentAssignee: GetCurrentAssigneeUseCase by inject()
     private val getUserById: GetAssetUserByIdUseCase by inject()
+    private val observeAssignmentsByAsset: ObserveAssignmentsByAssetUseCase by inject()
+
 
     private val _uiState =
         MutableStateFlow(viewModelScope, AssetDetailUiState())
-
     @NativeCoroutinesState
     val uiState: StateFlow<AssetDetailUiState> = _uiState.asStateFlow()
 
     fun start(assetId: Uuid) {
         loadAsset(assetId)
-        loadAssignments(assetId)
+        observeAssignments(assetId)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        observeAssignmentsByAsset.stop()
     }
 
     private fun loadAsset(assetId: Uuid) {
@@ -63,48 +70,65 @@ class AssetDetailViewModel : ViewModel(), KoinComponent {
         }
     }
 
-    private fun loadAssignments(assetId: Uuid) {
-        viewModelScope.launch {
-            try {
-                val currentAssignee = getCurrentAssignee(assetId)
+    private fun observeAssignments(assetId: Uuid) {
+        observeAssignmentsByAsset.observe(assetId) { assignments ->
 
-                val history = getAssignmentsByAsset(assetId)
+            val currentAssignment = assignments.firstOrNull { it.until == null }
+
+            viewModelScope.launch {
+                val currentAssignee = currentAssignment?.assetUserId
+                    ?.let { getUserById(it) }
+
+                val historyAssignees = assignments.mapNotNull { assignment ->
+                    assignment.assetUserId?.let { getUserById(id = it) }
+                }
 
                 _uiState.value = _uiState.value.copy(
                     currentAssigneeName = currentAssignee?.name,
-                    currentAssignmentNote = currentAssignee?.note,
-                    lastAssignments = history
-                )
-            } catch (t: Throwable) {
-                _uiState.value = _uiState.value.copy(
-                    errorMessage = t.message
+                    currentAssignmentNote = currentAssignment?.note,
+                    lastAssignments = assignments,
+                    lastAssignees = historyAssignees
                 )
             }
+
+
+//            viewModelScope.launch {
+//                val assignee = currentAssignment?.assetUserId
+//                    ?.let { getUserById(it) }
+//
+//                _uiState.value = _uiState.value.copy(
+//                    currentAssigneeName = assignee?.name,
+//                    currentAssignmentNote = currentAssignment?.note,
+//                    lastAssignments = assignments
+//                )
+//            }
         }
     }
-    fun reloadAssignments(assetId: Uuid) {
-        loadAssignments(assetId)
-    }
 
-    fun setEditing(active: Boolean) {
-        _uiState.value = _uiState.value.copy(isEditing = active)
-    }
+//    private fun loadAssignments(assetId: Uuid) {
+//        viewModelScope.launch {
+//            try {
+//                val currentAssignee = getCurrentAssignee(assetId)
+//
+//                val history = getAssignmentsByAsset(assetId)
+//
+//                _uiState.value = _uiState.value.copy(
+//                    currentAssigneeName = currentAssignee?.name,
+//                    currentAssignmentNote = currentAssignee?.note,
+//                    lastAssignments = history
+//                )
+//            } catch (t: Throwable) {
+//                _uiState.value = _uiState.value.copy(
+//                    errorMessage = t.message
+//                )
+//            }
+//        }
+//    }
+//    fun reloadAssignments(assetId: Uuid) {
+//        loadAssignments(assetId)
+//    }
 
-    fun setName(newName: String) {
-        val asset = _uiState.value.asset ?: return
-        _uiState.value = _uiState.value.copy(
-            asset = asset.withName(newName),
-            isDirty = true
-        )
-    }
 
-    fun setStatus(newStatus: TagStatus) {
-        val asset = _uiState.value.asset ?: return
-        _uiState.value = _uiState.value.copy(
-            asset = asset.withStatus(newStatus),
-            isDirty = true
-        )
-    }
 
     fun allStatuses(): List<TagStatus> =
         try { TagStatus.entries } catch (_: Throwable) { TagStatus.values().toList() }
@@ -160,6 +184,26 @@ class AssetDetailViewModel : ViewModel(), KoinComponent {
         _uiState.value = _uiState.value.copy(
             errorMessage = null,
             operationSucceeded = false
+        )
+    }
+
+    fun setEditing(active: Boolean) {
+        _uiState.value = _uiState.value.copy(isEditing = active)
+    }
+
+    fun setName(newName: String) {
+        val asset = _uiState.value.asset ?: return
+        _uiState.value = _uiState.value.copy(
+            asset = asset.withName(newName),
+            isDirty = true
+        )
+    }
+
+    fun setStatus(newStatus: TagStatus) {
+        val asset = _uiState.value.asset ?: return
+        _uiState.value = _uiState.value.copy(
+            asset = asset.withStatus(newStatus),
+            isDirty = true
         )
     }
 }

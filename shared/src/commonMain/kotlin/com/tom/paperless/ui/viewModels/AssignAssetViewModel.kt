@@ -19,16 +19,18 @@ import com.tom.paperless.domain.useCases.GetLastAssigneesUseCase
 import com.tom.paperless.domain.useCases.ReturnAssetUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.uuid.Uuid
 
 class AssignAssetViewModel : ViewModel(), KoinComponent {
+
     private val assignAssetToEmployeeUseCase: AssignAssetToEmployeeUseCase by inject()
     private val returnAssetUseCase: ReturnAssetUseCase by inject()
-
     private val getCurrentAssignee: GetCurrentAssigneeUseCase by inject()
     private val getLastAssignees: GetLastAssigneesUseCase by inject()
+    private val assetUserRepository: AssetUserRepository by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, AssignAssetUiState())
     @NativeCoroutinesState
@@ -57,6 +59,9 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
             )
 
             try {
+                val assetUsers = assetUserRepository.getAll()
+                println("DEBUG getAll() count = ${assetUsers.size}")
+                println("DEBUG first user = ${assetUsers.firstOrNull()}")
                 val currentAssignee = getCurrentAssignee(assetId)
 
                 val lastAssignees = getLastAssignees(
@@ -66,6 +71,7 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
 
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
+                    assetUsers = assetUsers,
                     currentAssigneeId = currentAssignee?.id,
                     currentAssigneeName = currentAssignee?.name,
                     lastAssignees = lastAssignees
@@ -112,6 +118,22 @@ class AssignAssetViewModel : ViewModel(), KoinComponent {
             } catch (t: Throwable) {
                 _uiState.value = _uiState.value.copy(errorMessage = t.message)
             }
+        }
+    }
+
+    fun setNoteText(value: String) {
+        _uiState.update { it.copy(noteText = value) }
+    }
+
+    fun onEmployeeTapped(assetUser: AssetUser) {
+        _uiState.update {
+            it.copy(selectedEmployeeName = assetUser.name)
+        }
+    }
+
+    fun resetSuccessFlag() {
+        _uiState.update {
+            it.copy(didAssignSuccessfully = false)
         }
     }
 }

@@ -14,10 +14,20 @@ struct AssignAssetView: View {
     @Environment(\.dismiss) private var dismiss
     @StateViewModel private var assignAssetVM = AssignAssetViewModel()
     
-    let itemIdString: String
+//    let itemIdString: String
+    let asset: NfcTaggable
     @State private var searchText: String = ""
     @State private var selectedEmployeeForDialog: AssetUser?
     @FocusState private var isSearchFocused: Bool
+    
+    private var assetIdString: String {
+        asset.id.description
+    }
+    
+    private var assetName: String {
+        let trimmed = asset.name.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? "Asset" : trimmed
+    }
     
     private var filteredEmployees: [AssetUser] {
         let assetUsers: [AssetUser] = assignAssetVM.uiState.assetUsers
@@ -31,11 +41,12 @@ struct AssignAssetView: View {
         List {
             Section {
                 if !isSearchFocused {
-                    AssignAssetHeaderSection(assetName: assignAssetVM.uiState.assetDisplayName)
+                    AssignAssetHeaderSection(assetName: assetName)
                 }
             }
             
             Section {
+                
                 AssignAssetEmployeeListSection(
                     assetUserList: filteredEmployees
                 ) { assetUser in
@@ -46,14 +57,14 @@ struct AssignAssetView: View {
         }
         .modifier(ListStyle())
         .standardToolbar(
-            title: assignAssetVM.uiState.assetDisplayName ?? "",
+            title: assetName,
             leadingAction: { dismiss() },
             leadingIcon: "arrow.left.circle"
         )
         .searchable(text: $searchText, prompt: "Suchen")
         .searchFocused($isSearchFocused)
         .onAppear {
-            assignAssetVM.attach(itemIdString: itemIdString)
+            assignAssetVM.attach(assetIdString: assetIdString)
         }
         .onChange(of: assignAssetVM.uiState.didAssignSuccessfully) { _, success in
             if success {
@@ -62,7 +73,12 @@ struct AssignAssetView: View {
             }
         }
         .sheet(item: $selectedEmployeeForDialog) { assetUser in
-            ConfirmAssignDialogSheet(assignAssetVM: assignAssetVM, assetUser: assetUser)
+            ConfirmAssignDialogSheet(
+                assignAssetVM: assignAssetVM,
+                assetUser: assetUser,
+                assetId: asset.id.description(),
+                assetName: asset.name
+            )
         }
     }
 }

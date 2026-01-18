@@ -15,4 +15,11 @@ interface AssignmentRepository {
     suspend fun getByEmployee(assetUserId: Uuid): List<Assignment>
     suspend fun update(assignment: Assignment): Assignment?
     suspend fun delete(id: Uuid): Boolean
+
+    fun observeAll(onChange: (List<Assignment>) -> Unit)
+    fun observeByAsset(
+        taggableId: Uuid,
+        onChange: (List<Assignment>) -> Unit
+    )
+    fun stopObserving()
 }

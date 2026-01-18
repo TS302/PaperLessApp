@@ -20,5 +20,4 @@ fun NfcTaggable.withStatus(status: TagStatus): NfcTaggable = when (this) {
     is Tool    -> copy(tagStatus = status)
     is KeyRing -> copy(tagStatus = status)
     is AssetUser -> copy(tagStatus = status)
-    else -> this
 }

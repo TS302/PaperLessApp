@@ -7,11 +7,18 @@ import kotlinx.coroutines.flow.flow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-class ObserveAssetUsersUseCase(): KoinComponent {
+class ObserveAllAssetUsersUseCase(): KoinComponent {
     private val repository: AssetUserRepository by inject()
 
-    operator fun invoke(): Flow<List<AssetUser>> =
-        flow {
-            emit(repository.getAll())
-        }
+    fun observe(onChange: (List<AssetUser>) -> Unit) {
+        repository.observeAll(onChange)
+    }
+
+    fun stop() {
+        repository.stopObserving()
+    }
+
+    suspend fun load(): List<AssetUser> {
+        return repository.getAll()
+    }
 }

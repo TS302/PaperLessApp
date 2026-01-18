@@ -44,7 +44,6 @@ struct AddVehicleSheet: View {
     var body: some View {
         NavigationStack {
             VStack {
-                
                 AddVehicleFormSection(
                     name: nameBinding,
                     plate: plateBinding,

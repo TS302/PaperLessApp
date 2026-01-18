@@ -16,7 +16,7 @@ struct AssignAssetHeaderSection: View {
                 Text("Asset-Nutzer auswählen")
                     .modifier(HeadlineModi())
                 
-                Text("Du kannst anschließend \"\(assetName ?? "LEER")\" übergeben.")
+                Text("Du kannst anschließend \"\(assetName ?? "Asset")\" übergeben.")
                     .font(.footnote)
                     .foregroundStyle(Color.primary)
                     .multilineTextAlignment(.center)

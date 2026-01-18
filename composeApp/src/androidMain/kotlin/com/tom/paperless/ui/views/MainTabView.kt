@@ -15,6 +15,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import com.tom.paperless.components.EmployeesTopBar
 import com.tom.paperless.components.ItemsTopBar
 import com.tom.paperless.di.KoinStarter
+import com.tom.paperless.domain.models.uiStates.AssetsUiState
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,10 +40,10 @@ fun MainTabView(
 ) {
     var selectedTabIndex by remember { mutableIntStateOf(0) }
     var showAddVehicleSheet by remember { mutableStateOf(false) }
-    var showAddVehicle by remember { mutableStateOf(false) }
-
-
+//    var showAddVehicle by remember { mutableStateOf(false) }
     val assetsViewModel = remember { KoinStarter.companyViewModel() }
+    val uiState by assetsViewModel.uiState.collectAsState()
+
     val tabs = remember {
         listOf(
             TabItem("Items", Icons.Filled.Inventory2),
@@ -97,7 +99,7 @@ fun MainTabView(
     ) { innerPadding ->
         when (selectedTabIndex) {
             0 -> ItemsView(
-                uiStateFlow = assetsViewModel.uiState,
+                uiState = uiState,
                 modifier = Modifier
                     .padding(innerPadding)
                     .consumeWindowInsets(innerPadding)
@@ -117,10 +119,7 @@ fun MainTabView(
     }
     if (showAddVehicleSheet) {
         AddVehicleSheet(
-            onDismiss = { showAddVehicleSheet = false },
-            onSaved = {
-                assetsViewModel.reloadAssets()
-            }
+            onDismiss = { showAddVehicleSheet = false }
         )
     }
 }

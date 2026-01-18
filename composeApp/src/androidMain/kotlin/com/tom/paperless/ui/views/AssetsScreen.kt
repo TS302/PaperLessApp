@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -18,7 +19,7 @@ import org.koin.compose.koinInject
 fun ItemsScreen(
     assetsViewModel: AssetsViewModel = koinInject()
 ) {
-    val uiStateFlow = assetsViewModel.uiState
+    val uiState by assetsViewModel.uiState.collectAsState()
 
     var showAddVehicleSheet by rememberSaveable { mutableStateOf(false) }
 
@@ -33,7 +34,7 @@ fun ItemsScreen(
         }
     ) { paddingValues ->
         ItemsView(
-            uiStateFlow = uiStateFlow,
+            uiState = uiState,
             modifier = Modifier.padding(paddingValues),
             onItemClick = { /* TODO */ },
             onItemMenuClick = { /* TODO */ }
@@ -43,10 +44,10 @@ fun ItemsScreen(
         AddVehicleSheet(
             onDismiss = {
                 showAddVehicleSheet = false
-            },
-            onSaved = {
-                assetsViewModel.reloadAssets()
             }
+//            onSaved = {
+//                assetsViewModel.reloadAssets()
+//            }
         )
     }
 }

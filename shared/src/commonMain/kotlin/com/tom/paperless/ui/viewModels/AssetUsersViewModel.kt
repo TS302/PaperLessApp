@@ -4,12 +4,14 @@ import com.rickclephas.kmp.nativecoroutines.NativeCoroutinesState
 import com.rickclephas.kmp.observableviewmodel.MutableStateFlow
 import com.rickclephas.kmp.observableviewmodel.ViewModel
 import com.rickclephas.kmp.observableviewmodel.launch
+import com.tom.paperless.data.repositories.AssetUserRepository
 import com.tom.paperless.domain.models.AssetUser
 import com.tom.paperless.domain.models.uiStates.AssetUsersUiState
 import com.tom.paperless.domain.useCases.AddAssetUserUseCase
 import com.tom.paperless.domain.useCases.DeleteAssetUserUseCase
 import com.tom.paperless.domain.useCases.FilterAssetUsersUseCase
 import com.tom.paperless.domain.useCases.GetAllAssetUsersUseCase
+import com.tom.paperless.domain.useCases.ObserveAllAssetUsersUseCase
 import com.tom.paperless.domain.useCases.UpdateAssetUserUseCase
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,6 +27,7 @@ class AssetUsersViewModel() : ViewModel(), KoinComponent {
     private val updateAssetUser: UpdateAssetUserUseCase by inject()
     private val deleteAssetUser: DeleteAssetUserUseCase by inject()
     private val filterAssetUsers: FilterAssetUsersUseCase by inject()
+    private val observeAllAssetUsers: ObserveAllAssetUsersUseCase by inject()
 
     private val _uiState = MutableStateFlow(viewModelScope, AssetUsersUiState.empty())
     @NativeCoroutinesState
@@ -33,18 +36,17 @@ class AssetUsersViewModel() : ViewModel(), KoinComponent {
     private var lastAllAssetUsers: List<AssetUser> = emptyList()
 
     init {
-        viewModelScope.launch {
-            val allAssetUsers = getAllAssetUsers()
-            lastAllAssetUsers = allAssetUsers
+        startObservingAssetUsers()
+    }
 
-            val filtered = filterAssetUsers(
-                allAssetUsers,
-                searchQueryText = _uiState.value.searchQueryText
-            )
+    private fun startObservingAssetUsers() {
+        _uiState.value = _uiState.value.copy(isLoading = true)
 
+        observeAllAssetUsers.observe { users ->
+            lastAllAssetUsers = users
+            recomputeVisibleAssetUsers()
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
-                items = filtered,
                 errorMessage = null
             )
         }

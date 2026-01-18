@@ -37,7 +37,7 @@ import org.koin.compose.koinInject
 fun AddVehicleSheet(
     viewModel: AddVehicleViewModel = koinInject(),
     onDismiss: () -> Unit,
-    onSaved: () -> Unit
+//    onSaved: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val canSave = uiState.name.trim().isNotEmpty() && !uiState.isSaving
@@ -46,7 +46,7 @@ fun AddVehicleSheet(
         if (uiState.didSave) {
             viewModel.resetDidSave()
             onDismiss()
-            onSaved()
+//            onSaved()
         }
     }
     ModalBottomSheet(

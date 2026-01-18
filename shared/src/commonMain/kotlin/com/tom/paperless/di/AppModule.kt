@@ -19,12 +19,19 @@ import com.tom.paperless.domain.useCases.AssignAssetToEmployeeUseCase
 import com.tom.paperless.domain.useCases.GetAssetsOfEmployeeUseCase
 import com.tom.paperless.domain.useCases.ReturnAssetUseCase
 import com.tom.paperless.domain.useCases.AddAssetUserUseCase
+import com.tom.paperless.domain.useCases.CompleteAssignmentUseCase
 import com.tom.paperless.domain.useCases.DeleteAssetUserUseCase
 import com.tom.paperless.domain.useCases.FilterAssetUsersUseCase
 import com.tom.paperless.domain.useCases.GetAllAssetUsersUseCase
 import com.tom.paperless.domain.useCases.GetAssetUserByIdUseCase
+import com.tom.paperless.domain.useCases.GetCurrentAssigneeUseCase
+import com.tom.paperless.domain.useCases.GetLastAssigneesUseCase
+import com.tom.paperless.domain.useCases.ObserveAllAssetUsersUseCase
+import com.tom.paperless.domain.useCases.ObserveAllAssignmentsUseCase
 import com.tom.paperless.domain.useCases.ObserveAllNfcTagsUseCase
+import com.tom.paperless.domain.useCases.ObserveAssignmentsByAssetUseCase
 import com.tom.paperless.domain.useCases.UpdateAssetUserUseCase
+import com.tom.paperless.domain.useCases.UpdateNfcTagStatusUseCase
 import com.tom.paperless.ui.viewModels.AddAssetUserViewModel
 import com.tom.paperless.ui.viewModels.AddKeyViewModel
 import com.tom.paperless.ui.viewModels.AddToolViewModel
@@ -34,6 +41,7 @@ import com.tom.paperless.ui.viewModels.AssetsViewModel
 import com.tom.paperless.ui.viewModels.AssetUserDetailViewModel
 import com.tom.paperless.ui.viewModels.AssetUsersViewModel
 import com.tom.paperless.ui.viewModels.AssetDetailViewModel
+import com.tom.paperless.ui.viewModels.AssignmentDetailViewModel
 import com.tom.paperless.ui.viewModels.EditAssetSheetViewModel
 import com.tom.paperless.ui.viewModels.EditAssetUserViewModel
 import com.tom.paperless.ui.viewModels.LoginViewModel
@@ -58,7 +66,6 @@ val appModule = module {
 
     // NfcTaggables UseCases
     single { FilterNfcTaggablesUseCase() }
-//    single { GetAllNfcTaggablesFlowUseCase() }
     single { ObserveAllNfcTagsUseCase() }
     single { AddNfcTaggableUseCase() }
     single { SaveNfcTaggableUseCase() }
@@ -67,18 +74,26 @@ val appModule = module {
     single { GetNfcTaggableByIdUseCase() }
     single { UpdateNfcTaggableUseCase() }
 
-    // Employees UseCases
+    // AssetUser UseCases
     single { GetAllAssetUsersUseCase() }
     single { GetAssetUserByIdUseCase() }
     single { AddAssetUserUseCase() }
     single { UpdateAssetUserUseCase() }
     single { DeleteAssetUserUseCase() }
     single { FilterAssetUsersUseCase() }
+    single { ObserveAllAssetUsersUseCase() }
+
 
     // Assignment UseCases
     single { AssignAssetToEmployeeUseCase() }
     single { ReturnAssetUseCase() }
     single { GetAssetsOfEmployeeUseCase() }
+    single { ObserveAllAssignmentsUseCase() }
+    single { ObserveAssignmentsByAssetUseCase() }
+    single { GetCurrentAssigneeUseCase() }
+    single { GetLastAssigneesUseCase() }
+    single { UpdateNfcTagStatusUseCase() }
+    factory { CompleteAssignmentUseCase() }
 
     // ViewModels
     factory { AssetsViewModel() }
@@ -95,4 +110,5 @@ val appModule = module {
     factory { AssignAssetViewModel() }
     factory { EditAssetSheetViewModel() }
     factory { EditAssetUserViewModel() }
+    factory { AssignmentDetailViewModel() }
 }

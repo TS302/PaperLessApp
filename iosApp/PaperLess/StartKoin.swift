@@ -5,10 +5,19 @@
 //  Created by Tom Salih on 08.11.25.
 //
 
-import Foundation
-import Shared 
+import Shared
+import FirebaseCore
 
-func startKoinOnIos() {
-    let service = IosFirebaseAuthService()
-    KoinIosStarterKt.startKoinIosWithAuth(authServiceInstance: service)
+func startKoinIos() {
+    let authService = IosFirebaseAuthService()
+    let assetUserRepository = IosAssetUserRepository()
+    let assignmentRepository = IosAssignmentRepository()
+    let nfcTaggableRepository = IosNfcTaggableRepository()
+    
+    KoinIosStarterKt.startKoinIosWithAuth(
+        authServiceInstance: authService,
+        assetUserRepository: assetUserRepository,
+        assignmentRepository: assignmentRepository,
+        nfcTaggableRepository: nfcTaggableRepository
+    )
 }
