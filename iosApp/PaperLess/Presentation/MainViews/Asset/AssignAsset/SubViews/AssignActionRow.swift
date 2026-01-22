@@ -12,18 +12,17 @@ struct AssignActionRow: View {
     let subtitle: String
     
     var body: some View {
-            HStack(spacing: 12) {
-                RowIcon(icon: "person.crop.circle.badge.plus")
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
-                        .modifier(TitleModi())
-                        .fontWeight(.bold)
-                    Text(subtitle)
-                        .modifier(SubtitleModi())
-                }
+        HStack(spacing: 12) {
+            RowIcon(icon: "person.crop.circle.badge.plus")
+            
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .modifier(TitleModi())
+                    .fontWeight(.bold)
+                Text(subtitle)
+                    .modifier(SubtitleModi())
             }
-            .padding(.vertical, 4)
-        
+        }
+        .padding(.vertical, 4)
     }
 }

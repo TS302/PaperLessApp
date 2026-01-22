@@ -38,16 +38,19 @@ struct EditAssetUserSheet: View {
                     ),
                     error: editAssetUserVM.uiState.errorMessage
                 )
-                .padding(.top, 32)
-                
-                SaveAndCancelButtonRow(
-                    cancelAction: { dismiss() },
-                    saveAction: {
-                        editAssetUserVM.save()
-                        dismiss()
-                    }
-                )
             }
+            .standardToolbar(
+                title: assetUser.name,
+                leadingAction: { dismiss() },
+                leadingIcon: "xmark",
+                leadingIconColor: Color.error,
+                trailingAction: {
+                    editAssetUserVM.save()
+                    dismiss()
+                },
+                trailingIcon: "checkmark"
+                
+            )
             .background(Color.secondary)
             .onChange(of: editAssetUserVM.uiState.isSaving) { _, did in
                 if did {

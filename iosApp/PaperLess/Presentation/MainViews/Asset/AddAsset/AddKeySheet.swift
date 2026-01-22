@@ -41,12 +41,16 @@ struct AddKeySheet: View {
                     errorMessage: addKeyVM.uiState.errorMessage,
                     isSaving: addKeyVM.uiState.isSaving
                 )
-                
-                SaveAndCancelButtonRow(
-                    cancelAction: { dismiss() },
-                    saveAction: { addKeyVM.submit() }
-                )
             }
+            .modifier(ListStyle())
+            .standardToolbar(
+                title: "Schlüssel hinzufügen",
+                leadingAction: { dismiss() },
+                leadingIcon: "xmark",
+                leadingIconColor: Color.error,
+                trailingAction: { addKeyVM.submit() },
+                trailingIcon: "checkmark"
+            )
             .onChange(of: addKeyVM.uiState.didSave) { _, didSave in
                 if didSave {
                     addKeyVM.resetDidSave()

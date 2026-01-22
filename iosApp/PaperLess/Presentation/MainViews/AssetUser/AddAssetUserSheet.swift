@@ -5,7 +5,6 @@
 //  Created by Tom Salih on 12.10.25.
 //
 
-
 import SwiftUI
 import Shared
 import KMPObservableViewModelSwiftUI
@@ -22,11 +21,6 @@ struct AddAssetUserSheet: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Text("ASSET-USER HINZUFÜGEN")
-                    .font(.system(size: 20))
-                    .foregroundStyle(Color.primary)
-                    .fontWeight(.black)
-                    .padding(.top, 38)
                 AddAssetUserForm(
                     name: Binding(
                         get: { addAssetUserVM.uiState.name },
@@ -42,14 +36,16 @@ struct AddAssetUserSheet: View {
                     ),
                     error: addAssetUserVM.uiState.errorMessage
                 )
-                
-                SaveAndCancelButtonRow(
-                    cancelAction: { dismiss() },
-                    saveAction: { addAssetUserVM.submit() }
-                )
             }
+            .standardToolbar(
+                title: "Asset-User hinzufügen",
+                leadingAction: { dismiss() },
+                leadingIcon: "xmark",
+                leadingIconColor: Color.error,
+                trailingAction: { addAssetUserVM.submit() },
+                trailingIcon: "checkmark"
+            )
             .background(Color.secondary)
-            
             .onChange(of: addAssetUserVM.uiState.didSave) { _, did in
                 if did {
                     dismiss()

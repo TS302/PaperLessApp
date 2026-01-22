@@ -21,7 +21,7 @@ struct AssignmentDetailView: View {
     
     @State private var showReturnConfirm = false
     
-    private var isActive: Bool { until == nil } // wenn du "Aktuell" als String übergibst: until == nil || until == "Aktuell"
+    private var isActive: Bool { until == nil }
     
     var body: some View {
         Form {
@@ -113,7 +113,6 @@ struct AssignmentDetailView: View {
             titleVisibility: .visible
         ) {
             Button("Zurückgeben", role: .destructive) {
-                // jetzt abschließen: until = jetzt
                 let nowMillis = Int64(Date().timeIntervalSince1970 * 1000)
                 vm.complete(assignmentId: assignment.id, assetId: assignment.tagId, untilMillis: nowMillis)
             }

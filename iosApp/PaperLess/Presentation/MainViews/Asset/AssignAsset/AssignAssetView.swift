@@ -14,11 +14,11 @@ struct AssignAssetView: View {
     @Environment(\.dismiss) private var dismiss
     @StateViewModel private var assignAssetVM = AssignAssetViewModel()
     
-//    let itemIdString: String
-    let asset: NfcTaggable
     @State private var searchText: String = ""
     @State private var selectedEmployeeForDialog: AssetUser?
     @FocusState private var isSearchFocused: Bool
+    
+    let asset: NfcTaggable
     
     private var assetIdString: String {
         asset.id.description
@@ -33,7 +33,7 @@ struct AssignAssetView: View {
         let assetUsers: [AssetUser] = assignAssetVM.uiState.assetUsers
         let trimmed = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !trimmed.isEmpty else { return assetUsers }
-
+        
         return assetUsers.filter { $0.searchQuery(query: trimmed) }
     }
     

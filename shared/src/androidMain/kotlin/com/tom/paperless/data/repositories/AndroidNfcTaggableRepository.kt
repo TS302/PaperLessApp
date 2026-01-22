@@ -78,7 +78,6 @@ class AndroidNfcTaggableRepository(
 
 
     override fun observeAll(onChange: (List<NfcTaggable>) -> Unit) {
-        println("🔥 observeAll CALLED")
 
         listener?.remove()
 
@@ -86,15 +85,10 @@ class AndroidNfcTaggableRepository(
             .collection("nfcItems")
             .addSnapshotListener { snapshot, error ->
 
-                println("🔥 snapshot fired")
 
                 if (error != null) {
-                    println("🔥 snapshot error: $error")
                     return@addSnapshotListener
                 }
-
-                println("🔥 snapshot is null = ${snapshot == null}")
-                println("🔥 documents count = ${snapshot?.documents?.size}")
 
                 snapshot?.documents?.forEach {
                     println("🔥 doc id=${it.id}, data=${it.data}")
@@ -121,44 +115,6 @@ class AndroidNfcTaggableRepository(
                 onChange(items as List<NfcTaggable>)
             }
     }
-
-//    override fun observeAll(onChange: (List<NfcTaggable>) -> Unit) {
-//
-//        // alten Listener stoppen
-//        listener?.remove()
-//        listener = null
-//
-//        listener = firestore
-//            .collection("nfcItems")
-//            .addSnapshotListener { snapshot, error ->
-//
-//                if (error != null) {
-//                    Log.e("NfcRepo", "observe error", error)
-//                    return@addSnapshotListener
-//                }
-//
-//                val items =
-//                    snapshot?.documents
-//                        ?.mapNotNull { doc ->
-//
-//                            when (doc.getString("tagType")) {
-//
-//                                "Vehicle" ->
-//                                    doc.toObject(VehicleDto::class.java)?.toDomain()
-//
-//                                "Tool" ->
-//                                    doc.toObject(ToolDto::class.java)?.toDomain()
-//
-//                                "Key" ->
-//                                    doc.toObject(KeyRingDto::class.java)?.toDomain()
-//
-//                                else -> null
-//                            }
-//                        }
-//                        ?: emptyList()
-//            }
-//    }
-
     override fun stopObserving() {
         listener?.remove()
         listener = null

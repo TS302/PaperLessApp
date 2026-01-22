@@ -41,7 +41,6 @@ struct AssetsView: View {
     }
     
     private func reloadList() {
-//        assetsVM.reloadAssets()
         assetsVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
         assetsVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
     }

@@ -28,7 +28,7 @@ final class IosAssignmentRepository: AssignmentRepository {
             
             let assignments: [Assignment] =
             snapshot?.documents.compactMap { doc in
-                AssignmentFirestoreDto.fromFirestore(doc.data())?.toDomain()
+                AssignmentDto.fromFirestore(doc.data())?.toDomain()
             } ?? []
             
             onChange(assignments)
@@ -52,7 +52,7 @@ final class IosAssignmentRepository: AssignmentRepository {
                 
                 let assignments: [Assignment] =
                 snapshot?.documents.compactMap { doc in
-                    AssignmentFirestoreDto.fromFirestore(doc.data())?.toDomain()
+                    AssignmentDto.fromFirestore(doc.data())?.toDomain()
                 } ?? []
                 
                 onChange(assignments)
@@ -67,7 +67,7 @@ final class IosAssignmentRepository: AssignmentRepository {
     
     
     func add(assignment: Assignment) async throws -> Assignment {
-        let dto = AssignmentFirestoreDto.fromDomain(assignment)
+        let dto = AssignmentDto.fromDomain(assignment)
         try await collection.document(dto.id).setData(dto.toFirestore())
         return assignment
     }
@@ -83,7 +83,7 @@ final class IosAssignmentRepository: AssignmentRepository {
         let snapshot = try await collection.getDocuments()
         
         return snapshot.documents.compactMap {
-            AssignmentFirestoreDto.fromFirestore($0.data())?.toDomain()
+            AssignmentDto.fromFirestore($0.data())?.toDomain()
         }
     }
     
@@ -93,7 +93,7 @@ final class IosAssignmentRepository: AssignmentRepository {
             .getDocument()
         
         guard let data = doc.data(),
-              let dto = AssignmentFirestoreDto.fromFirestore(data)
+              let dto = AssignmentDto.fromFirestore(data)
         else { return nil }
         
         return dto.toDomain()
@@ -105,7 +105,7 @@ final class IosAssignmentRepository: AssignmentRepository {
             .getDocuments()
         
         return snapshot.documents.compactMap {
-            AssignmentFirestoreDto.fromFirestore($0.data())?.toDomain()
+            AssignmentDto.fromFirestore($0.data())?.toDomain()
         }
     }
     
@@ -115,12 +115,12 @@ final class IosAssignmentRepository: AssignmentRepository {
             .getDocuments()
         
         return snapshot.documents.compactMap {
-            AssignmentFirestoreDto.fromFirestore($0.data())?.toDomain()
+            AssignmentDto.fromFirestore($0.data())?.toDomain()
         }
     }
     
     func update(assignment: Assignment) async throws -> Assignment? {
-        let dto = AssignmentFirestoreDto.fromDomain(assignment)
+        let dto = AssignmentDto.fromDomain(assignment)
         try await collection.document(dto.id).setData(dto.toFirestore())
         return assignment
     }

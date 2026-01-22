@@ -18,31 +18,33 @@ struct EditAssetSheet: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                Form {
-                    Section {
-                        let displayedAsset = editAssetVM.uiState.asset ?? asset
-                        
-                        if displayedAsset is Tool {
-                            EditToolSection(editAssetVM: editAssetVM)
-                        } else if displayedAsset is KeyRing {
-                            EditKeySection(editAssetVM: editAssetVM)
-                        } else if displayedAsset is Vehicle {
-                            EditVehicleSection(editAssetVM: editAssetVM)
-                        }
+            Form {
+                Section {
+                    let displayedAsset = editAssetVM.uiState.asset ?? asset
+                    
+                    if displayedAsset is Tool {
+                        EditToolSection(editAssetVM: editAssetVM)
+                    } else if displayedAsset is KeyRing {
+                        EditKeySection(editAssetVM: editAssetVM)
+                    } else if displayedAsset is Vehicle {
+                        EditVehicleSection(editAssetVM: editAssetVM)
                     }
                 }
-                
-                SaveAndCancelButtonRow(
-                    cancelAction: {
-                        editAssetVM.reload(assetId: asset.id)
-                        dismiss()
-                    },
-                    saveAction: {
-                    editAssetVM.saveCurrentItem()
-                })
             }
             .modifier(ListStyle())
+            .standardToolbar(
+                title: asset.name,
+                leadingAction: {
+                    editAssetVM.reload(assetId: asset.id)
+                    dismiss()
+                },
+                leadingIcon: "xmark",
+                leadingIconColor: Color.error,
+                trailingAction: {
+                    editAssetVM.saveCurrentItem()
+                },
+                trailingIcon: "checkmark"
+            )
             .onChange(of: editAssetVM.uiState.operationSucceeded) { _, ok in
                 if ok {
                     dismiss()

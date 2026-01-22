@@ -49,12 +49,15 @@ struct AddToolSheet: View {
                     errorMessage: addToolVM.uiState.errorMessage,
                     isSaving: addToolVM.uiState.isSaving
                 )
-                
-                SaveAndCancelButtonRow(
-                    cancelAction: { dismiss() },
-                    saveAction: { addToolVM.submit() }
-                )
             }
+            .standardToolbar(
+                title: "Werkzeug hinzufügen",
+                leadingAction: { dismiss() },
+                leadingIcon: "xmark",
+                leadingIconColor: Color.error,
+                trailingAction: { addToolVM.submit() },
+                trailingIcon: "checkmark"
+            )
             .onChange(of: addToolVM.uiState.didSave) { _, didSave in
                 if didSave {
                     addToolVM.resetDidSave()

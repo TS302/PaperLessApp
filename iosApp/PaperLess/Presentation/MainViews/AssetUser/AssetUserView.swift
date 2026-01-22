@@ -17,6 +17,10 @@ struct AssetUserView: View {
     @State private var searchText: String = ""
     @State private var addEmployeeSheetIsPresent: Bool = false
     
+    private func delete(_ assetUser: AssetUser) {
+        assetUserVM.delete(employeeId: assetUser.id)
+    }
+    
     var body: some View {
         NavigationStack {
             List {
@@ -27,10 +31,19 @@ struct AssetUserView: View {
                         } label: {
                             AssetUserRow(assetUser: assetUser)
                         }
+                        .id(assetUser.id)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                            Button(role: .destructive) {
+                                delete(assetUser)
+                            } label: {
+                                Label("Löschen", systemImage: "trash")
+                            }
+                        }
                     }
                 } header: {
                     SectionHeader(text: "Asset-Nutzer")
                 }
+                
             }
             .modifier(ListStyle())
             .standardToolbar(

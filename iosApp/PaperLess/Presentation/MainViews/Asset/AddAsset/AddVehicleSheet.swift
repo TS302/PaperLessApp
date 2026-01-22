@@ -51,12 +51,15 @@ struct AddVehicleSheet: View {
                     errorMessage: addVehicleVM.uiState.errorMessage,
                     isSaving: addVehicleVM.uiState.isSaving
                 )
-                
-                SaveAndCancelButtonRow(
-                    cancelAction: { dismiss() },
-                    saveAction: { addVehicleVM.submit() }
-                )
             }
+            .standardToolbar(
+                title: "Fahrzeug hinzufügen",
+                leadingAction: { dismiss() },
+                leadingIcon: "xmark",
+                leadingIconColor: Color.error,
+                trailingAction: { addVehicleVM.submit() },
+                trailingIcon: "checkmark"
+            )
             .onChange(of: addVehicleVM.uiState.didSave) { _, didSave in
                 if didSave {
                     addVehicleVM.resetDidSave()

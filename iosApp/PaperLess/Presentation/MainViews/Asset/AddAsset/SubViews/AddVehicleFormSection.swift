@@ -20,12 +20,6 @@ struct AddVehicleFormSection: View {
     var body: some View {
         
         VStack {
-            Text("NEUES FAHRZEUG ANLEGEN")
-                .font(.system(size: 20))
-                .foregroundStyle(Color.primary)
-                .fontWeight(.black)
-                .padding(.top, 38)
-            
             List {
                 TextField("Name *", text: $name)
                     .submitLabel(.next)

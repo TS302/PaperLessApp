@@ -15,13 +15,7 @@ struct AddKeyFormSection: View {
     let isSaving: Bool
     
     var body: some View {
-        VStack {
-            Text("NEUEN SCHLÜSSEL ANLEGEN")
-                .font(.system(size: 20))
-                .foregroundStyle(Color.primary)
-                .fontWeight(.black)
-                .padding(.top, 38)
-            
+        VStack {            
             List {
                 TextField("Name *", text: $name)
                     .submitLabel(.next)
