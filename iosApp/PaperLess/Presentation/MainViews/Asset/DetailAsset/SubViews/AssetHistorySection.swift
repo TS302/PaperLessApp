@@ -81,7 +81,9 @@ private struct AssignmentRow: View {
 
     var body: some View {
         
-        let assetUser = lastAssignees.first { $0.id == assignment.assetUserId }
+        let assetUserIdString = assignment.assetUserId.description()
+        let assetUser = lastAssignees.first {$0.id == assetUserIdString }
+        
         let name = assetUser?.name ?? "Unbekannter Asset-User"
 
         let fromDate = assignment.from.toDate()

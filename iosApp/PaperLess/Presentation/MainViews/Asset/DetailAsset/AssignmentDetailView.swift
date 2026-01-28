@@ -20,6 +20,7 @@ struct AssignmentDetailView: View {
     let until: String?
     
     @State private var showReturnConfirm = false
+    @State private var returnNoteText: String = ""
     
     private var isActive: Bool { until == nil }
     
@@ -35,30 +36,15 @@ struct AssignmentDetailView: View {
                             .modifier(TitleModi())
                     }
                 }
-                .padding(.vertical, 6)
+                .padding(.vertical, 4)
             }
             
             Section {
                 HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Von")
+                        Text("Zeitpunkt der Übergabe")
                             .modifier(SubtitleModi())
                         Text(from)
-                            .modifier(TitleModi())
-                    }
-                    Spacer()
-                    Image(systemName: "chevron.backward.chevron.backward.dotted")
-                        .foregroundStyle(Color.primary)
-                        .fontWeight(.bold)
-                }
-                .padding(.vertical, 6)
-                
-                HStack {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Bis")
-                            .modifier(SubtitleModi())
-                        
-                        Text(until ?? "Aktuell")
                             .modifier(TitleModi())
                     }
                     Spacer()
@@ -66,13 +52,38 @@ struct AssignmentDetailView: View {
                         .foregroundStyle(Color.primary)
                         .fontWeight(.bold)
                 }
-                .padding(.vertical, 6)
+                .padding(.vertical, 4)
+                
+                if let note = assignment.fromNote, !note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Bemerkung (Übergabe)")
+                            .modifier(SubtitleModi())
+                        Text(note)
+                            .padding(.trailing, 24)
+                            .modifier(TitleModi())
+                    }
+                }
             }
             
-            if let note = assignment.note, !note.isEmpty {
-                Section {
+            Section {
+                HStack {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("Bemerkung")
+                        Text("Zeitpunkt der Rücknahme")
+                            .modifier(SubtitleModi())
+                        
+                        Text(until ?? "ausstehend")
+                            .modifier(TitleModi())
+                    }
+                    Spacer()
+                    Image(systemName: "chevron.backward.chevron.backward.dotted")
+                        .foregroundStyle(Color.primary)
+                        .fontWeight(.bold)
+                }
+                .padding(.vertical, 4)
+                
+                if let note = assignment.untilNote, !note.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Bemerkung (Rücknahme)")
                             .modifier(SubtitleModi())
                         Text(note)
                             .modifier(TitleModi())
@@ -87,7 +98,7 @@ struct AssignmentDetailView: View {
                     } label: {
                         HStack {
                             Image(systemName: "arrow.uturn.left")
-                            Text(vm.uiState.isCompleting ? "Wird zurückgegeben..." : "Asset zurückgeben")
+                            Text(vm.uiState.isCompleting ? "Wird zurückgenommen..." : "Asset zurücknehmen")
                         }
                     }
                     .disabled(vm.uiState.isCompleting)
@@ -103,20 +114,25 @@ struct AssignmentDetailView: View {
         }
         .modifier(ListStyle())
         .standardToolbar(
-            title: employeeName,
-            leadingAction: { dismiss() },
-            leadingIcon: "arrow.left.circle"
+            title: employeeName
         )
-        .confirmationDialog(
-            "Asset wirklich zurückgeben?",
-            isPresented: $showReturnConfirm,
-            titleVisibility: .visible
-        ) {
-            Button("Zurückgeben", role: .destructive) {
-                let nowMillis = Int64(Date().timeIntervalSince1970 * 1000)
-                vm.complete(assignmentId: assignment.id, assetId: assignment.tagId, untilMillis: nowMillis)
+        .alert("Asset wirklich zurücknehmen?", isPresented: $showReturnConfirm) {
+            TextField("Kommentar (optional)", text: $returnNoteText)
+
+            Button("Zurücknehmen", role: .destructive) {
+                let trimmed = returnNoteText.trimmingCharacters(in: .whitespacesAndNewlines)
+                vm.complete(
+                    assetIdString: assignment.tagId.description(),
+                    untilNote: trimmed.isEmpty ? nil : trimmed
+                )
+                returnNoteText = ""
             }
-            Button("Abbrechen", role: .cancel) {}
+
+            Button("Abbrechen", role: .cancel) {
+                returnNoteText = ""
+            }
+        } message: {
+            Text("Du kannst optional einen Kommentar zur Rückgabe hinzufügen.")
         }
         .onChange(of: vm.uiState.didComplete) { _, did in
             if did {
@@ -126,3 +142,4 @@ struct AssignmentDetailView: View {
         }
     }
 }
+

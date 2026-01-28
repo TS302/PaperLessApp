@@ -16,16 +16,17 @@ struct AssignmentDto {
     let tagId: String
     let from: Date
     let until: Date?
-    let note: String?
+    let fromNote: String?
+    let untilNote: String?
 
-    static func fromFirestore(_ data: [String: Any]) -> AssignmentDto? {
+    static func fromFirestore(docId: String, _ data: [String: Any]) -> AssignmentDto? {
         guard
-            let id = data["id"] as? String,
             let assetUserId = data["assetUserId"] as? String,
             let tagId = data["tagId"] as? String,
             let fromTs = data["from"] as? Timestamp
         else { return nil }
 
+        let id = (data["id"] as? String) ?? docId
         let untilTs = data["until"] as? Timestamp
 
         return AssignmentDto(
@@ -34,7 +35,8 @@ struct AssignmentDto {
             tagId: tagId,
             from: fromTs.dateValue(),
             until: untilTs?.dateValue(),
-            note: data["note"] as? String
+            fromNote: data["fromNote"] as? String,
+            untilNote: data["untilNote"] as? String
         )
     }
 
@@ -46,7 +48,8 @@ struct AssignmentDto {
             "from": Timestamp(date: from)
         ]
         if let until { map["until"] = Timestamp(date: until) }
-        if let note { map["note"] = note }
+        if let fromNote { map["fromNote"] = fromNote }
+        if let untilNote { map["untilNote"] = untilNote }
         return map
     }
 }
@@ -65,7 +68,8 @@ extension AssignmentDto {
             tagId: a.tagId.description,
             from: fromDate,
             until: untilDate,
-            note: a.note
+            fromNote: a.fromNote,
+            untilNote: a.untilNote
         )
     }
 
@@ -84,7 +88,8 @@ extension AssignmentDto {
                 ? nil
                 : Kotlinx_datetimeInstant.Companion()
                     .fromEpochMilliseconds(epochMilliseconds: Int64(until!.timeIntervalSince1970 * 1000)),
-            note: note
+            fromNote: fromNote,
+            untilNote: untilNote
         )
     }
 }

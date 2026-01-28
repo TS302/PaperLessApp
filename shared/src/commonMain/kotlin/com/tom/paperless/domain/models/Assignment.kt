@@ -10,5 +10,8 @@ data class Assignment(
     val tagId: Uuid,
     val from: Instant = Clock.System.now(),
     val until: Instant? = null,
-    val note: String? = null
-)
+//    val note: String? = null
+    val fromNote: String? = null,
+    val untilNote: String? = null
+
+    )

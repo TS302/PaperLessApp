@@ -38,7 +38,7 @@ struct AddAssetMenu: View {
                 }
             }
         } label: {
-            Image(systemName: "widget.small.badge.plus")
+            Image(systemName: "plus")
                 .fontWeight(.bold)
         }
         .tint(Color.appPrimary)

@@ -19,7 +19,7 @@ struct AssignAssetEmployeeListSection: View {
                 systemImage: "person.2.slash"
             )
         } else {
-            ForEach(assetUserList, id: \.id) { assetUser in
+            ForEach(assetUserList, id: \.idString) { assetUser in
                 Button {
                     onAssetUserTap(assetUser)
                 } label: {

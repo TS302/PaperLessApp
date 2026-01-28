@@ -29,6 +29,7 @@ struct AssetDetailView: View {
         NavigationStack {
             List {
                 AssetGeneralInfoSection(asset: displayedAsset)
+                
                 AssetCurrentAssignmentSection(
                     isLoading: assetDetailVM.uiState.isLoading,
                     currentAssigneeName: assetDetailVM.uiState.currentAssigneeName,
@@ -36,6 +37,7 @@ struct AssetDetailView: View {
                     currentAssignmentNote: assetDetailVM.uiState.currentAssignmentNote,
                     asset: displayedAsset
                 )
+                
                 AssetHistorySection(
                     lastAssignments: assetDetailVM.uiState.lastAssignments,
                     lastAssignees: assetDetailVM.uiState.lastAssignees
@@ -44,8 +46,6 @@ struct AssetDetailView: View {
             .modifier(ListStyle())
             .standardToolbar(
                 title: assetDetailVM.uiState.asset?.name ?? "",
-                leadingAction: { dismiss() },
-                leadingIcon: "arrow.left.circle",
                 trailingAction: { isEditSheetPresented.toggle() },
                 trailingIcon: "slider.horizontal.3"
             )

@@ -16,6 +16,8 @@ data class AssetUser(
     override val note: String? = null
 ) : NfcTaggable {
 
+    val idString: String get() = id.toString()
+
     fun searchQuery(query: String): Boolean {
         val trimmed = query.trim()
         if (trimmed.isEmpty()) return true

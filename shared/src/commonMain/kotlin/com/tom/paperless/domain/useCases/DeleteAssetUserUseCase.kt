@@ -11,4 +11,8 @@ class DeleteAssetUserUseCase() : KoinComponent {
     suspend operator fun invoke(id: Uuid) {
         repository.delete(id)
     }
+
+    suspend operator fun invoke(id: String) {
+        repository.delete(id)
+    }
 }

@@ -26,7 +26,6 @@ struct AssetUserDetailView: View {
                         name: assetUser.name,
                         phoneNumber: assetUser.phoneNumber,
                         email: assetUser.email,
-                        //TODO: employeeId zu assetUserID machen
                         id: employeeId
                     )
                 }
@@ -56,8 +55,6 @@ struct AssetUserDetailView: View {
         .modifier(ListStyle())
         .standardToolbar(
             title: assetUserDetailVM.uiState.assetUser?.name ?? "Asset-User Details",
-            leadingAction: { dismiss() },
-            leadingIcon: "arrow.left.circle",
             trailingAction: { isEditSheetPresented.toggle() },
             trailingIcon: "slider.horizontal.3"
         )

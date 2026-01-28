@@ -27,8 +27,6 @@ class AssetDetailViewModel : ViewModel(), KoinComponent {
     private val getTagById: GetNfcTaggableByIdUseCase by inject()
     private val saveTag: SaveNfcTaggableUseCase by inject()
     private val deleteTag: DeleteNfcTaggableUseCase by inject()
-    private val getAssignmentsByAsset: GetAssignmentsByAssetUseCase by inject()
-    private val getCurrentAssignee: GetCurrentAssigneeUseCase by inject()
     private val getUserById: GetAssetUserByIdUseCase by inject()
     private val observeAssignmentsByAsset: ObserveAssignmentsByAssetUseCase by inject()
 
@@ -85,50 +83,13 @@ class AssetDetailViewModel : ViewModel(), KoinComponent {
 
                 _uiState.value = _uiState.value.copy(
                     currentAssigneeName = currentAssignee?.name,
-                    currentAssignmentNote = currentAssignment?.note,
+                    currentAssignmentNote = currentAssignment?.fromNote,
                     lastAssignments = assignments,
                     lastAssignees = historyAssignees
                 )
             }
-
-
-//            viewModelScope.launch {
-//                val assignee = currentAssignment?.assetUserId
-//                    ?.let { getUserById(it) }
-//
-//                _uiState.value = _uiState.value.copy(
-//                    currentAssigneeName = assignee?.name,
-//                    currentAssignmentNote = currentAssignment?.note,
-//                    lastAssignments = assignments
-//                )
-//            }
         }
     }
-
-//    private fun loadAssignments(assetId: Uuid) {
-//        viewModelScope.launch {
-//            try {
-//                val currentAssignee = getCurrentAssignee(assetId)
-//
-//                val history = getAssignmentsByAsset(assetId)
-//
-//                _uiState.value = _uiState.value.copy(
-//                    currentAssigneeName = currentAssignee?.name,
-//                    currentAssignmentNote = currentAssignee?.note,
-//                    lastAssignments = history
-//                )
-//            } catch (t: Throwable) {
-//                _uiState.value = _uiState.value.copy(
-//                    errorMessage = t.message
-//                )
-//            }
-//        }
-//    }
-//    fun reloadAssignments(assetId: Uuid) {
-//        loadAssignments(assetId)
-//    }
-
-
 
     fun allStatuses(): List<TagStatus> =
         try { TagStatus.entries } catch (_: Throwable) { TagStatus.values().toList() }

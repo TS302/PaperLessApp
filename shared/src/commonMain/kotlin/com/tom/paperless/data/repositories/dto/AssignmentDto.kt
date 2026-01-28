@@ -11,7 +11,8 @@ data class AssignmentDto(
     val tagId: String = "",
     val from: String = "",
     val until: String? = null,
-    val note: String? = null
+    val fromNote: String? = null,
+    val untilNote: String? = null
 ) {
 
     companion object {
@@ -21,7 +22,8 @@ data class AssignmentDto(
             assetUserId: Uuid,
             from: Instant,
             until: Instant? = null,
-            note: String? = null
+            fromNote: String? = null,
+            untilNote: String? = null
         ): AssignmentDto {
             return AssignmentDto(
                 id = id,
@@ -29,7 +31,8 @@ data class AssignmentDto(
                 tagId = tagId.toString(),
                 from = from.toString(),
                 until = until?.toString(),
-                note = note
+                fromNote = fromNote,
+                untilNote = untilNote
             )
         }
     }

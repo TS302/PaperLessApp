@@ -17,38 +17,35 @@ struct AssetsView: View {
     @State private var addTool = false
     @State private var addKey = false
     @State private var searchText: String = ""
-
-    private var filterBinding: Binding<FilterOption> {
+    
+    private var filterBinding: Binding<TagType?> {
         Binding(
-            get: {
-                if let filter = assetsVM.uiState.activeTypeFilter { return filter.asFilterOption }
-                return .all
-            },
+            get: { assetsVM.uiState.activeTypeFilter },
             set: { newValue in
-                assetsVM.setTypeFilterForIos(typeFilter: newValue.toTargetTypeOrNil)
+                assetsVM.setTypeFilter(newTypeFilter: newValue)
             }
         )
     }
-
+    
     private var searchBinding: Binding<String> {
         Binding(
             get: { searchText },
             set: { newValue in
                 searchText = newValue
-                assetsVM.setSearchQueryForIos(queryText: newValue)
+                assetsVM.setSearchQuery(newSearchQueryText: newValue)
             }
         )
     }
     
-    private func reloadList() {
-        assetsVM.setTypeFilterForIos(typeFilter: filterBinding.wrappedValue.toTargetTypeOrNil)
-        assetsVM.setSearchQueryForIos(queryText: $searchText.wrappedValue)
-    }
-
+//    private func reloadList() {
+//        assetsVM.setTypeFilter(newTypeFilter: filterBinding)
+//        assetsVM.setSearchQuery(newSearchQueryText: searchText)
+//    }
+    
     private func delete(_ item: NfcTaggable) {
         assetsVM.deleteItem(id: item.id)
     }
-
+    
     var body: some View {
         let state = assetsVM.uiState
         NavigationStack {
@@ -60,7 +57,6 @@ struct AssetsView: View {
                         } label: {
                             AssetRow(asset: asset)
                         }
-                        .id(asset.id)
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button(role: .destructive) {
                                 delete(asset)
@@ -74,7 +70,6 @@ struct AssetsView: View {
                 }
             }
             .modifier(ListStyle())
-            .refreshable { reloadList() }
             .searchable(text: searchBinding, prompt: "Suchen")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
@@ -88,21 +83,12 @@ struct AssetsView: View {
         }
         .sheet(isPresented: $addVehicle) {
             AddVehicleSheet()
-//                .onDisappear {
-//                    reloadList()
-//                }
         }
         .sheet(isPresented: $addTool) {
             AddToolSheet()
-//                .onAppear {
-//                    reloadList()
-//                }
         }
         .sheet(isPresented: $addKey) {
             AddKeySheet()
-//                .onDisappear {
-//                    reloadList()
-//                }
         }
     }
 }

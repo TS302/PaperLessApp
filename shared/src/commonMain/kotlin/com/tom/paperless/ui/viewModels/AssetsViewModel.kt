@@ -39,18 +39,6 @@ init {
     private fun startObservingAssets() {
         observeAllNfcTags.observe { items ->
             lastAllItems = items
-
-            _uiState.value = _uiState.value.copy(
-                activeTypeFilter = null,
-                searchQueryText = ""
-            )
-
-            recomputeVisibleItems()
-        }
-
-        observeAllNfcTags.observe { items ->
-            println("🟢 observe callback, items = ${items.size}")
-            lastAllItems = items
             recomputeVisibleItems()
         }
     }
@@ -60,13 +48,6 @@ init {
         observeAllNfcTags.stop()
     }
 
-    fun reloadAssets() {
-        viewModelScope.launch {
-            val items = observeAllNfcTags.load()
-            lastAllItems = items
-            _uiState.value = _uiState.value.copy(assets = items)
-        }
-    }
     fun setTypeFilter(newTypeFilter: TagType?) {
         _uiState.value = _uiState.value.copy(activeTypeFilter = newTypeFilter)
         recomputeVisibleItems()
@@ -101,9 +82,4 @@ init {
         runCatching { deleteNfcTaggable(id) }
             .onFailure { e -> _uiState.value = _uiState.value.copy(errorMessage = e.message) }
     }
-
-    // ---------- iOS Helper ----------
-    fun setTypeFilterForIos(typeFilter: TagType?) = setTypeFilter(typeFilter)
-    fun setSearchQueryForIos(queryText: String) = setSearchQuery(queryText)
-
 }

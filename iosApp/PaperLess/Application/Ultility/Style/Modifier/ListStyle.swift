@@ -14,7 +14,6 @@ struct ListStyle: ViewModifier {
         content
             .scrollContentBackground(.hidden)
             .background(Color.secondary)
-            .navigationBarBackButtonHidden(true)
             .navigationTitle(safeTitle)
 //            .navigationBarTitleDisplayMode(.inline)
     }

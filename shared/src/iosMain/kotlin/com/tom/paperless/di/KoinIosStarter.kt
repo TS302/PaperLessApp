@@ -28,15 +28,3 @@ fun startKoinIosWithAuth(
 
 fun getKoinIos(): Koin =
     koinIosRef ?: error("Koin iOS wurde noch nicht gestartet")
-
-//fun declareIosRepositories(
-//    assetRepo: AssetUserRepository,
-//    assignmentRepo: AssignmentRepository,
-//    nfcRepo: NfcTaggableRepository
-//) {
-//    val koin = getKoinIos()
-//
-//    koin.declare(assetRepo, allowOverride = true)
-//    koin.declare(assignmentRepo, allowOverride = true)
-//    koin.declare(nfcRepo, allowOverride = true)
-//}

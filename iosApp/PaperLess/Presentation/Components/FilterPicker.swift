@@ -6,14 +6,14 @@
 //
 
 import SwiftUI
+import Shared
 
 struct FilterPicker: View {
-    @Binding var filter: FilterOption
+    @Binding var filter: TagType?
 
     var body: some View {
         HStack {
-            Text(filter.title)
-                .foregroundColor(filter == .all ? .primary.opacity(0.4) : .primary)
+            Text(filter?.displayName ?? "Alle")
                 .font(.callout)
                 .fontWeight(.black)
                 .foregroundStyle(Color.primary)
@@ -21,36 +21,36 @@ struct FilterPicker: View {
             Spacer()
 
             Button {
-                filter = .vehicles
+                filter = .vehicle
             } label: {
-                Image(systemName: "car.fill")
+                Image(systemName: TagType.vehicle.systemImageName)
                     .padding(.trailing, 10)
                     .font(.system(size: 16))
-                    .foregroundColor(filter == .vehicles ? .primary : .primary.opacity(0.4))
+                    .foregroundColor(filter == .vehicle ? .primary : .primary.opacity(0.4))
             }
             .accessibilityLabel("Fahrzeuge")
 
             Button {
-                filter = .tools
+                filter = .tool
             } label: {
-                Image(systemName: "wrench.and.screwdriver.fill")
+                Image(systemName: TagType.tool.systemImageName)
                     .padding(.trailing, 10)
                     .font(.system(size: 16))
-                    .foregroundColor(filter == .tools ? .primary : .primary.opacity(0.4))
+                    .foregroundColor(filter == .tool ? .primary : .primary.opacity(0.4))
             }
             .accessibilityLabel("Werkzeuge")
 
             Button {
-                filter = .keys
+                filter = .key
             } label: {
                 Image(systemName: "key.2.on.ring.fill")
                     .font(.system(size: 16))
-                    .foregroundColor(filter == .keys ? .primary : .primary.opacity(0.4))
+                    .foregroundColor(filter == .key ? .primary : .primary.opacity(0.4))
             }
             .accessibilityLabel("Schlüssel")
             
             Button {
-                filter = .all
+                filter = nil
             } label: {
                 Image(systemName: "x.circle.fill")
                     .font(.system(size: 16))
@@ -66,5 +66,5 @@ struct FilterPicker: View {
 }
 
 #Preview {
-    FilterPicker(filter: .constant(.vehicles))
+    FilterPicker(filter: .constant(.vehicle))
 }

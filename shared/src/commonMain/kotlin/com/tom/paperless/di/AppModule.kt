@@ -6,7 +6,6 @@ import com.tom.paperless.domain.useCases.AddNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.CheckUserLoggedInUseCase
 import com.tom.paperless.domain.useCases.DeleteNfcTaggableUseCase
 import com.tom.paperless.domain.useCases.FilterNfcTaggablesUseCase
-//import com.tom.paperless.domain.useCases.GetAllNfcTaggablesFlowUseCase
 import com.tom.paperless.domain.useCases.GetAllNfcTaggablesUseCase
 import com.tom.paperless.domain.useCases.GetLoggedInUserUseCase
 import com.tom.paperless.domain.useCases.GetNfcTaggableByIdUseCase
@@ -30,6 +29,7 @@ import com.tom.paperless.domain.useCases.ObserveAllAssetUsersUseCase
 import com.tom.paperless.domain.useCases.ObserveAllAssignmentsUseCase
 import com.tom.paperless.domain.useCases.ObserveAllNfcTagsUseCase
 import com.tom.paperless.domain.useCases.ObserveAssignmentsByAssetUseCase
+import com.tom.paperless.domain.useCases.ReassignAssetUseCase
 import com.tom.paperless.domain.useCases.UpdateAssetUserUseCase
 import com.tom.paperless.domain.useCases.UpdateNfcTagStatusUseCase
 import com.tom.paperless.ui.viewModels.AddAssetUserViewModel
@@ -53,9 +53,6 @@ val appModule = module {
 
     // Repositories
     single<UserRepository> { UserRepository }
-//    single<NfcTaggableRepository> { NfcTaggableRepositoryImpl() }
-//    single<AssetUserRepository> { AssetUserRepositoryImpl }
-//    single<AssignmentRepository> { AssignmentRepositoryImpl(get(), get()) }
 
     // Auth UseCases
     single { RegisterUserUseCase() }
@@ -87,6 +84,7 @@ val appModule = module {
     // Assignment UseCases
     single { AssignAssetToEmployeeUseCase() }
     single { ReturnAssetUseCase() }
+    single { ReassignAssetUseCase() }
     single { GetAssetsOfEmployeeUseCase() }
     single { ObserveAllAssignmentsUseCase() }
     single { ObserveAssignmentsByAssetUseCase() }

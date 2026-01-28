@@ -13,7 +13,7 @@ struct AssignAssetHeaderSection: View {
     var body: some View {
         Section {
             VStack(alignment: .center, spacing: 8) {
-                Text("Asset-Nutzer auswählen")
+                Text("Wähle einen Asset-Nutzer aus")
                     .modifier(HeadlineModi())
                 
                 Text("Du kannst anschließend \"\(assetName ?? "Asset")\" übergeben.")
@@ -21,12 +21,13 @@ struct AssignAssetHeaderSection: View {
                     .foregroundStyle(Color.primary)
                     .multilineTextAlignment(.center)
                     .frame(maxWidth: .infinity, alignment: .center)
-                
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .padding(.vertical, 12)
+//            .padding(.top, 12)
             
         }
+        
     }
     
 }

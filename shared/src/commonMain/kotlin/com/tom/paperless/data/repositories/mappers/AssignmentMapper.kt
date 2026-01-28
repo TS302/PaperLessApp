@@ -11,7 +11,8 @@ fun Assignment.toDto() = AssignmentDto(
     tagId = tagId.toString(),
     from = from.toString(),
     until = until?.toString(),
-    note = note
+    fromNote = fromNote,
+    untilNote = untilNote
 )
 
 fun AssignmentDto.toDomain() = Assignment(
@@ -20,5 +21,6 @@ fun AssignmentDto.toDomain() = Assignment(
     tagId = Uuid.parse(tagId),
     from = Instant.parse(from),
     until = until?.let { Instant.parse(it) },
-    note = note
+    fromNote = fromNote,
+    untilNote = untilNote
 )

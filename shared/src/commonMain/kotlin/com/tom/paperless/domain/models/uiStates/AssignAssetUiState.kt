@@ -6,6 +6,7 @@ import com.tom.paperless.domain.models.NfcTaggable
 import kotlin.uuid.Uuid
 
 data class AssignAssetUiState(
+    val assetId: Uuid? = null,
     val isLoading: Boolean = false,
     val asset: NfcTaggable? = null,
     val assetUsers: List<AssetUser> = emptyList(),

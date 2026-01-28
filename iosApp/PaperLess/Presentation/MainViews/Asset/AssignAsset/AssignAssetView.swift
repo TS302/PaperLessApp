@@ -16,12 +16,13 @@ struct AssignAssetView: View {
     
     @State private var searchText: String = ""
     @State private var selectedEmployeeForDialog: AssetUser?
+    @State private var addEmployeeSheetIsPresent: Bool = false
     @FocusState private var isSearchFocused: Bool
     
     let asset: NfcTaggable
     
     private var assetIdString: String {
-        asset.id.description
+        asset.idString
     }
     
     private var assetName: String {
@@ -39,6 +40,7 @@ struct AssignAssetView: View {
     
     var body: some View {
         List {
+            
             Section {
                 if !isSearchFocused {
                     AssignAssetHeaderSection(assetName: assetName)
@@ -55,12 +57,17 @@ struct AssignAssetView: View {
                 }
             }
         }
+        .padding(.top, 12)
         .modifier(ListStyle())
         .standardToolbar(
             title: assetName,
-            leadingAction: { dismiss() },
-            leadingIcon: "arrow.left.circle"
+            trailingAction: { addEmployeeSheetIsPresent.toggle() },
+            trailingIcon: "plus"
         )
+        .sheet(isPresented: $addEmployeeSheetIsPresent) {
+            AddAssetUserSheet()
+                .presentationDetents([.medium])
+        }
         .searchable(text: $searchText, prompt: "Suchen")
         .searchFocused($isSearchFocused)
         .onAppear {
@@ -76,7 +83,7 @@ struct AssignAssetView: View {
             ConfirmAssignDialogSheet(
                 assignAssetVM: assignAssetVM,
                 assetUser: assetUser,
-                assetId: asset.id.description(),
+                assetId: assetIdString,
                 assetName: asset.name
             )
         }

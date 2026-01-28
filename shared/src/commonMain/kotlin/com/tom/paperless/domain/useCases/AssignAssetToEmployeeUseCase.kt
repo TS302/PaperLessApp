@@ -19,7 +19,7 @@ class AssignAssetToEmployeeUseCase : KoinComponent {
     suspend operator fun invoke(
         employeeId: Uuid,
         assetId: Uuid,
-        note: String?
+        fromNote: String?
     ) {
         val asset = nfcTaggableRepository.getById(assetId)
             ?: error("Asset $assetId nicht gefunden")
@@ -45,8 +45,9 @@ class AssignAssetToEmployeeUseCase : KoinComponent {
             tagId = asset.id,
             assetUserId = employeeId,
             from = Clock.System.now(),
+            fromNote = fromNote,
             until = null,
-            note = note
+            untilNote = null
         )
 
         assignmentRepository.add(assignment)

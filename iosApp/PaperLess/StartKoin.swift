@@ -8,6 +8,8 @@
 import Shared
 import FirebaseCore
 
+//MARK: 1
+// Hier startet Koin und übergibt die iOS-Services.
 func startKoinIos() {
     let authService = IosFirebaseAuthService()
     let assetUserRepository = IosAssetUserRepository()
@@ -21,3 +23,4 @@ func startKoinIos() {
         nfcTaggableRepository: nfcTaggableRepository
     )
 }
+

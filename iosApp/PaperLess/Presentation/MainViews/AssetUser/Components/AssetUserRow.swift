@@ -15,7 +15,7 @@ struct AssetUserRow: View {
     var body: some View {
         
         HStack(spacing: 12) {
-            RowIcon(icon: "person")
+            RowIcon(icon: "person.fill")
             
             VStack(alignment: .leading, spacing: 2) {
                 Text(assetUser.name)

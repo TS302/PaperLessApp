@@ -7,10 +7,8 @@
 
 import Shared
 
-extension AssetUser: @retroactive Identifiable {
-    var idString: String {
-        String(describing: id)
-    }
+extension AssetUser: Identifiable {
+    public var id: String { idString }
 }
 
 extension AssetUser {

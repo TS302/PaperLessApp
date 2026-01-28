@@ -79,7 +79,7 @@ class AssetUsersViewModel() : ViewModel(), KoinComponent {
             }
     }
 
-    fun delete(employeeId: Uuid) = viewModelScope.launch {
+    fun delete(employeeId: String) = viewModelScope.launch {
         runCatching { deleteAssetUser(employeeId) }
             .onFailure { error ->
                 _uiState.value = _uiState.value.copy(errorMessage = error.message)

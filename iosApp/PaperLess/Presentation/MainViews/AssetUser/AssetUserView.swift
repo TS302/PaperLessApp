@@ -31,7 +31,6 @@ struct AssetUserView: View {
                         } label: {
                             AssetUserRow(assetUser: assetUser)
                         }
-                        .id(assetUser.id)
                         .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                             Button(role: .destructive) {
                                 delete(assetUser)
@@ -48,7 +47,7 @@ struct AssetUserView: View {
             .modifier(ListStyle())
             .standardToolbar(
                 trailingAction: { addEmployeeSheetIsPresent.toggle() },
-                trailingIcon: "person.crop.circle.badge.plus"
+                trailingIcon: "plus"
             )
         }
         .sheet(isPresented: $addEmployeeSheetIsPresent) {

@@ -53,7 +53,7 @@ struct AssetCurrentAssignmentSection: View {
                 } label: {
                     AssignActionRow(
                         title: "Asset verknüpfen",
-                        subtitle: "Keinem bestehende Verknüpfung"
+                        subtitle: "Keine bestehende Verknüpfung"
                     )
                 }
             }
